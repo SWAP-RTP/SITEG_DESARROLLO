@@ -1,0 +1,175 @@
+/* Animación fadeIn para elementos con la clase .animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation {
+  animation: fadeIn 0.9s ease-in-out;
+}
+
+/* CSS General */
+/* Animación de respiración para el borde */
+@keyframes respirar-borde {
+  0% {
+    box-shadow: 0 0 0 0.2rem rgba(245, 4, 4, 0.25);
+    border-color: #f50404;
+  }
+  50% {
+    box-shadow: 0 0 0 0.5rem rgba(245, 4, 4, 0.1);
+    border-color: #f50404;
+  }
+  100% {
+    box-shadow: 0 0 0 0.2rem rgba(245, 4, 4, 0.25);
+    border-color: #f50404;
+  }
+}
+
+.focus_eco,
+.focus_eco:focus,
+.focus_eco:hover,
+select.focus_eco {
+  border-color: #f50404 !important;
+  animation: respirar-borde 1.2s infinite;
+  transition: border-color 0.3s;
+}
+
+/* En tu CSS principal */
+
+input,
+select,
+textarea,
+label,
+button {
+  font-family: "Inter", "Roboto", Arial, Helvetica, sans-serif !important;
+}
+
+/* data table */
+
+#miTabla {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table.dataTable tbody tr {
+  background-color: #f7f7f7;
+}
+
+table.dataTable tbody tr:nth-of-type(odd) {
+  background-color: #ffffff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: 6px;
+}
+
+.dataTables_paginate .pagination {
+  gap: 0 !important;
+  margin: 0 !important;
+}
+
+.dataTables_paginate .page-item {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.dataTables_paginate .page-link {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-radius: 0 !important;
+}
+
+div.dt-buttons {
+  margin-bottom: 0.5rem !important;
+}
+.dataTables_length {
+  margin-bottom: 1rem;
+}
+
+/* li debajo de los inputs */
+/* Aplica a cualquier ul de sugerencias */
+ul[id^="lista-sugerencias"] {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #e3e8f7;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
+  margin-top: 4px;
+  padding: 0.25rem 0;
+  z-index: 1000;
+  display: none;
+  max-height: 260px;
+  overflow-y: auto;
+  list-style: none; /* <-- Esto elimina las viñetas */
+  margin-bottom: 0;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+ul[id^="lista-sugerencias"] li {
+  list-style: none;
+  padding: 12px 18px 10px 18px;
+  margin: 0;
+  color: #222;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background 0.18s, color 0.18s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+ul[id^="lista-sugerencias"] li:last-child {
+  border-bottom: none;
+}
+
+ul[id^="lista-sugerencias"] li:hover,
+ul[id^="lista-sugerencias"] li:focus {
+  background: #6896db;
+  color: #ffffff;
+}
+
+.sugerencia-credencial {
+  font-weight: 700;
+  color: #3b47e3;
+  font-size: 1.08em;
+  letter-spacing: 0.5px;
+}
+
+.sugerencia-nombre {
+  font-weight: 400;
+  color: #222;
+  font-size: 0.98em;
+}
+
+.sugerencia-depto {
+  background: #f3f4f6;
+  color: #6c757d;
+  font-size: 0.85em;
+  border-radius: 8px;
+  padding: 2px 10px;
+  margin-left: 0;
+  margin-top: 2px;
+  align-self: flex-start;
+  font-weight: 500;
+  display: inline-block;
+}

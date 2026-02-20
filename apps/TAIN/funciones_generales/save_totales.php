@@ -27,6 +27,37 @@ function save_totales_pv($data){
         // ID correcto del registro padre
         $id_indicador = $pdo_tablero->lastInsertId();
 
+        // ===== ACCIDENTES =====
+        $fecha_hoy = date('Y-m-d');
+
+        // conexión accidentes
+        $pdo_accidentes = conexionAccidentes();
+
+        $sqlAcc = "SELECT modulo, COUNT(id) AS total
+                FROM accidentes
+                WHERE DATE(fecha_accidente) = :fecha
+                GROUP BY modulo";
+
+        $stmtAcc = $pdo_accidentes->prepare($sqlAcc);
+        $stmtAcc->execute([':fecha' => $fecha_hoy]);
+        $accidentes = $stmtAcc->fetchAll(PDO::FETCH_ASSOC);
+
+        $sqlInsertAcc = "INSERT INTO tabla_indicadores_accidentes
+                        (id_indicador, modulo, total_accidentes)
+                        VALUES (:id, :modulo, :total)";
+
+        $stmtInsertAcc = $pdo_tablero->prepare($sqlInsertAcc);
+
+        foreach ($accidentes as $row) {
+
+            $stmtInsertAcc->execute([
+                ':id'     => $id_indicador,
+                ':modulo' => $row['modulo'],
+                ':total'  => $row['total']
+            ]);
+        }
+
+
         // ===== INSERT DETALLE =====
         $sql2 = "INSERT INTO tabla_indicadores_pv (id_indicador, modulo, modalidad, motivo, total_camiones)
                  VALUES (:id, :modulo, :modalidad, :motivo, :total_camiones)";

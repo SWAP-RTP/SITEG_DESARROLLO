@@ -1,0 +1,114 @@
+html,
+body {
+  background-image:
+    linear-gradient(rgba(14, 26, 43, 0.7), rgba(14, 26, 43, 0.7)),
+    url("../img/logoRTPMI.png");
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #0e1a2b;
+}
+/* evita que el contenido se oculte bajo el header */
+body {
+  padding-top: 95px;
+}
+
+/* Header */
+header nav {
+  background-color: #132c46 !important;
+  position: relative;
+  /* Definición de una sombra muy oscura y notoria en el en el nav */
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2) !important;
+}
+header nav .offcanvas {
+  background-color: #132c46 !important;
+  color: white;
+  font-size: 20px;
+}
+
+.navbar-brand img {
+  height: 70px;
+  width: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Footer */
+footer {
+  /* background: #132c46;  */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5vh;
+  margin-top: auto;
+}
+
+/* LO QUE ESTA ADENTRO DEL MAIN */
+#container {
+  width: 90%;
+  margin: 0 auto;
+}
+/* estilos de los cards de home */
+.card {
+  background: linear-gradient(to bottom, #182d4b, #0e1a2b);
+  color: rgba(255, 255, 255, 0.87);
+  /*Limita el ancho de la tarjeta*/
+  max-width: 450px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  /* Estado inicial de la animación (antes de correr) */
+  opacity: 0;
+  transform: translateY(20px);
+
+  animation-name: fadeUp;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  /* El delay ayuda a que el elemento no intente el hover mientras anima */
+  animation-delay: 0.5s;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card img {
+  width: 100%;
+  max-height: 250px; /* Limita la altura de la imagen, pero permite que se reduzca */
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/*CONTENIDO INTERNO*/
+.card .mt-3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%; /* Asegura que el contenido interno ocupe todo el ancho del card */
+}
+
+#container button:hover {
+  background-color: white;
+  color: black;
+}
+#container .fade-card:hover {
+  background: #354c6d;
+}

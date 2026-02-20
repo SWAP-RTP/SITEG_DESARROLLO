@@ -57,7 +57,7 @@ export function SumaTotales() {
 // Función: ObtenerModulos
 export function modulo() {
     $.ajax({
-        url: '/formulario_captura/query_sql/modulo.php',
+        url: '/app-tain/formulario_captura/query_sql/modulo.php',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -79,7 +79,7 @@ export function modulo() {
 // Función: ObtenerMotivos
 export function motivo() {
     $.ajax({
-        url: '/formulario_captura/query_sql/motivo.php',
+        url: '/app-tain/formulario_captura/query_sql/motivo.php',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -100,7 +100,7 @@ export function motivo() {
 
 export function tipo_unidad() {
     $.ajax({
-        url: '/formulario_captura/query_sql/tipo_unidad.php',
+        url: '/app-tain/formulario_captura/query_sql/tipo_unidad.php',
         type: 'GET',
         dataType: 'json',
         cache: false,

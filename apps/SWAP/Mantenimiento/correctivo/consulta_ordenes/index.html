@@ -1,0 +1,170 @@
+<?php
+session_start();
+
+if (!isset($_SESSION[usuario])){
+    session_destroy();
+    header("Location: /");
+}
+
+$moduloActual = explode('/',substr(dirname($_SERVER[REQUEST_URI]),1));
+$Modulo = $moduloActual[0];
+$modulos=$_SESSION[modulos];
+for ($i=0; $i < count ($modulos[$Modulo]); $i++)
+    $permiso[]=$modulos[$Modulo][$i];
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RED DE TRANSPORTE DE PASAJEROS DE LA CDMX</title>
+    <!-- CSS general -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- BOOTSTRAP CSS -->
+    <link href="/Almacen/public/bootstrap-5.3.2-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+        type="text/css" />
+    <!-- Iconos -->
+    <link rel="stylesheet" href="/public/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/public/assets/Bootstrap-5-5.3.0/css/bootstrap.min.css">
+    <!-- CSS del Menu  -->
+    <link rel="stylesheet" href="/public/assets/css/custom_rtp.css" />
+    <!-- En el <head> -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
+</head>
+
+<body>
+
+    <!-- encabezado -->
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/components/encabezado.html';?>
+    <!-- menu Mantenimiento -->
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/Mantenimiento/menu.html';?>
+
+
+    <!-- toast alerta -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 87px;">
+        <div id="myToast" class="toast bg-danger text-white border-0 shadow" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="toast-header bg-danger text-white border-0">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+                <strong class="me-auto">Swap</strong>
+                <small>Ahora mismo</small>
+                <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Por favor, completa todos los campos obligatorios antes de continuar.
+            </div>
+        </div>
+    </div>
+    <!-- fin toast -->
+
+    <main class="d-flex flex-column align-items-center animation bg-light" style="min-height: 100vh;">
+        <div class="mt-5 w-100 mx-auto" style="max-width: 1000px;">
+            <div class="card-body justify-content-center">
+                <div class="card shadow mt-3">
+                    <div class="card-header text-white" style="background-color: #012C22;">
+                        <h3 class="text-center mt-3">Consulta Ordenes</h3>
+                    </div>
+
+                    <div class="card-body mt-3">
+                        <form id="form_consulta_ordenes">
+                            <div class="row align-items-center justify-content-center mb-3">
+                                <div class="col-auto text-center">
+                                    <label for="rutas" class="form-label mb-0">Num.Orden:</label>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <input id="num_orden" type="number" class="form-control form-control-sm rounded-5">
+                                </div>
+                                <div class="col-auto text-center">
+                                    <label for="economico" class="form-label mb-0">Economico:</label>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <div class="position-relative">
+                                        <input type="number" id="economico" name="economico"
+                                            class=" form-control form-control-sm rounded-5">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center justify-content-center mb-3">
+
+                                <div class="col-auto text-center">
+                                    <label for="fecha" class="form-label mb-0">Fecha Inicio:</label>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <input type="date" id="fecha_inicio" 
+                                        class="form-control form-control-sm rounded-5">
+                                </div>
+                                <div class="col-auto text-center">
+                                    <label for="fecha" class="form-label mb-0">Fecha Fin:</label>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <input type="date" id="fecha_final" 
+                                        class="form-control form-control-sm rounded-5">
+                                </div>
+
+                            </div>
+                            <div class="row align-items-center justify-content-center mb-3">
+                                <div class="col-auto text-center">
+                                    <label for="busqueda_estatus" class="form-label mb-0">Busqueda por:</label>
+                                </div>
+                                <div class="col-3 text-end">
+                                    <select id="busqueda_estatus" name="busqueda_estatus"
+                                        class="form-select form-select-sm rounded-5">
+                                        <option value="0">-- Selecciona una opcion --</option>
+                                        <option value="1">ABIERTA</option>
+                                        <option value="2">CERRADAS</option>
+                                        <option value="3">REPORTE IMPROCEDENTE</option>
+                                        <option value="4">CANCELADAS</option>
+                                        <option value="5">REAPERTURA EN FIN DE SEMANA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center mt-4 mb-3">
+                                <button id="btn_alta" type="button" class="btn btn-success rounded-5 px-4 me-3">
+                                    <i class="fa-regular fa-floppy-disk"></i> Consultar Detalles</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+
+
+
+
+    <!-- pie de pagina -->
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/components/pie.html'; ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- script bootstrap -->
+    <script src="/public/assets/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/sweetalert2.all.min.js"></script>
+    <!-- DataTables core -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- DataTables Buttons y dependencias -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <!-- script general -->
+    <script type="module" src="scripts/index.js"></script>
+
+</body>
+
+</html>

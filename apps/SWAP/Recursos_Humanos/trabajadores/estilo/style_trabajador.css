@@ -1,0 +1,325 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 390319036638cb11f96d0426c37d77bbec365fef
+/* Animacion loader de la foto */
+.loader_foto {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    border-right-color: #25b09b;
+    animation: l15 1s infinite linear;
+}
+.loader_foto::before,
+.loader_foto::after {    
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+}
+.loader_foto::after {
+    margin: 8px;
+    animation-duration: 3s;
+}
+@keyframes l15{ 
+    100%{transform: rotate(1turn)}
+}
+
+/* Animacion de carga */
+.loader {
+    margin-left: 90px;
+    margin-top: 70px;
+    width: calc(80px / cos(45deg));
+    height: 14px;
+    --c: #000 0 15px,#0000 0 20px;
+    background: 
+        repeating-linear-gradient(135deg,var(--c)) left top,
+        repeating-linear-gradient( 45deg,var(--c)) left bottom;
+    background-size:  200% 50%;
+    background-repeat: no-repeat;
+    animation: l4 2s infinite linear;
+}
+@keyframes l4 {
+    100% {background-position:top right,bottom right}
+}
+
+/* para poner el div a la derecha del otro div */
+.form-row{
+    display: flex;
+    margin: auto;
+}
+
+.etiqueta{
+    float: right;
+}
+#titulo{
+    background-color: rgb(55, 72, 85); 
+    height: 30px;
+}
+#titulo h6{
+    color: white;
+}
+#titulo_margen{
+    background-color: rgb(1, 121, 111); 
+    height: 4px; 
+    display: flex;
+}
+#foto{
+    margin-left: 1220px;
+    margin-top: -250px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;  /* Asegura que la imagen mantenga su proporción y se ajuste bien dentro del tamaño */
+    border-radius: 8px; 
+}
+.titulo-foto{
+    margin-left: 120px;
+    margin-top: -15px;
+    color: white;
+}
+.titulo-foto-nueva{
+    margin-left: 580px;
+    margin-top: -180px;
+    color: white;
+}
+
+#foto_trabajador{
+    margin-left: 150px;
+    margin-top: 15px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;  
+    border-radius: 8px; 
+}
+#img_sin_permiso{
+    margin-left: 100px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;  /* Asegura que la imagen mantenga su proporción y se ajuste bien dentro del tamaño */
+    border-radius: 8px; 
+}
+#editar_img{
+    margin-left: 995px;
+    margin-top: -50px;
+}
+#contenedor-busqueda{
+    margin-left: 1100px;
+}
+
+
+#BtnDetalleTrabajador,
+#BtnDetalleAcademico,
+#BtnDetalleCursos,
+#BtnDetalleFamiliares,
+#BtnDetalleTallas,
+#BtnFamiliar{
+    background-color: rgb(1, 121, 111); 
+    color: white;
+}
+
+
+#BtnEditarTallas{
+    margin-left: 990px;
+    margin-top: -220px;
+}
+
+/* Edita el color del modal */
+.modal-header, .modal-body, #footer{
+    background-color: rgb(55, 72, 85);
+    justify-content: center;
+    align-items: center;     
+}
+
+/* Centra el titulo del modal */
+.modal-title {
+    color: white;
+    text-align: center;      
+    flex-grow: 1;  
+} 
+
+.texto-permiso{
+    margin-left: 100px;
+    color: red;
+}
+
+
+#contenedor_botones button, 
+#contenedor-boton-guardar button,
+#footer button {
+    background-color: rgb(1, 121, 111); 
+    color: white;
+}
+
+#contenedor_botones button:hover, 
+#contenedor-boton-guardar button:hover,
+#footer button:hover {
+    background-color: #E2E3E5;
+    color: #000;
+}
+<<<<<<< HEAD
+=======
+=======
+/* Animacion loader de la foto */
+.loader_foto {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    border-right-color: #25b09b;
+    animation: l15 1s infinite linear;
+}
+.loader_foto::before,
+.loader_foto::after {    
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+}
+.loader_foto::after {
+    margin: 8px;
+    animation-duration: 3s;
+}
+@keyframes l15{ 
+    100%{transform: rotate(1turn)}
+}
+
+/* Animacion de carga */
+.loader {
+    margin-left: 90px;
+    margin-top: 70px;
+    width: calc(80px / cos(45deg));
+    height: 14px;
+    --c: #000 0 15px,#0000 0 20px;
+    background: 
+        repeating-linear-gradient(135deg,var(--c)) left top,
+        repeating-linear-gradient( 45deg,var(--c)) left bottom;
+    background-size:  200% 50%;
+    background-repeat: no-repeat;
+    animation: l4 2s infinite linear;
+}
+@keyframes l4 {
+    100% {background-position:top right,bottom right}
+}
+
+/* para poner el div a la derecha del otro div */
+.form-row{
+    display: flex;
+    margin: auto;
+}
+
+.etiqueta{
+    float: right;
+}
+#titulo{
+    background-color: rgb(55, 72, 85); 
+    height: 30px;
+}
+#titulo h6{
+    color: white;
+}
+#titulo_margen{
+    background-color: rgb(1, 121, 111); 
+    height: 4px; 
+    display: flex;
+}
+#foto{
+    margin-left: 1220px;
+    margin-top: -250px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;  /* Asegura que la imagen mantenga su proporción y se ajuste bien dentro del tamaño */
+    border-radius: 8px; 
+}
+.titulo-foto{
+    margin-left: 120px;
+    margin-top: -15px;
+    color: white;
+}
+.titulo-foto-nueva{
+    margin-left: 580px;
+    margin-top: -180px;
+    color: white;
+}
+
+#foto_trabajador{
+    margin-left: 150px;
+    margin-top: 15px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;  
+    border-radius: 8px; 
+}
+#img_sin_permiso{
+    margin-left: 100px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;  /* Asegura que la imagen mantenga su proporción y se ajuste bien dentro del tamaño */
+    border-radius: 8px; 
+}
+#editar_img{
+    margin-left: 995px;
+    margin-top: -50px;
+}
+#contenedor-busqueda{
+    margin-left: 1100px;
+}
+
+
+#BtnDetalleTrabajador,
+#BtnDetalleAcademico,
+#BtnDetalleCursos,
+#BtnDetalleFamiliares,
+#BtnDetalleTallas,
+#BtnFamiliar{
+    background-color: rgb(1, 121, 111); 
+    color: white;
+}
+
+
+#BtnEditarTallas{
+    margin-left: 990px;
+    margin-top: -220px;
+}
+
+/* Edita el color del modal */
+.modal-header, .modal-body, #footer{
+    background-color: rgb(55, 72, 85);
+    justify-content: center;
+    align-items: center;     
+}
+
+/* Centra el titulo del modal */
+.modal-title {
+    color: white;
+    text-align: center;      
+    flex-grow: 1;  
+} 
+
+.texto-permiso{
+    margin-left: 100px;
+    color: red;
+}
+
+
+#contenedor_botones button, 
+#contenedor-boton-guardar button,
+#footer button {
+    background-color: rgb(1, 121, 111); 
+    color: white;
+}
+
+#contenedor_botones button:hover, 
+#contenedor-boton-guardar button:hover,
+#footer button:hover {
+    background-color: #E2E3E5;
+    color: #000;
+}
+>>>>>>> e40c811f0792c47020ea16882dd53dc56fd1a088
+>>>>>>> 390319036638cb11f96d0426c37d77bbec365fef

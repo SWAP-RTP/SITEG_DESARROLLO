@@ -1,0 +1,20 @@
+/* Animación fadeIn para elementos con la clase .animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation {
+  animation: fadeIn 0.9s ease-in-out;
+}
+
+#tabla_mant_eco_wrapper .dt-buttons {
+    display: none !important;
+}

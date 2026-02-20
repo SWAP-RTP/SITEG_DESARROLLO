@@ -20,7 +20,7 @@ export function cards_modulos() {
 
             // Fetch y pintar datos del módulo seleccionado
             try {
-                const response = await fetch('Trabajadores/query_sql/total_trabajadores.php');
+                const response = await fetch('../Trabajadores/query_sql/total_trabajadores.php');
                 if (!response.ok) throw new Error('Error de respuesta');
                 const data = await response.json();
 

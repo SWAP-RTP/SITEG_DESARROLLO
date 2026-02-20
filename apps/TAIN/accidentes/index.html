@@ -1,0 +1,229 @@
+<?php
+require_once '../middleware.php';
+$user = validarAcceso(); 
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Accidentes</title>
+    <link rel="shortcut icon" href="../img/Logo_RTP.png" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../lib/Bootstrap-5-5.3.0/css/bootstrap.min.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" type="text/css" href="../lib/fontawesome/css/all.min.css"/>
+    <!-- Mapa de calor -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Estilos -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style_accidentes.css">
+</head>
+
+<body>
+<?php include '../header.html'; ?>
+
+<main>
+    <div class="container-main">
+        <div class="row align-items-center mb-3 g-2 top-row-seg">
+            <div class="col-auto">
+                <button id="btnRegresarSeg" class="btn btn-warning btn-lg" onclick="location.href='/index.php'">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </div>
+
+            <div class="col text-center">
+                <h3 class="mb-0">Accidentes</h3>
+            </div>
+        </div>
+
+        <!-- FILTRO-->
+        <div class="filtros-accidentes mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="fechaAccidentes" class="form-label">Seleccionar fecha</label>
+                    <input type="date" id="fechaAccidentes" class="form-control" value="<?php echo date('Y-m-d'); ?>">
+                </div>
+
+                <!-- <div class="col-md-3">
+                    <label for="tipoEstatusAccidentes" class="form-label">Estatus</label>
+                    <select id="tipoEstatusAccidentes" class="form-select">
+                        <option value="">Todos</option>
+                        <option>En Proceso</option>
+                        <option>Concluidos</option>
+                        <option>Cancelados</option>
+                    </select>
+                </div> -->
+
+                <div class="col-md-3">
+                    <label for="moduloAccidentes" class="form-label">Módulo</label>
+                    <select id="moduloAccidentes" class="form-select">
+                        <option value="">Todos</option>
+                        <option>Módulo 1</option>
+                        <option>Módulo 2</option>
+                        <option>Módulo 3</option>
+                        <option>Módulo 4</option>
+                        <option>Módulo 5</option>
+                        <option>Módulo 6</option>
+                        <option>Módulo 7</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 text-md-end">
+                    <button id="btnCargarAcc" class="btn btn-success mt-3 mt-md-0">
+                        Cargar Datos
+                    </button>
+                </div>
+            </div>
+        </div>
+<!-- MODULOS -->
+<div id="panelRankingModulos" class="panel-ranking-modulos mt-2" hidden>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h4 class="mb-0">Ranking de módulos por número de accidentes</h4>
+        <button id="btnCerrarRanking" class="btn btn-sm btn-outline-light">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <small class="text-light-50">
+        Del módulo más crítico al de menor incidencia. Datos del periodo filtrado.
+    </small>
+
+    <div class="lista-modulos-ranking mt-3">
+    </div>
+</div>
+
+<div id="panelVariacionMes" class="panel-ranking-variacion" hidden>
+    <h5 class="mb-1">Variación por Módulo, Mes actual vs Mes Anterior</h5>
+    <p class="text-muted small mb-3">
+        Cambio porcentual de accidentes por módulo comparando el mes actual con el mes anterior.
+    </p>
+    <div id="listaVariacionModulos"></div>
+</div>
+
+<div id="panelRutasModulos" class="panel-ranking-rutas" hidden>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h4 class="mb-0">Rutas más riesgosas por módulo</h4>
+        <button id="btnCerrarRutas" class="btn btn-sm btn-outline-light">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <p class="text-muted small mb-3">
+        Ruta con mayor número de accidentes en cada módulo
+        (periodo considerado).
+    </p>
+
+    <div id="listaRutasModulos" class="lista-rutas-modulos">
+        </div>
+    </div>
+<section id="seccionGraficas">
+    <div class="row g-4">
+
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="col-xl-7 col-lg-12">
+
+            <!-- ACCIDENTES TOTALES -->
+            <div class="card-graph mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h4 class="mb-0">
+                        Accidentes totales: <span id="totalAccidentes">0</span>
+                    </h4>
+                    <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis small">
+                        <i class="fa-solid fa-chart-line me-1"></i> Módulo
+                    </span>
+                </div>
+
+<canvas id="grafTiempoLineal"></canvas>
+            </div>
+
+            <!-- MAPA DE CALOR -->
+            <div class="card-graph">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h4 class="mb-0">Mapa de Calor CDMX</h4>
+                    <span class="badge rounded-pill bg-info-subtle text-info-emphasis small">
+                        <i class="fa-solid fa-location-dot me-1"></i> Concentración
+                    </span>
+                </div>
+
+                <div id="mapaCalor" class="mapa-calor">
+                    <a href="http://10.10.30.28:8086/app-tain/accidentes/script/mapa_de_calor/index.html" target="_blank">
+                        <img src="script/mapa_de_calor/scripts/mapa.png"
+                             class="img-fluid rounded"
+                             alt="Mapa de calor CDMX">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA -->
+        <div class="col-xl-5 col-lg-12">
+
+            <!-- TOTAL DEL DÍA -->
+            <div class="card-graph mb-4 text-center">
+                <h5 class="mb-2">
+                    Total de registros del día
+                </h5>
+                <h3 id="fechaSeleccionada" class="fw-bold">
+                    17/02/2026
+                </h3>
+                <h1 id="totalDia" class="display-5 fw-bold text-success">
+                    0
+                </h1>
+            </div>
+            <div class="row g-3">
+
+                <div class="col-6">
+                    <div class="card-mini">
+                        <h6>Alcaldia más accidentada</h6>
+                        <h4 id="bloque1">0</h4>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card-mini">
+                        <h6>ACCIDENTES EN PROCESO</h6>
+                        <h4 id="bloque2">0</h4>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card-mini">
+                        <h6>Operador más accidentes</h6>
+                        <h4 id="bloque3">0</h4>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card-mini">
+                        <h6>Accidente más frecuente</h6>
+                        <h4 id="bloque4">0</h4>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+    </div>
+</main>
+    <?php include '../footer.html'; ?>
+<!-- JS de Bootstrap -->
+<script src="./lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<!-- JS de Fontawesome -->
+<script type="text/javascript" src="./lib/fontawesome/js/all.min.js"></script>
+<!-- Chart.js -->
+<script src="./lib/chartjs/chart.umd.min.js"></script>
+<!-- Leaflet base -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Heatmap plugin -->
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<!-- JS del dashboard -->
+<script src="script/accidentes.js"></script>
+<script src="../../js/auth_name.js"></script>
+</body>
+</html>

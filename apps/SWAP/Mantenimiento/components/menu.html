@@ -1,0 +1,325 @@
+<!-- INICIO BARRA LATERAL DE MENÚ -->
+<div class="flex-shrink-0 p-3" style="width: 350px; min-height: 100vh; background-color: #009688">
+
+  <!-- INICIO LISTA DE OPCIONES  -->
+  <ul class="list-unstyled ps-0">
+    <!-- permiso dependiendo del modulo -->
+
+    <li class="mb-1">
+      <a id="correctivo-alta" href="/Mantenimiento/correctivo/orden_alta/index.html"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3""><i
+          class=" fas fa-car-alt"></i>Alta de Orden</a>
+    </li>
+    <li class="border-top my-1"></li>
+
+    <li class="mb-1">
+      <a id="mantenimiento-requisicon-fondo-revolvente"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-target="#mantenimiento-requisicon-fondo-revolvente" href="/Mantenimiento/requisicion_buscar.html"><i
+          class="fas fa-funnel-dollar"></i>Requisici&#243;n de Fondo Revolvente
+      </a>
+    </li>
+    <li class="border-top my-1"></li>
+
+    <li class="mb-1">
+      <a id="mantenimiento-fondo-revolvente"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-target="#mantenimiento-fondo-revolvente" href="/Mantenimiento/requerim_fondo_revolvente.html"><i
+          class="fas fa-funnel-dollar"></i>Fondo Revolvente
+      </a>
+    </li>
+
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+        data-bs-toggle="collapse" data-bs-target="#requisiciones" aria-expanded="false">
+        <div id="btn-desp" class="d-flex align-items-center gap-2"><i class="fas fa-folder-plus"></i>
+          Generaci&#243;n de Requisiciones
+        </div>
+        <i class="fas fa-chevron-down ms-2 dropdown"></i>
+      </button>
+
+      <div class="collapse" id="requisiciones">
+        <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+          <li class="pe-2">
+            <a id="consulta-requisicion" href="/Mantenimiento/generacion_requisicion/index.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                class="fas fa-search-location"></i>Consulta de requerimiento</a>
+          </li>
+          <li class="pe-2">
+            <a id="alta_requisicion" href="/Mantenimiento/generacion_requisicion/alta_requerimiento.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                class="fas fa-file-import"></i>Alta de nuevo requerimiento</a>
+          </li>
+
+
+
+        </ul>
+      </div>
+    </li>
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <a id="mantenimiento-firma-responsable"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-target="#firma-responsable" href="/Mantenimiento/firma/firma_responsable.html"><i
+          class="fas fa-pencil"></i>Firma Responsable
+      </a>
+    </li>
+
+
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <a id="mantenimiento-distribucion-refacciones"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-target="#mantenimiento-distribucion-refacciones" href="/Mantenimiento/distrib/salidas_buscar.html"><i
+          class="fas fa-people-carry"></i>Distribuci&#243;n de Refacciones
+      </a>
+    </li>
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <a id="mantenimiento-existencias" class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-target="#mantenimiento-existencias" href="/Mantenimiento/distrib/existencias_buscar.html"><i
+          class="fas fa-boxes"></i>Existencias
+      </a>
+    </li>
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <a id="mantenimiento-reporte-modular"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-target="#mantenimiento-reporte-modular" href="/Mantenimiento/distrib/reporte.html"><i
+          class="fas fa-file-invoice"></i>Reporte Modular
+      </a>
+    </li>
+
+    <!-- Mantenimiento Preventivo -->
+    <li class="border-top my-2">
+      <ul class="list-unstyled ps-0">
+        <li class="mb-1">
+          <button id="parque-vehicular"
+            class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+            data-bs-toggle="collapse" data-bs-target="#pv-menu" aria-expanded="false">
+            <div id="btn-desp" class="d-flex align-items-center gap-2">
+              <i class="fas fa-bus"></i>Mantenimiento Preventivo
+              <i class="fas fa-chevron-down ms-2 dropdown"></i>
+          </button>
+
+          <div class="collapse" id="pv-menu">
+            <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+              <li class="pe-2">
+                <a id="pv-odometro" href="/Mantenimiento/parque_vehicular/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+                  <i class="fas fa-tachometer-alt"></i>Od&oacute;metro
+                </a>
+              </li>
+              <li class="pe-2">
+                <a id="pv-orden-reparacion" href="/Mantenimiento/parque_vehicular/orden_reparacion/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+                  <i class="fas fa-receipt"></i>Orden de Reparaci&oacute;n
+                </a>
+              </li>
+
+              <li class="pe-2">
+                <a href="#"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2 justify-content-between"
+                  data-bs-toggle="collapse" data-bs-target="#mantenimiento-reportes-preventivos" aria-expanded="false">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class='fas fa-file-alt'></i>
+                    <span> Reportes</span>
+                  </div>
+                  <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="collapse" id="mantenimiento-reportes-preventivos">
+                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li class="pe-2">
+                      <a id="servicio-preentivo" href="/Mantenimiento/reporte/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+                        <i class="fas fa-screwdriver"></i>Servicios Preventivos</a>
+                    </li>
+
+
+                    <li class="pe-2">
+                      <a id="historicos-km-preventivos" href="/Mantenimiento/historico/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+                        <i class="fas fa-atlas"></i>Hist&oacute;ricos KM y Preventivos</a>
+                    </li>
+
+                    <li class="pe-2">
+                      <a id="historicos-km-dia-dia" href="/Mantenimiento/historico_km/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+                        <i class="far fa-calendar-check"></i>Hist&oacute;ricos KM D&iacute;a D&iacute;a </a>
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+
+        <!--Mantenimiento Correctivo  -->
+        <li class="border-top my-2"></li>
+        <li class="mb-1">
+          <button
+            class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+            data-bs-toggle="collapse" data-bs-target="#mantenimiento-correctivo" aria-expanded="false">
+            <div id="btn-desp" class="d-flex align-items-center gap-2"><i class="fas fa-car-crash"></i>
+              Mantenimiento Correctivo
+            </div>
+            <i class="fas fa-chevron-down ms-2 dropdown"></i>
+          </button>
+
+          <div class="collapse" id="mantenimiento-correctivo">
+            <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+              <li class="pe-2">
+                <a id="correctivo-diagnostico" href="/Mantenimiento/correctivo/diagnostico/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                    class="fas fa-stethoscope"></i>Diagnostico</a>
+              </li>
+              <li class="pe-2">
+                <a id="correctivo-solicitud" href="/Mantenimiento/correctivo/solicitud_almacen/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                    class="fas fa-warehouse"></i>Solicitud a Almacen</a>
+              </li>
+              <li class="pe-2">
+                <a id="correctivo-reparaciones" href="/Mantenimiento/correctivo/reparaciones/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                    class="fas fa-tools"></i>Reparaciones Realizadas</a>
+              </li>
+              <li class="pe-2">
+                <a id="correctivo-salida" href="/Mantenimiento/correctivo/salida/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                    class="fas fa-door-open"></i>Salida de Taller</a>
+              </li>
+              <li class="pe-2">
+                <a id="correctivo-consulta" href="/Mantenimiento/correctivo/consulta_ordenes/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                    class="fas fa-search-location"></i>Consulta de Ordenes</a>
+              </li>
+              <li class="pe-2">
+                <a id="correctivo-consulta" href="/Mantenimiento/correctivo/rat/index.html"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                    class="fa-solid fa-gear"></i>Registro de autobuses en taller (RAT)</a>
+              </li>
+
+              <li class="pe-2">
+                <a href="#"
+                  class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2 justify-content-between"
+                  data-bs-toggle="collapse" data-bs-target="#mantenimiento-reportes" aria-expanded="false">
+                  <div id="btn-desp" class="d-flex align-items-center gap-2">
+                    <i class='fas fa-file-alt'></i>
+                    <span> Reportes</span>
+                  </div>
+                  <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="collapse" id="mantenimiento-reportes">
+                  <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+
+                    <li class="pe-2">
+                      <a id="fallas-recurrentes" href="/Mantenimiento/correctivo/reportes/fallas_recurrentes/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                          class="fas fa-tools"></i> Fallas Recurrentes </a>
+                    </li>
+                    <li class="pe-2">
+                      <a href="/Mantenimiento/correctivo/reportes/componentes_mas_usados/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                          class="fas fa-cogs"></i> Componentes m&aacute;s Usados </a>
+                    </li>
+                    <li class="pe-2">
+                      <a href="/Mantenimiento/correctivo/reportes/operadores_incidencias/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                          class="far fa-address-card"></i> Operadores con m&aacute;s incidencias </a>
+                    </li>
+                    <li class="pe-2">
+                      <a href="/Mantenimiento/correctivo/reportes/modulos_mayor_mantenimientos/index.html"
+                        class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                          class="far fa-chart-bar"></i> M&oacute;dulos con mayor mantenimientos </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Llantas -->
+        <li class="border-top my-2"></li>
+    </li>
+    <li class="mb-1">
+      <button id="mantenimiento-llantas"
+        class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+        data-bs-toggle="collapse" data-bs-target="#llantas-menu" aria-expanded="false">
+        <div id="btn-desp" class="d-flex align-items-center gap-2">
+          <i class="fas fa-circle-dot"></i>Llantas
+        </div>
+        <i class="fas fa-chevron-down ms-2 dropdown"></i>
+      </button>
+
+      <div class="collapse" id="llantas-menu">
+        <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+          <li class="pe-2">
+            <a id="llantas-menu-item-gestion" href="/Mantenimiento/llantas/index.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+              <i class="fas fa-file"></i>Gestion de llantas
+            </a>
+          </li>
+          <li class="pe-2">
+            <a id="llantas-menu-item-huella" href="/Mantenimiento/llantas/huella.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+              <i class="fas fa-ruler"></i>Profundidad de Huella
+            </a>
+          </li>
+          <li class="pe-2">
+            <a id="llantas-menu-item-reportes" href="/Mantenimiento/llantas/reportes.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2">
+              <i class="fas fa-file"></i>Reportes
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="border-top my-2">
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+        data-bs-toggle="collapse" data-bs-target="#carga-masiva" aria-expanded="false">
+        <div id="btn-desp" class="d-flex align-items-center gap-2"><i class="fas fa-upload"></i>
+          Carga Masiva
+        </div>
+        <i class="fas fa-chevron-down ms-2 dropdown"></i>
+      </button>
+
+      <div class="collapse" id="carga-masiva">
+        <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+          <li class="pe-2">
+            <a id="carga_requerimiento" href="/Mantenimiento/carga_masiva/carga_requerimiento.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                class="fas fa-tasks"></i>Requerimiento</a>
+          </li>
+          <li class="pe-2">
+            <a id="carga_distribucion" href="/Mantenimiento/carga_masiva/carga_distribucion.html"
+              class="link-dark rounded w-100 d-flex align-items-center gap-2 text-light py-2"><i
+                class="fas fa-truck-loading"></i>Distribuci&#243;n</a>
+          </li>
+
+        </ul>
+      </div>
+    </li>
+    </li>
+
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <a class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+        href="/menu.html">
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-undo-alt"></i>
+          Regresar
+        </div>
+      </a>
+    </li>
+  </ul>
+
+
+  </ul>
+</div>
+<!-- FIN DE LISTA DE OPCIONES  -->

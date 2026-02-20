@@ -1,0 +1,46 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 390319036638cb11f96d0426c37d77bbec365fef
+/* Estilo para el contenedor principal */
+#contenedor-principal {
+    display: flex; /* Utiliza el modelo de diseño flexbox para distribuir los elementos */
+    margin: auto;  /* Centra el contenedor en la página horizontalmente */
+}
+
+/* Estilo para el contenedor de los botones */
+#contenedor-boton {
+    display: flex; /* Utiliza flexbox para distribuir los botones dentro del contenedor */
+    justify-content: center; /* Centra los botones en el eje horizontal */
+    margin-top: 20px; /* Añade un espacio superior de 20px */
+    gap: 10px; /* Añade un espacio de 10px entre los botones */
+}
+
+/* Estilo para las filas de formularios */
+.form-row {
+    display: flex; /* Utiliza flexbox para alinear los elementos dentro de la fila */
+    margin: auto; /* Centra la fila en la página horizontalmente */
+<<<<<<< HEAD
+=======
+=======
+/* Estilo para el contenedor principal */
+#contenedor-principal {
+    display: flex; /* Utiliza el modelo de diseño flexbox para distribuir los elementos */
+    margin: auto;  /* Centra el contenedor en la página horizontalmente */
+}
+
+/* Estilo para el contenedor de los botones */
+#contenedor-boton {
+    display: flex; /* Utiliza flexbox para distribuir los botones dentro del contenedor */
+    justify-content: center; /* Centra los botones en el eje horizontal */
+    margin-top: 20px; /* Añade un espacio superior de 20px */
+    gap: 10px; /* Añade un espacio de 10px entre los botones */
+}
+
+/* Estilo para las filas de formularios */
+.form-row {
+    display: flex; /* Utiliza flexbox para alinear los elementos dentro de la fila */
+    margin: auto; /* Centra la fila en la página horizontalmente */
+>>>>>>> e40c811f0792c47020ea16882dd53dc56fd1a088
+>>>>>>> 390319036638cb11f96d0426c37d77bbec365fef
+}

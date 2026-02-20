@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="/app-swap/images/Swap_8.jpg" type="image/x-icon">
+  <!-- <link rel="shortcut icon" href="/app-swap/images/Swap_8.jpg" type="image/x-icon"> -->
   <!-- TÍTULO DE LA PÁGINA -->
   <title>Entrada de materiales</title>
   <!-- Iconos -->
@@ -13,7 +13,7 @@
   <!-- BOOTSTRAP CSS -->
   <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
   <!-- CSS del Menu, encabezado, main y Titulos (template)-->
-  <link rel="stylesheet" type="text/css" href="/app-swap/public/css/custom_rtp.css" />
+  <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <!-- DataTables CSS -->
@@ -52,16 +52,16 @@
                   <div class="col-12 col-md-4">
                     <label for="material" class="form-label mb-0">Descripción del Material:</label>
                     <input id="material" name="material" type="text" class="form-control form-control-sm rounded-pill"
-                      placeholder="Ej: ARILLO PARA ENGARGOLAR 3/4 COLOR NEGRO">
+                      placeholder="Ej: TONER PARA IMPRESORA">
                   </div>
                   <!-- campo 3: Grupo al que pertenece (select) -->
                   <div class="col-12 col-md-4">
                     <label for="grupo_pertenece" class="form-label mb-0">Grupo al que pertenece:</label>
                     <select id="grupo_pertenece" name="grupo_pertenece" class="form-select form-select-sm rounded-pill">
                       <option value="">Selecciona...</option>
-                      <option value="Papelería">Papelería</option>
-                      <option value="Limpieza">Limpieza</option>
-                      <option value="Herramientas">Herramientas</option>
+                      <option value="Papelería">PAPELERIA</option>
+                      <option value="Limpieza">LIMPIEZA</option>
+                      <option value="Herramientas">HERRAMIENTAS</option>
                       <option value="Otros">Otros</option>
                     </select>
                   </div>
@@ -70,41 +70,49 @@
                     <label for="unidad_entrada" class="form-label mb-0">Unidad de Entrada:</label>
                     <select id="unidad_entrada" name="unidad_entrada" class="form-select form-select-sm rounded-pill">
                       <option value="">Selecciona...</option>
-                      <option value="Caja">Caja</option>
-                      <option value="Paquete">Paquete</option>
-                      <option value="Pieza">Pieza</option>
-                      <option value="Litro">Litro</option>
-                      <option value="Otros">Otros</option>
+                      <option value="Caja">CAJA</option>
+                      <option value="Paquete">PAQUETERIA</option>
+                      <option value="Pieza">PIEZA</option>
+                      <option value="Litro">LITRO</option>
+                      <option value="Otros">OTROS</option>
                     </select>
                   </div>
                   <!-- campo 5: Existencia Mínima -->
                   <div class="col-12 col-md-4">
-                    <label for="existencia_minima" class="form-label mb-0">Existencia Mínima:</label>
-                    <input id="existencia_minima" name="existencia_minima" type="number" min="0"
-                      class="form-control form-control-sm rounded-pill" placeholder="Ej: 10">
+                    <label for="cantidad_material" class="form-label mb-0">Cantidad:</label>
+                    <input id="cantidad_material" name="cantidad_material" type="number" min="0"
+                      class="form-control form-control-sm rounded-pill" placeholder="Ej:3">
                   </div>
                   <!-- campo 6: Ubicación en Almacén -->
                   <div class="col-12 col-md-4">
                     <label for="ubicacion_almacen" class="form-label mb-0">Ubicación en Almacén:</label>
-                    <input id="ubicacion_almacen" name="ubicacion_almacen" type="text"
-                      class="form-control form-control-sm rounded-pill" placeholder="Ej: Pasillo 3, Estante B">
+                    <select id="ubicacion_almacen" name="ubicacion_almacen"
+                      class="form-select form-select-sm rounded-pill">
+                      <option value="">Selecciona...</option>
+                      <option value="Almacén Central">AlMACEN CENTRAL</option>
+                      <option value="Recursos Humanos">RECURSOS HUMANOS</option>
+                      <option value="Informática">INFORMATICA</option>
+                      <option value="Mantenimiento">MANTENIMIENTO</option>
+                    </select>
                   </div>
                   <!-- campo 7: Estado del Material (select) -->
                   <div class="col-12 col-md-4">
                     <label for="estado_material" class="form-label mb-0">Estado del Material:</label>
                     <select id="estado_material" name="estado_material" class="form-select form-select-sm rounded-pill">
                       <option value="">Selecciona...</option>
-                      <option value="Nuevo">Nuevo / Disponible</option>
+                      <option value="Nuevo">NUEVO</option>
                       <option value="Dañado">Dañado</option>
+                      <option value="Gastado">Gastado</option>
                       <option value="Mantenimiento">En mantenimiento</option>
                     </select>
                   </div>
 
-                  <!-- campo 8: ID de Credencial -->
+                  <!-- campo 8: ID de Credencial (Es el que vendrá de manera atomatizada en el index.js) -->
                   <div class="col-12 col-md-4">
                     <label for="id_credencial" class="form-label mb-0">Credencial:</label>
-                    <input id="id_credencial" name="id_credencial" type="text"
-                      class="form-control form-control-sm rounded-pill" placeholder="Ej: 000123, A-456">
+                    <input id="id_credencial" name="id_credencial" type="text" pattern="[0-9]*" inputmode="numeric"
+                      maxlength="10" class="form-control form-control-sm rounded-pill" placeholder="Ej:123"
+                      autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                   </div>
                   <!-- campo 9: Nombre de la Persona (se usará como 'nombre_registra' para el JS) -->
                   <div class="col-12 col-md-4">
@@ -115,19 +123,14 @@
                   <!-- campo 10: Área de Adscripción (select, se usará como 'area' para el JS) -->
                   <div class="col-12 col-md-4">
                     <label for="area" class="form-label mb-0">Área de Adscripción:</label>
-                    <select id="area" name="area" class="form-select form-select-sm rounded-pill">
-                      <option value="">Selecciona área...</option>
-                      <option value="Administración">Almacen Central/option>
-
-                      <option value="Módulo 4">Módulo 4</option>
-                      <option value="Otros">Otros</option>
-                    </select>
+                    <input id="area" name="area" type="text" class="form-control form-control-sm rounded-pill"
+                      value="Módulo 4" readonly>
                   </div>
                   <!-- campo 11: Fecha de Registro -->
                   <div class="col-12 col-md-4">
                     <label for="fecha_registro" class="form-label mb-0">Fecha y hora de Registro:</label>
                     <input id="fecha_registro" name="fecha_registro" type="datetime-local"
-                      class="form-control form-control-sm rounded-pill" required>
+                      class="form-control form-control-sm rounded-pill">
                   </div>
                 </div>
               </div>
@@ -148,24 +151,30 @@
       </div>
     </div>
 
+    <!-- Título de la consulta -->
+    <div id="titulo-consulta" class="text-center w-100" style="display:none; margin-top:20px;">
+      <h2>Resultados de la consulta de materiales</h2>
+    </div>
+
     <!-- inicia Tabla para mostrar los registros de materiales -->
     <div class="row justify-content-center">
 
       <div class="col-10 col-md-10 col-lg-9 mx-auto">
         <div class="table-responsive mt-4">
-          <table id="tabla_registros" class="table table-striped table-hover align-middle shadow-sm">
+          <table id="tabla_registros" class="table table-striped table-hover align-middle shadow-sm fade-table d-none">
             <thead class="table-success small encabezado-mini">
-              <th>Código del Material</th>
-              <th>Descripción</th>
-              <th>Grupo</th>
-              <th>Unidad de Entrada</th>
-              <th>Existencia Mínima</th>
-              <th>Ubicación en Almacén</th>
-              <th>Estado</th>
-              <th>ID de Credencial</th>
-              <th>Registrado por</th>
-              <th>Área de Adscripción</th>
-              <th>Fecha de Registro</th>
+              <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Grupo</th>
+                <th>Unidad</th>
+                <th>Cantidad</th>
+                <th>Ubicación</th>
+                <th>Estado</th>
+                <th>Credencial</th>
+                <th>Registrado por</th>
+                <th>Área</th>
+                <th>Fecha</th>
               </tr>
             </thead>
             <tbody id="tabla_materiales"></tbody>
@@ -174,6 +183,8 @@
       </div>
     </div>
     <!-- termina Tabla para mostrar los registros de materiales -->
+
+
   </main>
 
   <?php 
@@ -184,9 +195,13 @@
   <!-- BOOTSTRAP JS  -->
   <script type="text/javascript" src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
   <!-- js del menu lateral -->
-  <script type="text/javascript" src="/app-swap/public/js/menu.js"></script>
+  <script type="text/javascript" src="../includes/utils/menu.js"></script>
+  <!-- Módulos reutilizables -->
+  <script type="module" src="../includes/utils/buscarCredencial.js"></script>
+  <script type="module" src="../includes/utils/dataTable_v2.js"></script>
+  <!-- Script específico de papelería -->
+  <script type="module" src="scripts/materiales.js"></script>
 
-  <script type="module" src="scripts/index.js"></script>
 
   <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

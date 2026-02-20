@@ -1,0 +1,331 @@
+/* --- PAGINADOR PERSONALIZADO DATATABLES --- */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background: #22334a !important;
+  color: #fff !important;
+  border: 1px solid #2e4a62 !important;
+  border-radius: 6px !important;
+  margin: 0 2px !important;
+  min-width: 36px;
+  min-height: 32px;
+  font-weight: 500;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+  background: #254a7c !important;
+  color: #fff !important;
+  border: 1.5px solid #4a7bb8 !important;
+  box-shadow: 0 0 4px #254a7c44;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: #18375b !important;
+  color: #fff !important;
+  border: 1.5px solid #4a7bb8 !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+  background: #132c46 !important;
+  color: #888 !important;
+  border: 1px solid #2e4a62 !important;
+  opacity: 0.7;
+}
+/* --- PERSONALIZACIÓN DE DATATABLES --- */
+
+/* Contenedor de controles de DataTables arriba de la tabla */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Alinear los controles a los extremos */
+.dataTables_wrapper .dataTables_length {
+  float: left;
+  margin-left: 1rem;
+}
+.dataTables_wrapper .dataTables_filter {
+  float: right;
+  margin-right: 1rem;
+}
+
+/* Input de búsqueda */
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+  background: #22334a;
+  color: #fff;
+  border: 1px solid #2e4a62;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-left: 0.5em;
+}
+
+/* Select de mostrar registros */
+.dataTables_wrapper .dataTables_length select {
+  background: #22334a;
+  color: #fff;
+  border: 1px solid #2e4a62;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin: 0 0.5em;
+}
+
+/* Etiquetas de los controles */
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+  color: #fff;
+  font-weight: 400;
+}
+
+/* Botones de acción personalizados */
+#tabla_orden_alta #tabla_modulos_sistema .btn-success {
+  background-color: #254a7c !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-right: 4px;
+  transition: background 0.2s;
+}
+#tabla_orden_alta #tabla_modulos_sistema .btn-success:hover {
+  background-color: #18375b !important;
+}
+#tabla_orden_alta #tabla_modulos_sistema .btn-warning {
+  background-color: #b85c2c !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 6px;
+  padding: 4px 10px;
+  transition: background 0.2s;
+}
+#tabla_orden_alta #tabla_modulos_sistema .btn-warning:hover {
+  background-color: #a04a1a !important;
+}
+
+/* Centrar la paginación debajo de la tabla */
+.dataTables_wrapper .dataTables_paginate {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.card1 {
+  width: 95vw; /* Ocupa todo el ancho de la ventana */
+  max-width: 100vw; /* No se limita */
+  margin-left: 1vw; /* Opcional: para compensar el padding del body/main si lo hay */
+  background: transparent;
+  border-radius: 0;
+}
+.card-header,
+.card-body {
+  width: 100%;
+}
+
+.card1.nav-link {
+  color: white;
+  background-color: #132c46 !important;
+}
+
+.card1 .card-body {
+  color: white;
+  background-color: #132c46 !important;
+}
+
+.nav-tabs {
+  width: 100%;
+  border-bottom: none !important;
+}
+/* Sobrescribe los estilos oscuros para la pestaña activa */
+.nav-tabs .nav-link.active {
+  background-color: #132c46 !important;
+  color: white !important;
+  border-color: #132c46;
+}
+
+/* Estilo para las pestañas inactivas si las quieres más claras */
+.nav-tabs .nav-link {
+  color: #ffffff;
+  border-color: #132c46;
+  background: rgb(14, 26, 43);
+}
+
+.card-body {
+  background-color: #132c46 !important;
+}
+/* estilo card carpeta */
+.grid {
+  color: white;
+  display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); */
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas fijas */
+  gap: 25px;
+}
+/* Pantallas medianas (tablets, laptops pequeños) */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 por fila */
+  }
+}
+/* Tablets verticales o pantallas pequeñas */
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 por fila */
+  }
+}
+/* Celulares */
+@media (max-width: 576px) {
+  .grid {
+    grid-template-columns: 1fr; /* 1 por fila */
+  }
+}
+
+/* contenido */
+.titulo {
+  margin: 0 auto;
+  margin-top: -15px;
+}
+/* --- TABLA DE USUARIOS PERSONALIZADA --- */
+
+/* Fondo de la tabla y ancho completo */
+#tabla_orden_alta.dataTable {
+  width: 100% !important;
+  background-color: #091c31 !important; /* Azul card */
+  border-radius: 10px;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  overflow: hidden;
+}
+#tabla_modulos_sistema.dataTable {
+  width: 100% !important;
+  background-color: #091c31 !important; /* Azul card */
+  border-radius: 10px;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+/* Cabecera */
+#tabla_orden_alta thead th {
+  background-color: #061628 !important; /* Azul más claro para contraste */
+  color: #fff !important;
+  border-bottom: 2px solid #2e4a62 !important;
+  font-weight: bold;
+  border-right: 1px solid #28496e !important;
+}
+#tabla_modulos_sistema thead th {
+  background-color: #061628 !important; /* Azul más claro para contraste */
+  color: #fff !important;
+  border-bottom: 2px solid #2e4a62 !important;
+  font-weight: bold;
+  border-right: 1px solid #28496e !important;
+} 
+
+/* Última cabecera sin borde derecho */
+#tabla_orden_alta thead th:last-child {
+  border-right: none !important;
+}
+#tabla_modulos_sistema thead th:last-child {
+  border-right: none !important;
+}
+
+/* Filas */
+#tabla_orden_alta tbody tr {
+  background-color: #18375b !important; /* Azul intermedio */
+  color: #e6f0fa !important;
+  border-bottom: 1px solid #28496e !important;
+}
+#tabla_modulos_sistema tbody tr {
+  background-color: #18375b !important; /* Azul intermedio */
+  color: #e6f0fa !important;
+  border-bottom: 1px solid #28496e !important;
+}
+
+/* Celdas */
+#tabla_orden_alta td {
+  border-right: 1px solid #28496e !important;
+  vertical-align: middle;
+  color: #e6f0fa !important;
+}
+#tabla_modulos_sistema td {
+  border-right: 1px solid #28496e !important;
+  vertical-align: middle;
+  color: #e6f0fa !important;
+}
+
+/* Última celda sin borde derecho */
+#tabla_orden_alta td:last-child {
+  border-right: none !important;
+}
+#tabla_modulos_sistema td:last-child {
+  border-right: none !important;
+}
+
+/* Hover en filas */
+#tabla_orden_alta tbody tr:hover {
+  background-color: #2e2f300f !important; /* Azul claro de contraste */
+  color: #fff !important;
+}
+#tabla_modulos_sistema tbody tr:hover {
+  background-color: #2e2f300f !important; /* Azul claro de contraste */
+  color: #fff !important;
+}
+
+/* Bordes redondeados solo en las esquinas */
+#tabla_orden_alta thead th:first-child {
+  border-top-left-radius: 10px;
+}
+#tabla_orden_alta thead th:last-child {
+  border-top-right-radius: 10px;
+}
+#tabla_orden_alta tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+#tabla_orden_alta tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+#tabla_modulos_sistema thead th:first-child {
+  border-top-left-radius: 10px;
+}
+#tabla_modulos_sistema thead th:last-child {
+  border-top-right-radius: 10px;
+}
+#tabla_modulos_sistema tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+#tabla_modulos_sistema tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.btn-color {
+  background-color: #f7b32b !important; /* Amarillo-naranja contraste */
+  border: none !important;
+  color: #132c46 !important;
+  border-radius: 6px;
+  padding: 4px 18px;
+  margin-right: 4px;
+  font-weight: bold;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.btn-color:hover {
+  background-color: #fff !important;
+  color: #173d6b !important;
+}
+
+/* Inputs con fondo azul card */
+.form-control,
+.form-select {
+  background-color: #132c46 !important;
+  color: #e6f0fa !important;
+  border: 1px solid #28496e !important;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: #1a3a5d !important;
+  color: #fff !important;
+  border-color: #2f2e2c82 !important;
+  box-shadow: 0 0 0 2px #f7b32b44;
+}

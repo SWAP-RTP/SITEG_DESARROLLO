@@ -8,7 +8,7 @@ $user = validarAcceso();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="images/Swap_8.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="../includes/img/Swap_8.jpg" type="image/x-icon">
 
     <!-- TÍTULO DE LA PÁGINA -->
     <title>SWAP</title>
@@ -33,7 +33,7 @@ $user = validarAcceso();
         <?php include 'encabezado_menu.html'; ?>
 
         <div style="width: 500px;">
-            <h2 class="text-center">Men&uacute;</h2>
+            <h2 class="text-center">Menu;</h2>
             <hr>
         </div>
         <div class="d-flex animate__animated animate__fadeIn">
@@ -66,6 +66,47 @@ $user = validarAcceso();
                             </div>
                         </li>
                         <li class="border-top my-2"></li>
+                        <li class="mb-1">
+                            <button class="btn btn-toggle align-items-center rounded collapsed w-100 p-3"
+                                data-bs-toggle="collapse" data-bs-target="#admin2" aria-expanded="false">
+                                <div class="d-flex align-items-center flex-grow-1 gap-2 justify-content-center">
+                                    DIRECCION EJECTIVA DE ADMINISTRACION Y FINANZAS
+                                </div>
+                                <i class="fas fa-chevron-down ms-2"></i>
+                            </button>
+
+                            <div class="collapse" id="admin2">
+                                <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1">
+                                    <li class="pe-2">
+                                        <a href="Recursos_Humanos/index.html"
+                                            class="link-dark rounded w-75 d-flex align-items-center gap-2 py-2 fs-6">
+                                            <i class="fa-solid fa-people-roof"></i>RECURSOS HUMANOS
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-top my-2"></li>
+                        <li class="mb-1">
+                            <button class="btn btn-toggle align-items-center rounded collapsed w-100 p-3"
+                                data-bs-toggle="collapse" data-bs-target="#admin3" aria-expanded="false">
+                                <div class="d-flex align-items-center flex-grow-1 gap-2 justify-content-center">
+                                    DIRECCION EJECTIVA DE OPERACION Y MANTENIMIENTO
+                                </div>
+                                <i class="fas fa-chevron-down ms-2"></i>
+                            </button>
+
+                            <div class="collapse" id="admin3">
+                                <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1">
+                                    <li class="pe-2">
+                                        <a href="Mantenimiento/index.html"
+                                            class="link-dark rounded w-75 d-flex align-items-center gap-2 py-2 fs-6">
+                                            <i class="fa-solid fa-toolbox"></i>MANTENIMIENTO
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
                         <!-- BLOQUE PHP DINAMICO -->
                         <?php
@@ -236,7 +277,7 @@ $user = validarAcceso();
             <div class="d-flex flex-column align-items-center h-auto animate__animated animate__fadeIn"
                 style="width:100%;">
                 <h1 class="text-center">Bienvenido</h1>
-                <img src="images/logoRTPMI.png" alt="RTP" width="1000" height="540" class="opacity-50">
+                <img src="includes/images/logoRTPMI.png" alt="RTP" width="1000" height="540" class="opacity-50">
             </div>
         </div>
         <?php
@@ -246,9 +287,7 @@ $user = validarAcceso();
 
     <!-- Scripts JS de Bootstrap  --------------------------------------->
     <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <!-- Scripts JS JQuery  --------------------------------------->
-    <script src="/app-swap/public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
-    <!-- JS -->
-    <script type="text/javascript" src="/app-swap/public/fontawesome/js/all.min.js"></script>
+
 </body>
+
 </html>

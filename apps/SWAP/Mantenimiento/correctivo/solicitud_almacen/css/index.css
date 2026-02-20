@@ -1,0 +1,42 @@
+/* Animación fadeIn para elementos con la clase .animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation {
+  animation: fadeIn 0.9s ease-in-out;
+}
+
+/* CSS General */
+/* Animación de respiración para el borde */
+@keyframes respirar-borde {
+  0% {
+    box-shadow: 0 0 0 0.2rem rgba(245, 4, 4, 0.25);
+    border-color: #f50404;
+  }
+  50% {
+    box-shadow: 0 0 0 0.5rem rgba(245, 4, 4, 0.1);
+    border-color: #f50404;
+  }
+  100% {
+    box-shadow: 0 0 0 0.2rem rgba(245, 4, 4, 0.25);
+    border-color: #f50404;
+  }
+}
+
+.focus_eco,
+.focus_eco:focus,
+.focus_eco:hover,
+select.focus_eco {
+  border-color: #f50404 !important;
+  animation: respirar-borde 1.2s infinite;
+  transition: border-color 0.3s;
+}

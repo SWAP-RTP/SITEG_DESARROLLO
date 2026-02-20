@@ -1,0 +1,871 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 390319036638cb11f96d0426c37d77bbec365fef
+<?php
+    session_start();
+    $url = $_SESSION[rootApp];
+    //print_r($_SESSION)
+    //include $url.'Recursos_Humanos_New/includes/valida_acceso.php';
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="estilo/style_trabajador.css" rel="stylesheet" type="text/css"/>
+
+    <!-- TÍTULO DE LA PÁGINA -->
+    <title>Trabajador</title>
+    
+   
+    <? 
+        include $url."Recursos_Humanos_New/includes/head_libs.html";   
+        include $url."Recursos_Humanos_New/includes/head_datatables.html";   
+    ?>
+  </head>
+
+  <body>
+
+        <? 
+            include $url."Recursos_Humanos_New/encabezado.html";   
+            include $url."Recursos_Humanos_New/menu.html";
+        ?>
+        <main>
+            <h2 class='text-center mb-4'><u>Detalles del Trabajador</u></h2> 
+
+            <!-- permiso del usuario -->
+            <input type="hidden" id="permiso_usr" name="permiso_usr">
+
+            <!-- En caso de que el usuario no tenga permisos-->
+            <!-- <div id="contenedor_sin_permiso" style="display: none;">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <img id="img_sin_permiso" name="img_sin_permiso" src="" alt="SIN PERMISO" ></img>
+                            </div>
+                            <div class="texto-permiso">
+                                <h4 class="mb-3">Error!</h4>
+                                <h5>Al parecer no tienes permisos para acceder a esta pagina.</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="btn-group mb-1" role="group" id="contenedor-busqueda">
+                <input type="text" class="form-control d-flex gap-1" name="credencial_busqueda" id="credencial_busqueda" placeholder="Nueva Credencial"/>
+                <button type="button" class="btn btn-primary d-flex gap-1 align-items-center" id="BtnBuscar"><i class="fas fa-search"></i> Buscar</button>
+                <button type="button" class="btn btn-danger d-flex gap-1 align-items-center" id="BtnRegresar"><i class="fas fa-fast-backward"></i> Regresar</button>
+            </div>
+
+            <!-- Primera tarjeta dentro del card principal -->
+            <div class="card" id="contenedor-principal">
+                <form id="formulario">
+                    <div class="card-body">
+                        <div id="contenedor-datos-institucion">
+
+                            <div id="contenedor_botones" style="display: none;">
+                                <div class="d-flex gap-1 justify-content-center mb-3">
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnBeneficiarios"><i class="fas fa-house-user"></i> Beneficiarios</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnContrato"><i class="fas fa-file-invoice"></i> Contrato</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnImprimir"><i class="fas fa-print"></i> Imprimir</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnHistorico"><i class="fas fa-history"></i> Historico</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnTrayectoria"><i class="fas fa-tasks"></i> Trayectoria</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnCalendario"><i class="fas fa-calendar-alt"></i> Calendario Asistencia</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnExpediente"><i class="fas fa-book-reader"></i> Expediente</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnDesempeño"><i class="fas fa-sort-amount-up"></i> Desempe&ntilde;o</button>
+                                </div>
+                            </div>
+
+                            <!-- Titulo institucion-->
+                            <div id="titulo">
+                                <div class="text-center">
+                                    <h6>DATOS DE LA INSTITUCION</h6>
+                                </div>
+                            </div>
+                            <div class="mb-4" id="titulo_margen"></div>
+
+                            <div class="form-row mb-2">
+                                <label><b>Credencial : </b></label>
+                                <div class="col-md-2" style="margin-left:70px">
+                                    <input type="number" class="form-control" name="credencial" id="credencial" disabled/>
+                                </div>
+                                <div style="margin-left:42px; display: none;" id="contenedor-reasignar-credencial">
+                                    <button type="button" class="btn btn-warning " id="BtnReasignarCredencial"><i class="fas fa-id-card"></i> Reasignar Credencial</button>
+                                </div>
+                            </div>                          
+                                
+                            <div class="form-row mb-2">
+                                <label><b>Adscripcion : </b></label>
+                                <div class="col-md-4" style="margin-left:60px">
+                                    <select type="text" class="form-select" name="adscripcion" id="adscripcion">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                    </select>
+                                </div>   
+                                <label style="margin-left: 20px;"><b>Puesto : </b></label>
+                                <div class="col-md-4" style="margin-left: 10px;">
+                                    <select type="text" class="form-select" name="puesto" id="puesto">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                    </select>
+                                </div>               
+                            </div>
+                            <div class="form-row mb-2">
+                                <label><b> Estatus : </b></label>
+                                <div class="col-md-3" style="margin-left: 95px;">
+                                    <select type="text" class="form-select" name="estatus" id="estatus">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value="1">Activo</option>
+                                        <option value="2">Inactivo</option>
+                                    </select>
+                                </div>                                                        
+                                <label style="margin-left: 71px;"><b> Tipo Trabajador : </b></label>
+                                <div class="col-md-3" style="margin-left: 10px;">
+                                    <select type="text" class="form-select" name="div_proc" id="div_proc">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                    </select>
+                                </div>                                                                                                  
+                            </div>
+                            
+                            <div class="form-row mb-2">
+                                <label><b> Fecha de Ingreso : </b></label>
+                                <div class="col-md-3" style="margin-left: 22px;">
+                                    <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-control">
+                                </div>                                                                                                                                                   
+                                <label style="margin-left: 53px;"><b> Fecha de Contrato : </b></label>
+                                <div class="col-md-3" style="margin-left: 10px;">
+                                    <input type="date" id="fecha_contrato" name="fecha_contrato" class="form-control">
+                                </div>                                                                                                  
+                            </div>
+                            <div id="detalle-datos-institucion" style="display: none;">
+                                <div class="form-row mb-2">
+                                    <label><b> Tipo de Contrato : </b></label>
+                                    <div class="col-md-3" style="margin-left: 20px;">
+                                        <select type="text" class="form-select" name="tipo_contrato" id="tipo_contrato">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>                                                        
+                                    <label style="margin-left: 72px;"><b> Afiliacion IMSS : </b></label>
+                                    <div class="col-md-3" style="margin-left: 15px;">
+                                        <input type="number" class="form-control" name="no_afiliacion" id="no_afiliacion"/>
+                                    </div>                                                                                                  
+                                </div>    
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <img id="foto" name="foto" src="" alt="Foto del Trabajador" ></img>
+                                </div>
+                                <div class="mb-4" id="contenedor-editar-foto" style="display: none;">
+                                    <button type="button" class="btn btn-warning" id="editar_img"><i class="far fa-image"></i> Editar Foto</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div id="contenedor-datos-trabajador">    
+                            <!-- Titulo Datos Trabajador-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleTrabajador"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>DATOS DEL TRABAJADOR</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+
+                            <!-- Contenedor que se oculta por el boton de detalle + -->
+                            <div id="datos-trabajdor">                                
+                                <div class="form-row mb-2">
+                                    <label><b>Nombre(s): </b></label>
+                                    <div class="col-md-2" style="margin-left: 100px;">
+                                        <input type="text" class="form-control" name="nombre" id="nombre"/>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Apellido Paterno: </b></label>
+                                    <div class="col-md-2" style="margin-left:20px">
+                                        <input type="text" class="form-control" name="ap_paterno" id="ap_paterno"/>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Apellido Materno: </b></label>
+                                    <div class="col-md-2" style="margin-left:60px">
+                                        <input type="text" class="form-control" name="ap_materno" id="ap_materno"/>
+                                    </div>
+                                </div>     
+                                
+                                <div class="form-row mb-2">
+                                    <label><b>Fecha de Nacimiento: </b></label>
+                                    <div class="col-md-2" style="margin-left: 23px;">
+                                        <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento"/>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Sexo: </b></label>
+                                    <div class="col-md-2" style="margin-left:110px">
+                                        <select type="selec" class="form-select" name="sexo" id="sexo">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option value="1">MASCULINO</option>
+                                            <option value="2">FEMENINO</option>
+                                        </select>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Estado Civil: </b></label>
+                                    <div class="col-md-2" style="margin-left:105px">
+                                        <select type="selec" class="form-select" name="estado_civil" id="estado_civil">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>     
+                                <div id="detalle-datos-trabajador" style="display: none;">
+                                    <div class="form-row mb-2">
+                                        <label><b>CURP: </b></label>
+                                        <div class="col-md-2" style="margin-left: 140px;">
+                                            <input type="text" class="form-control" name="curp" id="curp"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>RFC: </b></label>
+                                        <div class="col-md-2" style="margin-left: 116px;">
+                                            <input type="text" class="form-control" name="rfc" id="rfc"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>Ent Fed de Nacimiento: </b></label>
+                                        <div class="col-md-2" style="margin-left:22px">
+                                            <select type="selec" class="form-select" name="ent_fed_nacimiento" id="ent_fed_nacimiento">
+                                                <option value="" disabled selected>Seleccionar</option>
+                                            </select>
+                                        </div>
+                                    </div>     
+                                    <div class="form-row mb-2">
+                                        <label><b>Nacionalidad: </b></label>
+                                        <div class="col-md-2" style="margin-left:83px">
+                                            <select type="selec" class="form-select" name="nacionalidad" id="nacionalidad">
+                                                <option value="" disabled selected>Seleccionar</option>
+                                            </select>
+                                        </div>
+                                        <label style="margin-left:20px"><b>Codigo Postal: </b></label>
+                                        <div class="col-md-2" style="margin-left: 41px;">
+                                            <input type="text" class="form-control" name="codigo_postal" id="codigo_postal"/>
+                                        </div>
+                                    </div>   
+                                    <div class="form-row mb-2">
+                                        <label><b>Calle / Numero: </b></label>
+                                        <div class="col-md-4" style="margin-left:68px">
+                                            <input type="text" class="form-control" name="calle_numero" id="calle_numero"/>
+                                        </div>
+                                        <label style="margin-left:55px"><b>Delegacion / Municipio: </b></label>
+                                        <div class="col-md-3" style="margin-left: 35px;">
+                                            <input type="text" class="form-control" name="delegacion_municipio" id="delegacion_municipio"/>
+                                        </div>
+                            
+                                    </div>   
+                                    <div class="form-row mb-2">
+                                        <label><b>Colonia: </b></label>
+                                        <div class="col-md-2" style="margin-left:125px">
+                                            <select type="selec" class="form-select" name="colonia" id="colonia">
+                                                <option value="" disabled selected>Seleccionar</option>
+                                            </select>
+                                        </div>
+                                        <label style="margin-left:23px"><b>Estado: </b></label>
+                                        <div class="col-md-2" style="margin-left:91px">
+                                            <input type="text" class="form-control" name="estado" id="estado"/>
+                                        </div>
+                                    </div>     
+                                    
+                                    <div class="form-row mb-2">
+                                        <label><b>Telefono: </b></label>
+                                        <div class="col-md-2" style="margin-left: 117px;">
+                                            <input type="text" class="form-control" name="telefono" id="telefono"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>Tel Movil: </b></label>
+                                        <div class="col-md-2" style="margin-left: 76px;">
+                                            <input type="text" class="form-control" name="tel_movil" id="tel_movil"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>E-Mail: </b></label>
+                                        <div class="col-md-2" style="margin-left:145px">
+                                            <input type="text" class="form-control" name="email" id="email"/>
+                                        </div>
+                                    </div> 
+                                    <div class="form-row mb-4">
+                                        <label><b>Cuenta Nomina: </b></label>
+                                        <div class="col-md-2" style="margin-left:65px">
+                                            <input type="text" class="form-control" name="no_nomina" id="no_nomina"/>
+                                        </div>
+                                    </div> 
+                                    
+                                
+                                </div> 
+                            </div> 
+                        </div> 
+
+                        <div id="contenedor-datos-academicos">
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleAcademico"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>DATOS ACADEMICOS</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+                            
+                            <div id="detalle-nivel-academico">
+                                <div class="form-row mb-5">
+                                    <label><b>Nivel Academico: </b></label>
+                                    <div class="col-md-3" style="margin-left:95px">
+                                        <select type="selec" class="form-select" name="nivel_academico" id="nivel_academico">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>
+                                    <label style="margin-left:83px"><b>Estado: </b></label>
+                                    <div class="col-md-4" style="margin-left:83px">
+                                        <select type="selec" class="form-select" name="estado_academico" id="estado_academico">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                        
+                        <!-- Cursos Curriculares -->
+                        <div id="contenedor-cursos-curriculares">
+                            <!-- Titulo Cursos Curriculares-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleCursos"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>CURSOS CURRICULARES</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+       
+                            <div id="detalle-cursos-curriculares">
+                                <div class="panel-body table-responsive" id="contenedor-cursos" >
+                                    <table id="tabla-cursos" class="table table-striped table-condensed table-hover text-center" style="width:100%">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <!-- Datos Familiares -->
+                        <div id="contenedor-datos-familiares" style="display: none;">
+                            <!-- Titulo Datos Familiares-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleFamiliares"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>DATOS FAMILIARES</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+       
+                            <div id="detalle-datos-familiares">
+                                <div class="panel-body table-responsive" id="contenedor-familiares" >
+                                    <table id="tabla-familiares" class="table table-striped table-condensed table-hover text-center" style="width:100%">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--Tallas -->
+                        <div id="contenedor-tallas" style="display: none;" class="mb-5">
+                            <!-- Titulo Tallas-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleTallas"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>TALLAS</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+       
+                            <div id="detalle-tallas">
+                                <div class="panel-body table-responsive" id="contenedor-tallas" >
+                                    <table id="tabla-tallas" class="table table-striped table-condensed table-hover text-center" style="width:100%">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="contenedor-boton-guardar" style="display: none;">
+                            <div class="d-flex gap-1 justify-content-center mb-3">
+                                <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnGuardarCambios"><i class="fas fa-save"></i> Guardar Cambios</button>
+                            </div>
+                        </div>
+
+                </form>
+            </div>
+    
+
+
+            <? include $url."/Recursos_Humanos_New/trabajadores/modal_trabajador.html"; ?>
+        
+        </main> 
+    
+
+        <!-- PIE -->
+        <? 
+        include $url."/Recursos_Humanos_New/pie.html"; 
+        ?>
+        <?php
+            include $url."/Recursos_Humanos_New/includes/footer_datatables.html";   
+        ?>
+
+        <script>
+            $('#trabajador').addClass('show');
+            $('#consulta-trabajador').removeClass('text-light');
+            $('#consulta-trabajador').addClass('text-dark bg-secondary-subtle');
+        </script>
+
+        <script type="text/javascript" src="scripts/editar_trabajador.js"></script>
+    </body>
+</html>
+<<<<<<< HEAD
+=======
+=======
+<?php
+    session_start();
+    $url = $_SESSION[rootApp];
+    //print_r($_SESSION)
+    //include $url.'Recursos_Humanos_New/includes/valida_acceso.php';
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="estilo/style_trabajador.css" rel="stylesheet" type="text/css"/>
+
+    <!-- TÍTULO DE LA PÁGINA -->
+    <title>Trabajador</title>
+    
+   
+    <? 
+        include $url."Recursos_Humanos_New/includes/head_libs.html";   
+        include $url."Recursos_Humanos_New/includes/head_datatables.html";   
+    ?>
+  </head>
+
+  <body>
+
+        <? 
+            include $url."Recursos_Humanos_New/encabezado.html";   
+            include $url."Recursos_Humanos_New/menu.html";
+        ?>
+        <main>
+            <h2 class='text-center mb-4'><u>Detalles del Trabajador</u></h2> 
+
+            <!-- permiso del usuario -->
+            <input type="hidden" id="permiso_usr" name="permiso_usr">
+
+            <!-- En caso de que el usuario no tenga permisos-->
+            <!-- <div id="contenedor_sin_permiso" style="display: none;">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <img id="img_sin_permiso" name="img_sin_permiso" src="" alt="SIN PERMISO" ></img>
+                            </div>
+                            <div class="texto-permiso">
+                                <h4 class="mb-3">Error!</h4>
+                                <h5>Al parecer no tienes permisos para acceder a esta pagina.</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="btn-group mb-1" role="group" id="contenedor-busqueda">
+                <input type="text" class="form-control d-flex gap-1" name="credencial_busqueda" id="credencial_busqueda" placeholder="Nueva Credencial"/>
+                <button type="button" class="btn btn-primary d-flex gap-1 align-items-center" id="BtnBuscar"><i class="fas fa-search"></i> Buscar</button>
+                <button type="button" class="btn btn-danger d-flex gap-1 align-items-center" id="BtnRegresar"><i class="fas fa-fast-backward"></i> Regresar</button>
+            </div>
+
+            <!-- Primera tarjeta dentro del card principal -->
+            <div class="card" id="contenedor-principal">
+                <form id="formulario">
+                    <div class="card-body">
+                        <div id="contenedor-datos-institucion">
+
+                            <div id="contenedor_botones" style="display: none;">
+                                <div class="d-flex gap-1 justify-content-center mb-3">
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnBeneficiarios"><i class="fas fa-house-user"></i> Beneficiarios</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnContrato"><i class="fas fa-file-invoice"></i> Contrato</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnImprimir"><i class="fas fa-print"></i> Imprimir</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnHistorico"><i class="fas fa-history"></i> Historico</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnTrayectoria"><i class="fas fa-tasks"></i> Trayectoria</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnCalendario"><i class="fas fa-calendar-alt"></i> Calendario Asistencia</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnExpediente"><i class="fas fa-book-reader"></i> Expediente</button>
+                                    <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnDesempeño"><i class="fas fa-sort-amount-up"></i> Desempe&ntilde;o</button>
+                                </div>
+                            </div>
+
+                            <!-- Titulo institucion-->
+                            <div id="titulo">
+                                <div class="text-center">
+                                    <h6>DATOS DE LA INSTITUCION</h6>
+                                </div>
+                            </div>
+                            <div class="mb-4" id="titulo_margen"></div>
+
+                            <div class="form-row mb-2">
+                                <label><b>Credencial : </b></label>
+                                <div class="col-md-2" style="margin-left:70px">
+                                    <input type="number" class="form-control" name="credencial" id="credencial" disabled/>
+                                </div>
+                                <div style="margin-left:42px; display: none;" id="contenedor-reasignar-credencial">
+                                    <button type="button" class="btn btn-warning " id="BtnReasignarCredencial"><i class="fas fa-id-card"></i> Reasignar Credencial</button>
+                                </div>
+                            </div>                          
+                                
+                            <div class="form-row mb-2">
+                                <label><b>Adscripcion : </b></label>
+                                <div class="col-md-4" style="margin-left:60px">
+                                    <select type="text" class="form-select" name="adscripcion" id="adscripcion">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                    </select>
+                                </div>   
+                                <label style="margin-left: 20px;"><b>Puesto : </b></label>
+                                <div class="col-md-4" style="margin-left: 10px;">
+                                    <select type="text" class="form-select" name="puesto" id="puesto">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                    </select>
+                                </div>               
+                            </div>
+                            <div class="form-row mb-2">
+                                <label><b> Estatus : </b></label>
+                                <div class="col-md-3" style="margin-left: 95px;">
+                                    <select type="text" class="form-select" name="estatus" id="estatus">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value="1">Activo</option>
+                                        <option value="2">Inactivo</option>
+                                    </select>
+                                </div>                                                        
+                                <label style="margin-left: 71px;"><b> Tipo Trabajador : </b></label>
+                                <div class="col-md-3" style="margin-left: 10px;">
+                                    <select type="text" class="form-select" name="div_proc" id="div_proc">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                    </select>
+                                </div>                                                                                                  
+                            </div>
+                            
+                            <div class="form-row mb-2">
+                                <label><b> Fecha de Ingreso : </b></label>
+                                <div class="col-md-3" style="margin-left: 22px;">
+                                    <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-control">
+                                </div>                                                                                                                                                   
+                                <label style="margin-left: 53px;"><b> Fecha de Contrato : </b></label>
+                                <div class="col-md-3" style="margin-left: 10px;">
+                                    <input type="date" id="fecha_contrato" name="fecha_contrato" class="form-control">
+                                </div>                                                                                                  
+                            </div>
+                            <div id="detalle-datos-institucion" style="display: none;">
+                                <div class="form-row mb-2">
+                                    <label><b> Tipo de Contrato : </b></label>
+                                    <div class="col-md-3" style="margin-left: 20px;">
+                                        <select type="text" class="form-select" name="tipo_contrato" id="tipo_contrato">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>                                                        
+                                    <label style="margin-left: 72px;"><b> Afiliacion IMSS : </b></label>
+                                    <div class="col-md-3" style="margin-left: 15px;">
+                                        <input type="number" class="form-control" name="no_afiliacion" id="no_afiliacion"/>
+                                    </div>                                                                                                  
+                                </div>    
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <img id="foto" name="foto" src="" alt="Foto del Trabajador" ></img>
+                                </div>
+                                <div class="mb-4" id="contenedor-editar-foto" style="display: none;">
+                                    <button type="button" class="btn btn-warning" id="editar_img"><i class="far fa-image"></i> Editar Foto</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div id="contenedor-datos-trabajador">    
+                            <!-- Titulo Datos Trabajador-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleTrabajador"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>DATOS DEL TRABAJADOR</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+
+                            <!-- Contenedor que se oculta por el boton de detalle + -->
+                            <div id="datos-trabajdor">                                
+                                <div class="form-row mb-2">
+                                    <label><b>Nombre(s): </b></label>
+                                    <div class="col-md-2" style="margin-left: 100px;">
+                                        <input type="text" class="form-control" name="nombre" id="nombre"/>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Apellido Paterno: </b></label>
+                                    <div class="col-md-2" style="margin-left:20px">
+                                        <input type="text" class="form-control" name="ap_paterno" id="ap_paterno"/>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Apellido Materno: </b></label>
+                                    <div class="col-md-2" style="margin-left:60px">
+                                        <input type="text" class="form-control" name="ap_materno" id="ap_materno"/>
+                                    </div>
+                                </div>     
+                                
+                                <div class="form-row mb-2">
+                                    <label><b>Fecha de Nacimiento: </b></label>
+                                    <div class="col-md-2" style="margin-left: 23px;">
+                                        <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento"/>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Sexo: </b></label>
+                                    <div class="col-md-2" style="margin-left:110px">
+                                        <select type="selec" class="form-select" name="sexo" id="sexo">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option value="1">MASCULINO</option>
+                                            <option value="2">FEMENINO</option>
+                                        </select>
+                                    </div>
+                                    <label style="margin-left:20px"><b>Estado Civil: </b></label>
+                                    <div class="col-md-2" style="margin-left:105px">
+                                        <select type="selec" class="form-select" name="estado_civil" id="estado_civil">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>     
+                                <div id="detalle-datos-trabajador" style="display: none;">
+                                    <div class="form-row mb-2">
+                                        <label><b>CURP: </b></label>
+                                        <div class="col-md-2" style="margin-left: 140px;">
+                                            <input type="text" class="form-control" name="curp" id="curp"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>RFC: </b></label>
+                                        <div class="col-md-2" style="margin-left: 116px;">
+                                            <input type="text" class="form-control" name="rfc" id="rfc"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>Ent Fed de Nacimiento: </b></label>
+                                        <div class="col-md-2" style="margin-left:22px">
+                                            <select type="selec" class="form-select" name="ent_fed_nacimiento" id="ent_fed_nacimiento">
+                                                <option value="" disabled selected>Seleccionar</option>
+                                            </select>
+                                        </div>
+                                    </div>     
+                                    <div class="form-row mb-2">
+                                        <label><b>Nacionalidad: </b></label>
+                                        <div class="col-md-2" style="margin-left:83px">
+                                            <select type="selec" class="form-select" name="nacionalidad" id="nacionalidad">
+                                                <option value="" disabled selected>Seleccionar</option>
+                                            </select>
+                                        </div>
+                                        <label style="margin-left:20px"><b>Codigo Postal: </b></label>
+                                        <div class="col-md-2" style="margin-left: 41px;">
+                                            <input type="text" class="form-control" name="codigo_postal" id="codigo_postal"/>
+                                        </div>
+                                    </div>   
+                                    <div class="form-row mb-2">
+                                        <label><b>Calle / Numero: </b></label>
+                                        <div class="col-md-4" style="margin-left:68px">
+                                            <input type="text" class="form-control" name="calle_numero" id="calle_numero"/>
+                                        </div>
+                                        <label style="margin-left:55px"><b>Delegacion / Municipio: </b></label>
+                                        <div class="col-md-3" style="margin-left: 35px;">
+                                            <input type="text" class="form-control" name="delegacion_municipio" id="delegacion_municipio"/>
+                                        </div>
+                            
+                                    </div>   
+                                    <div class="form-row mb-2">
+                                        <label><b>Colonia: </b></label>
+                                        <div class="col-md-2" style="margin-left:125px">
+                                            <select type="selec" class="form-select" name="colonia" id="colonia">
+                                                <option value="" disabled selected>Seleccionar</option>
+                                            </select>
+                                        </div>
+                                        <label style="margin-left:23px"><b>Estado: </b></label>
+                                        <div class="col-md-2" style="margin-left:91px">
+                                            <input type="text" class="form-control" name="estado" id="estado"/>
+                                        </div>
+                                    </div>     
+                                    
+                                    <div class="form-row mb-2">
+                                        <label><b>Telefono: </b></label>
+                                        <div class="col-md-2" style="margin-left: 117px;">
+                                            <input type="text" class="form-control" name="telefono" id="telefono"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>Tel Movil: </b></label>
+                                        <div class="col-md-2" style="margin-left: 76px;">
+                                            <input type="text" class="form-control" name="tel_movil" id="tel_movil"/>
+                                        </div>
+                                        <label style="margin-left:20px"><b>E-Mail: </b></label>
+                                        <div class="col-md-2" style="margin-left:145px">
+                                            <input type="text" class="form-control" name="email" id="email"/>
+                                        </div>
+                                    </div> 
+                                    <div class="form-row mb-4">
+                                        <label><b>Cuenta Nomina: </b></label>
+                                        <div class="col-md-2" style="margin-left:65px">
+                                            <input type="text" class="form-control" name="no_nomina" id="no_nomina"/>
+                                        </div>
+                                    </div> 
+                                    
+                                
+                                </div> 
+                            </div> 
+                        </div> 
+
+                        <div id="contenedor-datos-academicos">
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleAcademico"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>DATOS ACADEMICOS</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+                            
+                            <div id="detalle-nivel-academico">
+                                <div class="form-row mb-5">
+                                    <label><b>Nivel Academico: </b></label>
+                                    <div class="col-md-3" style="margin-left:95px">
+                                        <select type="selec" class="form-select" name="nivel_academico" id="nivel_academico">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>
+                                    <label style="margin-left:83px"><b>Estado: </b></label>
+                                    <div class="col-md-4" style="margin-left:83px">
+                                        <select type="selec" class="form-select" name="estado_academico" id="estado_academico">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                        
+                        <!-- Cursos Curriculares -->
+                        <div id="contenedor-cursos-curriculares">
+                            <!-- Titulo Cursos Curriculares-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleCursos"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>CURSOS CURRICULARES</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+       
+                            <div id="detalle-cursos-curriculares">
+                                <div class="panel-body table-responsive" id="contenedor-cursos" >
+                                    <table id="tabla-cursos" class="table table-striped table-condensed table-hover text-center" style="width:100%">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <!-- Datos Familiares -->
+                        <div id="contenedor-datos-familiares" style="display: none;">
+                            <!-- Titulo Datos Familiares-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleFamiliares"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>DATOS FAMILIARES</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+       
+                            <div id="detalle-datos-familiares">
+                                <div class="panel-body table-responsive" id="contenedor-familiares" >
+                                    <table id="tabla-familiares" class="table table-striped table-condensed table-hover text-center" style="width:100%">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--Tallas -->
+                        <div id="contenedor-tallas" style="display: none;" class="mb-5">
+                            <!-- Titulo Tallas-->
+                            <div id="titulo" class="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-sm" id="BtnDetalleTallas"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="flex-grow-1 text-center">
+                                    <h6>TALLAS</h6>
+                                </div>
+                                <div></div> <!-- Div vacío para balancear el espacio a la derecha -->
+                            </div>
+                            <div class="mb-3" id="titulo_margen"></div>
+       
+                            <div id="detalle-tallas">
+                                <div class="panel-body table-responsive" id="contenedor-tallas" >
+                                    <table id="tabla-tallas" class="table table-striped table-condensed table-hover text-center" style="width:100%">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="contenedor-boton-guardar" style="display: none;">
+                            <div class="d-flex gap-1 justify-content-center mb-3">
+                                <button type="button" class="btn btn-light d-flex gap-1 align-items-center" id="BtnGuardarCambios"><i class="fas fa-save"></i> Guardar Cambios</button>
+                            </div>
+                        </div>
+
+                </form>
+            </div>
+    
+
+
+            <? include $url."/Recursos_Humanos_New/trabajadores/modal_trabajador.html"; ?>
+        
+        </main> 
+    
+
+        <!-- PIE -->
+        <? 
+        include $url."/Recursos_Humanos_New/pie.html"; 
+        ?>
+        <?php
+            include $url."/Recursos_Humanos_New/includes/footer_datatables.html";   
+        ?>
+
+        <script>
+            $('#trabajador').addClass('show');
+            $('#consulta-trabajador').removeClass('text-light');
+            $('#consulta-trabajador').addClass('text-dark bg-secondary-subtle');
+        </script>
+
+        <script type="text/javascript" src="scripts/editar_trabajador.js"></script>
+    </body>
+</html>
+>>>>>>> e40c811f0792c47020ea16882dd53dc56fd1a088
+>>>>>>> 390319036638cb11f96d0426c37d77bbec365fef

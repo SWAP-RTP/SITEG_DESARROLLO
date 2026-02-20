@@ -24,7 +24,7 @@
         <!-- TOP BAR -->
         <div class="row align-items-center mb-3 g-2 top-row">
             <div class="col-auto">
-                <button id="btnRegresar" class="btn btn-warning btn-lg" onclick="location.href='/index.php'">
+                <button id="btnRegresar" class="btn btn-warning btn-lg" onclick="location.href='index.html'">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
             </div>

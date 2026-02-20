@@ -67,4 +67,23 @@
         }
     }
 
+    function conexionAccidentes() {
+    // conexion a la base de datos de ACCIDENTES
+    try {
+        $localhost = '10.10.30.5';
+        $port = '5432';
+        $dbname = 'accidentes_pv_db';
+        $user = 'postgres';
+        $password = 'accidentes10';
+
+        $pdo = new PDO("pgsql:host=$localhost;port=$port;dbname=$dbname", $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $pdo;
+
+    } catch (PDOException $e) {
+        echo "Error de conexión DB ACCIDENTES: " . $e->getMessage();
+        return null;
+    }
+    }
 ?>

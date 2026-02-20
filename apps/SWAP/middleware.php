@@ -17,14 +17,14 @@ function validarAcceso()
     // 2. Verificamos que la clave secreta exista
     $key = getenv('JWT_SECRET');
     if (!$key) {
-        $key = "tu_clave_secreta_super_segura"; // Opcional: Clave de respaldo si falla el env
+        $key = "CLAVE_SUPER_SECRETA_PARA_SITEG_LARGA_2026_MUY_SEGURA"; // Opcional: Clave de respaldo si falla el env
     }
 
     $jwt = $_COOKIE['access_token'] ?? null;
 
     if (!$jwt) {
         // Redirección al puerto 8086 del Login
-        header("Location: http://10.10.30.28:8086/index.html?error=necesitas_loguearte");
+        header("Location: http://localhost:8086/login.html?error=necesitas_loguearte");
         exit;
     }
 
@@ -36,7 +36,7 @@ function validarAcceso()
         return $decoded->data;
     } catch (Exception $e) {
         // Si el token expiró o la firma es falsa
-        header("Location: http://10.10.30.28:8086/index.html?error=sesion_invalida");
+        header("Location: http://localhost:8086/login.html?error=sesion_invalida");
         exit;
     }
 }

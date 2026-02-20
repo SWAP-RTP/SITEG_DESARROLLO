@@ -1,0 +1,252 @@
+html {
+  height: -webkit-fill-available;
+}
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  overflow-x: auto;
+}
+main {
+  margin: 1rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border: lightgray solid 1px;
+  border-radius: 0.4rem;
+  flex-grow: 1;
+  overflow-x: auto;
+  width: 30vw;
+}
+.dropdown-toggle {
+  outline: 0;
+}
+.btn-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: transparent;
+  border: 0;
+  gap: 10px;
+}
+
+.btn-toggle:hover,
+.btn-toggle:focus {
+  color: #cccccc;
+  background-color: rgba(0, 97, 87, 0.223);
+}
+
+.btn-toggle[aria-expanded="true"] {
+  color: rgba(0, 0, 0, 0.85);
+}
+.btn-toggle[aria-expanded="true"]::after {
+  transform: rotate(90deg);
+}
+
+.btn-toggle-nav a {
+  display: inline-flex;
+  padding: 0.1875rem 0.5rem;
+  margin-top: 0.125rem;
+  margin-left: 1.25rem;
+  text-decoration: none;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+  background-color: rgba(0, 97, 87, 0.223);
+  color: #cccccc;
+}
+
+.fw-semibold {
+  font-weight: 600;
+}
+
+td.details-control {
+  text-align: center;
+  color: forestgreen;
+  cursor: pointer;
+}
+tr.shown td.details-control {
+  text-align: center;
+  color: red;
+}
+
+.custom-btn-print {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* ESTILO DEL ENCABEZADO */
+#contenedor_encabezado {
+  background-color: #324148;
+  height: 3.5rem;
+}
+
+/* ESTILO DEL CONTENEDOR DEL MENU*/
+.menu-compacto {
+  width: 270px;
+  min-height: 100vh;
+  background-color: #009688;
+}
+/* TAMAÑO DE LA FUENTE DEL MENU LATERAL*/
+.menu-compacto button,
+.menu-compacto a {
+  font-size: 12.5px;
+}
+
+/* ANIMACION DE LOS TITULOS PRINCIPALES */
+.menu-btn {
+  position: relative;
+  width: 33px;
+  height: 28px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.menu-btn span {
+  position: absolute;
+  height: 4px;
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.menu-btn span:nth-child(1) {
+  top: 0;
+}
+
+.menu-btn span:nth-child(2) {
+  top: 13px;
+}
+
+.menu-btn span:nth-child(3) {
+  top: 26px;
+}
+
+/* Checkbox oculto */
+#menu-toggle {
+  display: none;
+}
+
+/* Cuando está activo, animar las barras */
+#menu-toggle:checked + .menu-btn span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 13px;
+}
+
+#menu-toggle:checked + .menu-btn span:nth-child(2) {
+  opacity: 0;
+}
+
+#menu-toggle:checked + .menu-btn span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 13px;
+}
+/* ANIMACION DEL ICONO PARA EL MENU HAMBURGUESA */
+/* SUBMENU COMPACTO CON GLOBO LATERAL*/
+.menu-compacto.menu-colapsado li {
+  position: relative;
+  max-width: 95%; /*maximo margen del contenido del li collapse*/
+}
+
+/* COLLAPSE PRINCIPAL - GLOBO LATERAL */
+.menu-compacto.menu-colapsado li .collapse {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  left: 45px; /* al lado del menú comprimido */
+  top: 0;
+  background: rgba(50, 65, 72, 0.8);
+  z-index: 1000;
+  width: 280px;
+  border-radius: 5px;
+  padding: 10px;
+
+  /* SCROLL si hay muchas opciones */
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Triángulo lateral solo cuando el menú está colapsado */
+.menu-compacto.menu-colapsado .opcion_principal {
+  position: relative;
+}
+
+/* Cuando el botón está activo o seleccionado */
+.menu-compacto.menu-colapsado > ul > li:hover {
+  background-color: rgba(50, 65, 72, 0.8); /* fondo blanco */
+  border-radius: 5px;
+  color: black;
+}
+
+/* Enlaces dentro del collapse */
+.menu-compacto.menu-colapsado li .collapse a {
+  font-size: 11px;
+  display: block;
+  padding: 5px 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Submenús que contienen otro collapse */
+.menu-compacto.menu-colapsado li:has(.collapse) > a::after {
+  content: "\f078"; /* Unicode de fa-chevron-down */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900; /* necesario para íconos sólidos */
+  float: right; /* lo coloca al final del enlace */
+  font-size: 10px;
+  margin-left: 5px;
+  color: #fff; /* color del icono, ajusta según tu tema */
+}
+
+/* Mostrar collapse al hover */
+.menu-compacto.menu-colapsado li:hover > .collapse {
+  display: block !important;
+  opacity: 1;
+}
+
+/* SUBMENUS ANIDADOS - dentro del mismo globo */
+.menu-compacto.menu-colapsado li .collapse li .collapse {
+  position: relative; /* RELATIVE para que esté dentro del scroll del padre */
+  left: 0; /* no se desplaza hacia afuera */
+  top: 0;
+  width: 100%; /* ocupa todo el ancho del globo principal */
+  background: inherit; /* mismo color que el padre */
+  border-radius: 0;
+  padding-left: 15px; /* sangría para diferenciar */
+  max-height: none;
+  overflow: visible;
+}
+/* SUBMENU COMACTO CON GLOBO LATERAL*/
+
+/* ANIMACION DE LOS TITULOS PRINCIPALES */
+.titulo1,
+.titulo2 {
+  animation: animationTitulo 3s forwards; /* se aplica la animacion 1 sola vez usando "forwards" y tarda 3s*/
+}
+@keyframes animationTitulo {
+  from {
+    clip-path: inset(0% 150% 0% 150%);
+  }
+  to {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+.logo_rtp {
+  display: flex;
+  animation: animation1 3s forwards;
+}
+@keyframes animation1 {
+  from {
+    clip-path: circle(5% at top left);
+  }
+  to {
+    clip-path: circle(150% at top left);
+  }
+}

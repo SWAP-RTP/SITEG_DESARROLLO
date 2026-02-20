@@ -1,0 +1,43 @@
+<!-- INICIO ENCABEZADO -->
+<header class="w-100 p-1 d-flex flex-wrap justify-content-between align-items-center" id="contenedor_encabezado">
+  <a href="/app-swap/index.html" class="navbar-brand text-light d-flex align-items-center gap-2 fw-bold">
+    <!-- BOTON HAMBURGUESA PARA MOSTRAR EL MENU -->
+    <div class="ms-2 menu_hamburguesa">
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-btn" for="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+    </div>
+    <!-- BOTON HAMBURGUESA PARA MOSTRAR EL MENU -->
+
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Logo_RTP_y_Movilidad_Integrada.png" width="80"
+      alt="RTP CDMX" />
+    Recursos Humanos
+  </a>
+
+  <div class="dropdown me-3">
+    <button type="button" class="btn dropdown-toggle dropdown-toggle-split text-light fw-semibold"
+      data-bs-toggle="dropdown" aria-expanded="false">
+      <!-- NOMBRE DE USUARIO  -->
+      <i class="fa-solid fa-user"></i> <span class="nombre-usuario"></span>
+      <!-- <? echo $_SESSION['usr_n'] ?> -->
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2" href="/app-swap/">
+          <i class="fas fa-home"></i> Regresar al Inicio
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2" href="/auth/logout.php">
+          <i class="fas fa-sign-out-alt"></i> Cerrar Sesi&oacute;n
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+<!-- FIN ENCABEZADO -->
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+<script src="../../js/auth_name.js"></script>

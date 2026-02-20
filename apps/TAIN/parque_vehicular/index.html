@@ -4,6 +4,7 @@ $user = validarAcceso();
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Parque Vehicular</title>
@@ -12,7 +13,7 @@ $user = validarAcceso();
     <!-- Bootstrap -->
     <link rel="stylesheet" href="../lib/Bootstrap-5-5.3.0/css/bootstrap.min.css">
     <!-- FontAwesome -->
-    <link rel="stylesheet" type="text/css" href="../lib/fontawesome/css/all.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/fontawesome/css/all.min.css" />
     <!-- style general -->
     <link rel="stylesheet" href="../css/style.css">
     <!-- Componentes -->
@@ -20,6 +21,7 @@ $user = validarAcceso();
     <!-- CSS personalizado para el módulo de parque vehicular -->
     <link rel="stylesheet" href="../css/style_parque.css">
 </head>
+
 <body>
     <?php include '../header.html'; ?>
 
@@ -46,12 +48,12 @@ $user = validarAcceso();
                             <label for="año" class="form-label">Fecha inicio:</label>
                             <input type="date" class="form-control" id="fech_inicio" name="fech_inicio">
                         </div>
-    
+
                         <div class="col-md-3">
                             <label for="año" class="form-label">Fecha fin:</label>
                             <input type="date" class="form-control" id="fech_final" name="fech_final">
-                        </div>                    
-        
+                        </div>
+
                         <div class="col-md-3">
                             <label for="filtro_por" class="form-label">Filtrar por</label>
                             <select id="filtro_por" class="form-select">
@@ -59,7 +61,7 @@ $user = validarAcceso();
                                 <option value="2">Por modulo</option>
                             </select>
                         </div>
-    
+
                         <div class="col gap-2 d-flex align-items-end justify-content-end">
                             <button type="button" id="btn_limpiar" class="btn btn-warning">
                                 <i class="fa-solid fa-broom me-1"></i> Limpiar filtros
@@ -114,6 +116,7 @@ $user = validarAcceso();
 
     <!-- JS del módulo de parque vehicular -->
     <script type="module" src="./script/parque.js"></script>
-    <script src="../../js/auth_name.js"></script>
+    <script src="/app_login/includes/js/auth_name.js"></script>
 </body>
+
 </html>

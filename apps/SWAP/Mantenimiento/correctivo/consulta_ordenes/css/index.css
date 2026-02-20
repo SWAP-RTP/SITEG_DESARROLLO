@@ -1,0 +1,76 @@
+/* Animación fadeIn para elementos con la clase .animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation {
+  animation: fadeIn 0.9s ease-in-out;
+}
+
+/* CSS General */
+/* Animación de respiración para el borde */
+@keyframes respirar-borde {
+  0% {
+    box-shadow: 0 0 0 0.2rem rgba(245, 4, 4, 0.25);
+    border-color: #f50404;
+  }
+  50% {
+    box-shadow: 0 0 0 0.5rem rgba(245, 4, 4, 0.1);
+    border-color: #f50404;
+  }
+  100% {
+    box-shadow: 0 0 0 0.2rem rgba(245, 4, 4, 0.25);
+    border-color: #f50404;
+  }
+}
+
+.focus_eco,
+.focus_eco:focus,
+.focus_eco:hover,
+select.focus_eco {
+  border-color: #f50404 !important;
+  animation: respirar-borde 1.2s infinite;
+  transition: border-color 0.3s;
+}
+
+/* En tu CSS principal */
+label,
+input,
+select,
+textarea,
+button {
+  font-family: "Inter", "Roboto", Arial, Helvetica, sans-serif !important;
+}
+
+/* data table */
+
+#miTabla {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table.dataTable tbody tr {
+  background-color: #f7f7f7;
+}
+
+table.dataTable tbody tr:nth-of-type(odd) {
+  background-color: #ffffff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: 6px;
+}
