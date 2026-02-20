@@ -1,9 +1,9 @@
 <?php
-$host = "10.10.31.207";
-$port = 5435;
-$dbname = "sugo-pruebas";
+$host = "10.10.30.28";
+$port = 5437;
+$dbname = "swap_2025";
 $user = "desarrollo";
-$password = "desarrollo1";
+$password = "desarrollo";
 
 function conexion()
 {

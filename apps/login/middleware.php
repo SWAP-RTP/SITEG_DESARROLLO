@@ -36,7 +36,7 @@ function validarAcceso()
         return $decoded->data;
     } catch (Exception $e) {
         // Si el token expiró o la firma es falsa
-        header("Location: http://10.10.30.28:8086/login.html?error=sesion_invalida");
+        header("Location: http://localhost:8086/login.html?error=sesion_invalida");
         exit;
     }
 }
