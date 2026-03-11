@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/app-swap/images/Swap_8.jpg" type="image/x-icon">
+    <!-- TÍTULO DE LA PÁGINA -->
+    <title>Reporte de Uniformes</title>
+    <!-- Iconos -->
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
+    <!-- BOOTSTRAP CSS -->
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <!-- CSS del Menu, encabezado, main y Titulos (template)-->
+    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+
+<body>
+    <?php 
+        include '../components/encabezado.html'; 
+    ?>
+    <?php 
+        include '../components/menu.html'; 
+    ?>
+    <main>
+        <h1 class="titulo1 mt-4 fw-bold text-center">Reporte de Uniformes</h1>
+        <br>
+
+        <!--Filtros-->
+        <!---Modulo-->
+        <div class="container mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="filtro_modulo" class="form-label fw-bold">M&oacute;dulo</label>
+                    <select id="filtro_modulo" class="form-select">
+                        <option value="todos">Todos</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="55">55</option>
+                    </select>
+                </div>
+                <!--Tipo de contrato-->
+                <div class="col-md-4">
+                    <label for="filtro_tipo" class="form-label fw-bold">Tipo de Contrato</label>
+                    <select id="filtro_tipo" class="form-select">
+                        <option value="todos">Todos</option>
+                        <option value="2">Determinado</option>
+                        <option value="1">Indeterminado</option>
+                    </select>
+                </div>
+                <!--Genero-->
+                <div class="col-md-4">
+                    <label for="filtro_genero" class="form-label fw-bold">G&eacute;nero</label>
+                    <select id="filtro_genero" class="form-select">
+                        <option value="todos">Todos</option>
+                        <option value="1">Masculino</option>
+                        <option value="2">Femenino</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-3 text-center">
+                <button class="btn btn-info fw-bold" id="btn_filtrar">Aplicar Filtros</button>
+            </div>
+        </div>
+
+
+
+    </main>
+
+    <!-- PIE -->
+    <?php 
+        include '../components/pie.html'; 
+    ?>
+    <!-- jquery -->
+    <script type="text/javascript" src="/app-swap/public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <!-- BOOTSTRAP JS  -->
+    <script type="text/javascript" src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- js del menu lateral -->
+    <script type="text/javascript" src="/app-swap/includes/utils/menu.js"></script>
+    <!-- js del reporte de uniformes -->
+    <!-- <script type="text/javascript" src="scripts/js"></script> -->
+</body>
+
+</html>

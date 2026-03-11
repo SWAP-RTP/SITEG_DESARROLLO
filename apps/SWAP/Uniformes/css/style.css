@@ -1,0 +1,61 @@
+/*Captura de Tallas*/
+
+main{
+    margin: 10px 20px;
+    padding: 10px;
+    background: transparent;
+}
+
+.uniforme_rtp img{
+    max-width: 500px;
+    height: auto;
+}
+
+body{
+    background: linear-gradient(135deg,#e9f5f4,#d7efec,#f4fbfb);
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* Blob decorativo */
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    background: radial-gradient(circle,#0d9488 0%, transparent 70%);
+    opacity:0.15;
+    top:-150px;
+    right:-150px;
+    border-radius:50%;
+    filter: blur(80px);
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    background: radial-gradient(circle,#10b981 0%, transparent 70%);
+    opacity:0.12;
+    bottom:-150px;
+    left:-150px;
+    border-radius:50%;
+    filter: blur(90px);
+}
+
+.card{
+background: #f4fbfb;
+border: none;
+box-shadow: 0 4px 12px rgba(0,0,0,0.0);
+}
+
+
+/*Progreso_captura*/
+
+.progress-bar {
+              font-size: 16px;
+              font-weight: bold;
+              color: black;
+          }

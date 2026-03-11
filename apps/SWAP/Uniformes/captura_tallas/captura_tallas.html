@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/app-swap/images/Swap_8.jpg" type="image/x-icon">
+    <!-- TÍTULO DE LA PÁGINA -->
+    <title>Captura de Tallas</title>
+    <!-- Iconos -->
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
+    <!-- BOOTSTRAP CSS -->
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <!-- CSS del Menu, encabezado, main y Titulos (template)-->
+    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+
+<body>
+    <?php 
+        include '../components/encabezado.html'; 
+    ?>
+    <?php 
+        include '../components/menu.html'; 
+    ?>
+    <main>
+        <div class="container_fluid">
+            <div class="card shadow-lg rounded-3 p-4">
+                <h5 class="titulo1 mt-2 fw-bold text">Registro de Uniformes</h5>
+                <div id="leyenda_bloqueo" class="alert alert-danger text-center fw-bold" style="display: none;">
+                    Bloqueada la captura
+                </div>
+                <form id="form_alta">
+                    <div class="row align-items-start mb-3">
+                        <!--Imagen del trabajador-->
+                        <div class="col-md-2 d-flex justify-content-center">
+                            <div style="width: 150px; height: 150px">
+                                <img id="trabajador_foto" src="/app-swap/Uniformes/img/usuario.png"
+                                    style="width: 100%; height: 100%; border-radius: 8px; object-fit: cover;" />
+                            </div>
+                        </div>
+                        <!--Datos del trabajador-->
+                        <div class="col-md-10">
+                            <!--Datos personales-->
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label for="input_credencial"><b>Credencial</b></label>
+                                    <input type="number" id="input_credencial" name="credencial"
+                                        class="form-control form-control-sm" autocomplete="off" />
+                                </div>
+                                <!--Nombre del trabajador-->
+                                <div class="col-md-5">
+                                    <label for="input_nombre"><b>Nombre</b></label>
+                                    <input id="input_nombre" name="nombre" class="form-control form-control-sm"
+                                        disabled />
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="input_genero"><b>G&eacute;nero</b></label>
+                                    <input id="input_genero" name="genero" type="text"
+                                        class="form-control form-control-sm" disabled />
+
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="input_modulo"><b>M&oacute;dulo</b></label>
+                                    <input id="input_modulo" name="modulo" type="text"
+                                        class="form-control form-control-sm" disabled />
+                                    <input type="hidden" id="modulo_clave" name="modulo_clave" />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <!--Tipo de Contrato-->
+                                <div class="col-md-2">
+                                    <label for="input_tipo_contrato_desc"><b>Tipo de Contrato</b></label>
+                                    <input id="input_tipo_contrato_desc" name="contrato"
+                                        class="form-control form-control-sm" disabled>
+                                    <input type="hidden" id="input_tipo_contrato" name="tipo_contrato">
+                                </div>
+                                <!--Puesto-->
+                                <div class="col-md-8">
+                                    <label for="input_puesto"><b>Puesto</b></label>
+                                    <input id="input_puesto" name="puesto" type="text"
+                                        class="form-control form-control-sm" disabled />
+                                    <input type="hidden" id="puesto_clave" name="puesto" />
+                                    <input type="hidden" id="tipo_trab_descripcion" name="tipo_trab_descripcion" />
+                                    <input type="hidden" id="tipo_trab_proc" name="tipo_trab_proc" />
+                                </div>
+                            </div>
+                            <!--estatus de registro-->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Estatus de registro</label>
+                                    <div class="d-flex gap-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="estatus"
+                                                id="estatus_presencial" value="P" checked required>
+                                            <label class="form-check-label" for="estatus_presencial">Presencial</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="estatus"
+                                                id="estatus_capturado" value="C">
+                                            <label class="form-check-label" for="estatus_capturado">Capturado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Tipos de prendas y tallas a seleccionar-->
+                    <!---Tabla catalogo de uniformes y talla a seleccionar-->
+                    <!-- <div class="uniformes-grid w-100">
+                        <div class="tabla_catalogo_uniforme" id="tabla_catalogo_uniforme" style="width: auto;">
+                            <div class="card shadow-lg rounded-4 p-3" style="font-size: 0.85rem; margin: 0 !important;">
+                                <h5 class="fw-bold mb-3">Tipo de prendas</h5>
+                                <div class="table-responsive W-100">
+                                    <table class="table table-stripped table-bordered" id="tabla_uniformes">
+                                        <thead class="text-center W-100">
+                                            <tr>
+                                                <th hidden></th>
+                                                <th>Tipo de prenda</th>
+                                                <th>Cantidad</th>
+                                                <th>Talla</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody> -->
+                    <!--los registros en js -->
+                    <!-- </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> -->
+                    <!--Guia de tallas a la derecha-->
+                    <!-- <div class="guia_tallas guia-aside" id="guia_tallas" style="display:none;">
+                            <div id="guia_header" class="mb-2 fw-bold"></div>
+                            <div id="guia_tabs" class="guia-tabs"></div>
+                            <div id="guia_viewer" class="guia-img-wrap">
+                                <img id="guia_img" src="" alt="Guía de talla">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row mt-4 mb-3">
+                        <div class="col md-10">
+                            <label class="form-label"><b>Observaciones</b></label>
+                            <textarea rows="2" id="observ" name="observ" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <!--Botones-->
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-success btn-sm me-2 d-none" id="guardar_registro"
+                                disabled>
+                                <i class="fas fa-save"></i> Registrar
+                            </button>
+
+                            <button type="reset" class="btn btn-danger btn-sm me-3">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!---Tabla de Registros Uniformes--->
+        <div class="container_fluid">
+            <div class="card shadow-lg rounded-3 p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Uniformes</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="registro_uniformes">
+                        <thead class="text-center">
+                            <tr>
+                                <th> </th>
+                                <th>Credencial</th>
+                                <th>Nombre</th>
+                                <th>G&eacute;nero</th>
+                                <th>Tipo Contrato</th>
+                                <th>Total de prendas</th>
+                                <th>Observaciones</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_registros">
+                            <!-- Aquí se insertarán los registros en el js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PIE -->
+    <?php 
+        include '../components/pie.html'; 
+    ?>
+    <!-- jquery -->
+    <script type="text/javascript" src="/app-swap/public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <!-- BOOTSTRAP JS  -->
+    <script type="text/javascript" src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- js del menu lateral -->
+    <script type="text/javascript" src="/app-swap/includes/utils/menu.js"></script>
+</body>
+
+</html>

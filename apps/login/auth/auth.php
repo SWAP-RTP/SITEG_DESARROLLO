@@ -5,6 +5,12 @@ use Firebase\JWT\JWT;
 
 require "../conf/conexion.php";
 
+$host = "10.10.30.28";
+$port = 5437;
+$dbname = "swap_2025";
+$user = "desarrollo";
+$password = "desarrollo";
+
 try {
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
     $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);

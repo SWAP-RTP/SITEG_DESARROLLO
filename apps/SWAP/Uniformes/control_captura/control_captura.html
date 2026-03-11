@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/app-swap/images/Swap_8.jpg" type="image/x-icon">
+    <!-- TÍTULO DE LA PÁGINA -->
+    <title>Progreso de Captura</title>
+    <!-- Iconos -->
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
+    <!-- BOOTSTRAP CSS -->
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <!-- CSS del Menu, encabezado, main y Titulos (template)-->
+    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+
+<body>
+    <?php 
+        include '../components/encabezado.html'; 
+    ?>
+    <?php 
+        include '../components/menu.html'; 
+    ?>
+
+    <main>
+        <h1 class="titulo1 mt-4 fw-bold text-center">Control de Captura</h1>
+        <br>
+
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Observaciones</th>
+                    <th>Acci&oacute;n</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <textarea id="observaciones" rows="2" class="form-control"></textarea>
+                    </td>
+                    <td>
+                        <button id="btn_estado" class="btn">
+                            Cargando...
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+        <!--Autorizaciones-->
+        <h3 class="titulo1 mt-2 fw-bold text-left">Autorizaci&oacute;n</h3>
+        <br>
+        <div class="container_fluid">
+            <div class="card shadow-lg rounded-3 p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0"></h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="act_uniformes">
+                        <thead class="text-center">
+                            <tr>
+                                <!-- <th> </th> -->
+                                <th>Credencial</th>
+                                <th>Nombre</th>
+                                <th>Observaciones</th>
+                                <th>Persona Solicitud</th>
+                                <th>Fecha</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="solicitud_registros">
+                            <!-- Aquí se insertarán los registros en el js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PIE -->
+    <?php 
+        include '../components/pie.html'; 
+    ?>
+    <!-- jquery -->
+    <script type="text/javascript" src="/app-swap/public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <!-- BOOTSTRAP JS  -->
+    <script type="text/javascript" src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- js del menu lateral -->
+    <script type="text/javascript" src="/app-swap/includes/utils/menu.js"></script>
+    <!-- js del cocntrol -->
+    <!-- <script type="text/javascript" src="scripts/.js"></script> -->
+</body>
+
+</html>
