@@ -1,41 +1,51 @@
 <?php
-require_once __DIR__ . '/../../conf/conexion.php';
+header('Content-Type: application/json');
+require_once "../../conf/conexion.php";
 
 // Recibir datos JSON
-header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
 $id = $input['id'] ?? null;
 $estatus = $input['estado'] ?? null; // Debe coincidir con el nombre enviado desde JS
 
-if (!$id || !isset($estatus)) {
+if ($id === null || $estatus === null) {
     http_response_code(400);
     echo json_encode(["error" => "Faltan parámetros"]);
     exit;
 }
-
-function updateModulos_sistema($host, $port, $dbname, $user, $password, $id, $estatus)
+function updateModulos_sistema($id, $estatus)
 {
-    $conexion = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
-    if (!$conexion) {
+    try {
+        $conexion = Database::conectar();
+        if (!$conexion) {
+            throw new Exception("Error de conexion a la DB");
+        }
+
+        pg_query($conexion, "BEGIN");
+
+        $sqlUpdateModulos = "UPDATE modulo_sistem SET estatus = $1 WHERE cve_modulo = $2";
+        $resultUpdateModulos = pg_query_params($conexion, $sqlUpdateModulos, [$estatus, $id]);
+
+        if ($resultUpdateModulos) {
+            if (pg_affected_rows($resultUpdateModulos) > 0) {
+                pg_query($conexion, "COMMIT");
+                return ["success" => true, "message" => "Estado actualizado correctamente"];
+            } else {
+                pg_query($conexion, "ROLLBACK");
+                return ["success" => false, "error" => "No se realizaron cambios (ID no existe o mismo estado)"];
+            }
+        } else {
+            throw new Exception("Error en la ejecucion del query");
+        }
+
+    } catch (Exception $e) {
+        //Si algo falla pero hay conexion se hace un rollback
+        $db = Database::conectar();
+        if ($db)
+            pg_query($db, "ROLLBACK");
+        error_log("Error updateModulos_sistema: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(["error" => "Error de conexión a la base de datos"]);
-        exit;
+        return ["error" => "Error interno al actualizar" . $e->getMessage()];
     }
-
-    pg_query($conexion, "BEGIN"); // Inicia transacción
-
-    $sql = "UPDATE modulo_sistem SET estatus = $1 WHERE cve_modulo = $2";
-    $result = pg_query_params($conexion, $sql, [$estatus, $id]);
-
-    if ($result) {
-        pg_query($conexion, "COMMIT");
-        echo json_encode(["success" => true]);
-    } else {
-        pg_query($conexion, "ROLLBACK");
-        http_response_code(500);
-        echo json_encode(["error" => "Error al actualizar"]);
-    }
-    pg_close($conexion);
 }
 
-updateModulos_sistema($host, $port, $dbname, $user, $password, $id, $estatus);
+echo json_encode(updateModulos_sistema($id, $estatus));

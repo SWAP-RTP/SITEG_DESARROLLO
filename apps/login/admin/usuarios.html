@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center align-items-start flex-row gap-5 mb-5 mt-4 text-white">
+<div class="d-flex justify-content-center align-items-start flex-row gap-5 mb-5 mt-4 componentes-tabla">
     <div class="d-flex align-items-center gap-2">
         <span>Credencial:</span>
         <input type="text" class="form-control">
@@ -23,20 +23,23 @@
     </div>
 
     <div>
-        <button class="btn btn-color btn-md">Buscar</button>
+        <button class="btn btn-success">
+            <i class="fas fa-check"></i> Guardar
+        </button>
     </div>
 </div>
 <hr>
-<div class="row mt-5 mb-4 justify-content-end align-content-center d-flex" id="tabla_correctivo">
-    <div style="overflow-x:auto; width:100%;">
-        <table id="tabla_orden_alta" style="width:100%; min-width:800px;">
-            <thead>
-                <tr>
-                    <!-- Tus columnas aquí -->
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
+<table id="tabla_orden_alta" class="table table-striped w-100">
+    <thead>
+        <tr>
+            <th>Columna 1</th>
+            <th>Columna 2</th>
+            <th>Columna 3</th>
+            <th>Columna 4</th>
+            <th>Columna 5</th>
+            <th>Columna 6</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

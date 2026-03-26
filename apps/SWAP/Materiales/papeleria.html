@@ -23,6 +23,7 @@
 
 
 <body>
+  
   <?php 
         include './components/encabezado.html'; 
     ?>
@@ -50,9 +51,9 @@
                   </div>
                   <!-- campo 2: Descripción del Material (se usará como 'material' para el JS) -->
                   <div class="col-12 col-md-4">
-                    <label for="material" class="form-label mb-0">Descripción del Material:</label>
-                    <input id="material" name="material" type="text" class="form-control form-control-sm rounded-pill"
-                      placeholder="Ej: TONER PARA IMPRESORA">
+                    <label for="descripcion_material" class="form-label mb-0">Descripción del Material:</label>
+                    <input id="descripcion_material" name="material" type="text"
+                      class="form-control form-control-sm rounded-pill" placeholder="Ej: TONER PARA IMPRESORA">
                   </div>
                   <!-- campo 3: Grupo al que pertenece (select) -->
                   <div class="col-12 col-md-4">
@@ -101,29 +102,31 @@
                     <select id="estado_material" name="estado_material" class="form-select form-select-sm rounded-pill">
                       <option value="">Selecciona...</option>
                       <option value="Nuevo">NUEVO</option>
-                      <option value="Dañado">Dañado</option>
-                      <option value="Gastado">Gastado</option>
-                      <option value="Mantenimiento">En mantenimiento</option>
+                      <option value="Dañado">USADO</option>
+                      <option value="Gastado">REPARADO</option>
+                     
                     </select>
                   </div>
 
-                  <!-- campo 8: ID de Credencial (Es el que vendrá de manera atomatizada en el index.js) -->
+                  <!-- campo 8: ID de Credencial -->
                   <div class="col-12 col-md-4">
                     <label for="id_credencial" class="form-label mb-0">Credencial:</label>
                     <input id="id_credencial" name="id_credencial" type="text" pattern="[0-9]*" inputmode="numeric"
                       maxlength="10" class="form-control form-control-sm rounded-pill" placeholder="Ej:123"
                       autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <!-- Agregar este UL para las sugerencias -->
+                    <ul id="lista-credenciales" class="list-group position-absolute w-100" style="z-index: 1000;"></ul>
                   </div>
                   <!-- campo 9: Nombre de la Persona (se usará como 'nombre_registra' para el JS) -->
                   <div class="col-12 col-md-4">
-                    <label for="nombre_registra" class="form-label mb-0">Nombre:</label>
-                    <input id="nombre_registra" name="nombre_registra" type="text"
+                    <label for="nombre_trabajador" class="form-label mb-0">Nombre:</label>
+                    <input id="nombre_trabajador" name="nombre_trabajador" type="text"
                       class="form-control form-control-sm rounded-pill" placeholder="Nombre completo">
                   </div>
                   <!-- campo 10: Área de Adscripción (select, se usará como 'area' para el JS) -->
                   <div class="col-12 col-md-4">
-                    <label for="area" class="form-label mb-0">Área de Adscripción:</label>
-                    <input id="area" name="area" type="text" class="form-control form-control-sm rounded-pill"
+                    <label for="area_material" class="form-label mb-0">Área de Adscripción:</label>
+                    <input id="area_material" name="area" type="text" class="form-control form-control-sm rounded-pill"
                       value="Módulo 4" readonly>
                   </div>
                   <!-- campo 11: Fecha de Registro -->
@@ -141,12 +144,53 @@
                 <button id="btn_consulta" type="button" class="btn btn-primary rounded-pill px-4 me-3">
                   <i class="fa-solid fa-table-list me-2"></i> Consultar registros
                 </button>
-                <button type="reset" class="btn btn-secondary rounded-pill px-4">
+                <button id="btn_limpiar" type="button" class="btn btn-secondary rounded-pill px-4">
                   <i class="fa-solid fa-broom"></i> Limpiar
                 </button>
               </div>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- Toast de éxito -->
+    <div class="toast-container position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+      <div id="toastExito" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+        aria-atomic="true" style="font-size: 1.3rem; padding: 1.2rem 2rem;">
+        <div class="d-flex">
+          <div class="toast-body" style="font-weight: bold;">
+            ¡Material registrado exitosamente!
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Cerrar"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast de error -->
+    <div class="toast-container position-fixed" style="top: 70px; right: 20px; z-index: 9999;">
+      <div id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+        aria-atomic="true" style="font-size: 1.3rem; padding: 1.2rem 2rem;">
+        <div class="d-flex">
+          <div class="toast-body" style="font-weight: bold;">
+            ¡No se ha realizado ningún registro!
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Cerrar"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast general -->
+    <div class="toast-container position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+      <div id="toastGeneral" class="toast align-items-center border-0" role="alert" aria-live="assertive"
+        aria-atomic="true" style="font-size: 1.3rem; padding: 1.2rem 2rem;">
+        <div class="d-flex">
+          <div class="toast-body" style="font-weight: bold;">
+            <!-- El mensaje se cambia desde JS -->
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Cerrar"></button>
         </div>
       </div>
     </div>
@@ -174,7 +218,7 @@
                 <th>Credencial</th>
                 <th>Registrado por</th>
                 <th>Área</th>
-                <th>Fecha</th>
+                <th>Fecha y hora</th>
               </tr>
             </thead>
             <tbody id="tabla_materiales"></tbody>
@@ -191,6 +235,13 @@
         include './components/pie.html'; 
     ?>
 
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <!-- DataTables core -->
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <!-- DataTables Bootstrap 5 -->
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
   <script type="text/javascript" src="/app-swap/public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
   <!-- BOOTSTRAP JS  -->
   <script type="text/javascript" src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -200,12 +251,8 @@
   <script type="module" src="../includes/utils/buscarCredencial.js"></script>
   <script type="module" src="../includes/utils/dataTable_v2.js"></script>
   <!-- Script específico de papelería -->
-  <script type="module" src="scripts/materiales.js"></script>
+  <script type="module" src="scripts/eventos.js"></script>
 
-
-  <!-- DataTables JS -->
-  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
 </body>
 

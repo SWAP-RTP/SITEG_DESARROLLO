@@ -1,5 +1,10 @@
+<?php
+require_once '/var/www/login_shared/middleware.php';
+$usuario = validarAcceso(); 
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Rutas</title>
@@ -7,15 +12,16 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="../lib/Bootstrap-5-5.3.0/css/bootstrap.min.css">
     <!-- Fontawesome -->
-    <link rel="stylesheet" type="text/css" href="../lib/fontawesome/css/all.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/fontawesome/css/all.min.css" />
     <!-- Componentes -->
     <link rel="stylesheet" href="../css/style_componentes.css">
     <!--Estilos -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/style_rutas.css">
 </head>
+
 <body>
-<?php include '../header.html'; ?>  
+    <?php include '../header.html'; ?>
 
     <main>
         <div class="container-main">
@@ -35,7 +41,7 @@
                     <div class="panel-modulos">
                         <h5 class="mb-2">Módulos</h5>
                         <p class="texto-ayuda">Selecciona un módulo para ver sus rutas (origen y destino).</p>
-         
+
                         <div id="total_rutas">
                             <!-- aqui se pintan los card de los modulos y el total-->
                         </div>
@@ -86,4 +92,5 @@
     <!-- JS -->
     <script src="script/rutas.js"></script>
 </body>
+
 </html>

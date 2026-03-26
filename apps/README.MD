@@ -25,5 +25,6 @@ Para obtener el nombre del usuario desde el frontend:
 ` js/auth_name.js`
 
 - Esta función se encarga de leer el token y extraer el nombre del usuario para su uso en la interfaz.
+-LOL
 
 

@@ -1,0 +1,185 @@
+/* ESTE ES EL BODY DEL LOGIN */
+body{
+   background: #ffffff;
+}
+/* ESTILO DEL CARD DEL LOGIN */
+#card_login .izquierdo {
+    background: rgb(241, 241, 241, 0.9) !important;
+    border-right: 1px solid #ffffff;
+    color: rgb(53, 53, 53) !important;
+}
+#card_login section #ingresaUsuario, #card_login section #ingresaPassword{
+  background-color: #ffffff !important;
+}
+/* forzar color cuando el navegador autocompleta */
+#card_login input:-webkit-autofill,
+#card_login input:-webkit-autofill:hover,
+#card_login input:-webkit-autofill:focus,
+#card_login input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+  -webkit-text-fill-color: rgb(53, 53, 53) !important;
+}
+
+/* TODOS LOS BOTONES QUE TENGAN ESTA CLASE SERAN DE ESTE COLOR */
+.btn-sistema {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: #ffffff !important;
+}
+.btn-sistema:hover {
+  background: rgb(153, 0, 255);
+  border-color: rgb(153, 0, 255);
+  color: #ffffff !important;
+}
+/* color de la Animacion para el loader de carga  */
+.loader {
+  background-image: url("../img/RTP_loading_darck.png");
+}
+/* Primer cuadrado */
+.loader::before {
+  background-color: #ffffff;
+}
+/* Segundo cuadrado */
+.loader::after {
+  background-color: #ffffff;
+}
+/* Texto de cargando */
+.loading-text {
+  color: rgb(0, 0, 0);
+}
+.contenedor_carga {
+  background-color: #ffffff;
+}
+/* ESTE ES EL BODY DEL INDEX DONDE ESTAN LOS ACCESOS */
+html,
+.body_index {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), 
+    url("../img/logoRTPMI.png");
+  background-color: #ffffff;
+}
+header nav{
+  color: rgb(53, 53, 53);
+}
+header nav .sun{
+  color:rgb(53, 53, 53) !important;
+}
+
+footer {
+  color: rgb(53, 53, 53);
+}
+/* SIDEBAR */
+.sidebar{
+    background: linear-gradient(to bottom, rgba(241, 241, 241), rgba(241, 241, 241, 0.7));
+    border-right: 1px solid #ffffff;
+}
+hr{
+    color: rgb(36, 36, 36);
+}
+/* iconos */
+.menu i,
+.menu svg{
+  color:rgb(53, 53, 53);
+  fill:rgb(53, 53, 53);
+}
+/* texto oculto */
+.menu span{
+    color: rgb(53, 53, 53);
+}
+/* Aplicar hover al contenedor <a> */
+.menu li a:hover {
+    background-color: #0d6efd !important; 
+}
+/* forzamos el hover en el icono y el span */
+.menu li a:hover i,
+.menu li a:hover svg,
+.menu li a:hover span {
+    color: #ffffff !important;
+}
+
+/* menu hamburguesa */
+.hamburger span{
+    background:rgb(53, 53, 53);
+}
+/* ---------------ESTILO DE LOS CARD DE LOS SISTEMAS----------------- */
+.card {
+  background: linear-gradient(to bottom, #ffffff, #c9c9c9);
+  color: rgba(255, 255, 255, 0.87);
+}
+.card .titulo-sistema{
+    color: rgb(53, 53, 53);
+}
+#container .fade-card:hover {
+  background: #c9c9c9;
+}
+
+#container .fade-card .btn-sistema {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: white !important;
+}
+
+.titulo{
+  color: rgb(53, 53, 53) !important;
+}
+
+/* ---------ESTILO DEL FOLDER DEL ADMIN -----------*/
+.card-folder .card-body {
+  background-color: #ffffff !important;
+  border: 1px solid #e6e6e6 !important;;
+}
+/* Estilo para pestañas activas*/
+.nav-tabs .nav-link.active {
+  background-color: #ffffff !important;
+  color: black !important;
+  border-color: #ffffff;
+}
+
+/* Estilo para las pestañas inactivas*/
+.nav-tabs .nav-link {
+  background-color: #afafaf;
+  color: rgb(0, 0, 0);
+  border-color: #afafaf;
+}
+/* estilo de los input*/
+.form-control,
+.form-select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #e6e6e6 !important;
+  border-radius: 6px;
+}
+.componentes-tabla{
+  color: black;
+}
+/* Fondo de la tabla y ancho completo */
+table thead tr th{
+  background-color: #9e9e9e !important;
+  color: #000000 !important;
+}
+/* color de las filas de la tabla */
+table tbody tr td{
+  background-color: #ffffff !important;
+  border-right: 1px solid #afafaf !important;
+  color: #000000 !important;
+}
+/* Hover en las filas de la tabla */
+table tbody tr:hover td {
+  background-color: #dbdbdb !important; 
+  color: #000000 !important;           
+}
+
+/* Estilos específicos para DataTables (buscadores, etiquetas y paginación) */
+.dataTables_wrapper .dataTables_length, 
+.dataTables_wrapper .dataTables_filter, 
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_processing, 
+.dataTables_wrapper .dataTables_paginate {
+    color: black !important;
+}
+
+/* ---------ESTILO DE LOS MODALES -----------*/
+.modal-content, .modal-header, .modal-body, .modal-footer{
+  background-color: #ffffff  !important;
+  color: #000000 !important;
+}

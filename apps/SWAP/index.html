@@ -1,6 +1,6 @@
 <?php
-require_once 'middleware.php';
-$user = validarAcceso(); 
+require_once '/var/www/login_shared/middleware.php';
+$usuario = validarAcceso(); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +81,12 @@ $user = validarAcceso();
                                         <a href="Recursos_Humanos/index.html"
                                             class="link-dark rounded w-75 d-flex align-items-center gap-2 py-2 fs-6">
                                             <i class="fa-solid fa-people-roof"></i>RECURSOS HUMANOS
+                                        </a>
+                                    </li>
+                                    <li class="pe-2">
+                                        <a href="Uniformes/index.html"
+                                            class="link-dark rounded w-75 d-flex align-items-center gap-2 py-2 fs-6">
+                                            <i class="fa-solid fa-shirt"></i>UNIFORMES
                                         </a>
                                     </li>
                                 </ul>

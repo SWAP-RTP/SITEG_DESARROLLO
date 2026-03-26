@@ -1,65 +1,21 @@
 <?php
-require_once __DIR__ . '/../../../config/conexion.php';
+require_once '/var/www/login_shared/conf/conexion.php';
 
-try{
+function getTrabajador()
+{
+    $conexion = Database::conectar();
 
-    // conexión a la base de datos
-    $conexion = conexion();
-    //si la conexión falla se lanza un error
     if (!$conexion) {
-        throw new Exception("Error al conectar con la DB");
+        echo json_encode(["error" => "Error de conexión a la base de datos"]);
+        exit;
     }
-    $credencial = obtenerCredencial();
 
-    validarCredencial($credencial);
-    // $modulo_usuario = obtenerModuloUsuario();
+    $credencial = $_GET['credencial'] ?? '';
 
-    $trabajador = obtenerTrabajador($conexion, $credencial);
-
-    validarExistencia($trabajador);
-
-    validarActivo($trabajador);
-    validarBase($trabajador);
-    // validarModulo($trabajador, $modulo_usuario);
-
-    // respuesta final
-    responderTrabajador($trabajador);
-
-} catch (Exception $e) {
-
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => $e->getMessage()
-    ]);
-}
-
-
-//Obtener datos de la credencial enviada desde el front
-
-function obtenerCredencial() {
-    return $_GET['credencial'] ?? '';
-}
-
-// function obtenerModuloUsuario() {
-//     return $_SESSION['modulo_o'] ?? 0;
-// }
-
-
-//Validar que se haya proporcionado una credencial
-function validarCredencial($credencial) {
     if (empty($credencial)) {
-        throw new Exception("No se proporcionó la credencial");
+        echo json_encode(["error" => "No se proporcionó la credencial"]);
+        exit;
     }
-}
-
-function validarExistencia($data) {
-    if (!$data) {
-        throw new Exception("No se encontraron datos para la credencial");
-    }
-}
-
-//Obtener información del trabajador desde la base de datos
-function obtenerTrabajador($conexion, $credencial) {
 
     $sql = "SELECT 
                 t.trab_credencial,
@@ -83,58 +39,41 @@ function obtenerTrabajador($conexion, $credencial) {
             WHERE t.trab_credencial = '$credencial'
             LIMIT 1";
 
-    $res = pg_query($conexion, $sql);
+    $res = @pg_query($conexion, $sql);
 
-    if ($res && pg_num_rows($res) > 0) {
-        return pg_fetch_assoc($res);
+    if (!$res) {
+        echo json_encode(["error" => "Error en la consulta SQL"]);
+        exit;
     }
 
-    return null;
-}
+    if (pg_num_rows($res) === 0) {
+        echo json_encode(["error" => "No se encontraron datos para la credencial"]);
+        exit;
+    }
 
-//Clasificar al trabajador según su puesto
-function validarActivo($data) {
+    $data = pg_fetch_assoc($res);
+
     if ($data['trab_status'] != '1') {
-        responderMensaje("Trabajador INACTIVO");
+        echo json_encode(["error" => "Trabajador inactivo"]);
+        exit;
     }
-}
 
-function validarBase($data) {
     if ($data['tipo_trab_clave'] != '1') {
-        responderMensaje("Trabajador no pertenece a base");
+        echo json_encode(["error" => "Trabajador no pertenece a base"]);
+        exit;
     }
-}
 
-// function validarModulo($data, $modulo_usuario) {
-//     if ($modulo_usuario != 0 && $data['mod_clave'] != $modulo_usuario) {
-//         responderMensaje("Trabajador pertenece a otro módulo");
-//     }
-// }
-
-
-//Respuesta
-function responderMensaje($mensaje) {
-    echo json_encode([
-        "status" => "ok",
-        "nombre" => $mensaje
-    ]);
-    exit;
-}
-
-function responderTrabajador($data) {
-
-    echo json_encode([
+    return [
         "status" => "ok",
         "nombre_completo" => $data['nombre_completo'],
-        // "modulo" => $data['mod_desc'],
-        // "mod_clave" => $data['mod_clave'],
         "puesto_clave" => $data['puesto_clave'],
         "puesto" => $data['puesto'],
         "genero" => $data['genero'],
         "foto" => $data['foto'],
         "tipo_contrato" => $data['tipo_contrato_cve'],
         "tipo_contrato_desc" => $data['tipo_contrato_desc'],
-        // "tipo_trab_proc" => $data['tipo_trab_proc']
         "tipo_trab_clave" => $data['tipo_trab_clave']
-    ]);
+    ];
 }
+
+echo json_encode(getTrabajador());

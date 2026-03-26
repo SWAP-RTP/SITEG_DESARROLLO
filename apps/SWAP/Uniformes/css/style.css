@@ -52,10 +52,66 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.0);
 }
 
 
-/*Progreso_captura*/
+/*Guia de tallas*/
+.guia-aside {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  flex: 1;
+  max-width: 360px;
+  position: sticky;
+  top: 20px;
+}
 
-.progress-bar {
-              font-size: 16px;
-              font-weight: bold;
-              color: black;
-          }
+.guia-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.guia-tab {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #e9f5f4;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.guia-tab:hover {
+  background: #d1ece8;
+}
+
+.guia-tab.active {
+  background: #0d9488;
+  color: #fff;
+  border-color: #0d9488;
+}
+
+.guia-img-wrap {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.guia-img-wrap img {
+  max-width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+  padding: 5px;
+}
+
+
+.uniformes-grid {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.tabla_catalogo_uniforme {
+  flex: 2;
+}

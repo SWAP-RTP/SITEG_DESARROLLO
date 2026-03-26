@@ -7,33 +7,9 @@ Ten en cuenta que deberas tener instalado docker desktop para poder levantar est
 Ademas de tener conocimientos en Git y Github
 
 ---
+## 1. Despliegue con Docker
 
-## 1. Configuración de Rutas Locales
-
-Antes de levantar los servicios, ajusta las rutas para que apunten a tu entorno local (`http://localhost:8086/`).
-
-**Ajustes Manuales:**
-
-- **Archivo:** `apps/login/js/menu.js`  
-  Cambia la URL base a `http://localhost:8086/`.
-
-- **Archivo:** `apps/login/auth/logout.php`  
-  Cambia la redirección a `http://localhost:8086/`.
-
-**Ignorar cambios de rutas en Git:**
-
-Para evitar que estas rutas locales se suban por error al servidor de producción, ejecuta en tu terminal:
-
-```bash
-git update-index --assume-unchanged apps/login/js/menu.js
-git update-index --assume-unchanged apps/login/auth/logout.php
-```
-
----
-
-## 2. Despliegue con Docker
-
-Una vez clonado el repositorio y ajustadas las rutas, construye y levanta los contenedores:
+Una vez clonado el repositorio, construye y levanta los contenedores:
 
 ```bash
 docker compose up --build -d
@@ -41,7 +17,7 @@ docker compose up --build -d
 
 ---
 
-## 3. Instalación de Dependencias (Firebase JWT)
+## 2. Instalación de Dependencias (Firebase JWT)
 
 Para que el sistema de autenticación por tokens funcione correctamente, instala la librería `firebase/php-jwt` dentro de cada contenedor.
 
@@ -66,7 +42,7 @@ Para que el sistema de autenticación por tokens funcione correctamente, instala
 
 ---
 
-## 4. Flujo de Trabajo con Git
+## 3. Flujo de Trabajo con Git
 
 Si necesitas enviar tus cambios a producción después de trabajar en tu rama:
 

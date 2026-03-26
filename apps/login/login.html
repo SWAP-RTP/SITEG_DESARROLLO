@@ -12,88 +12,75 @@
     type="text/css" />
   <!-- BOOTSTRAP CSS -->
   <link href="./lib/Bootstrap-5-5.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <!-- CSS -->
-  <!-- Estilos CSS ----------------------------------->
-  <link rel="stylesheet" href="./includes/css/loginStyle.css" />
+  <!-- FONTAWESOME -->
   <link rel="stylesheet" type="text/css" href="./lib/fontawesome/css/all.min.css" />
   <!-- Alertas Notyf -->
   <link rel="stylesheet" href="./lib/Notyf/notyf.min.css">
+  <!-- ESTILOS PERSONALIZADOS CSS -->
+  <link class="theme-link theme-dark" rel="stylesheet" href="./includes/css/dark.css">
+  <link class="theme-link theme-light" rel="stylesheet" href="./includes/css/light.css" disabled>
+  <link rel="stylesheet" href="./includes/css/componentes.css">
 </head>
 
 <body>
   <!-- Main Container ----------------------------------------------------------------->
-  <main class="container d-flex flex-column justify-content-center align-items-center">
-
+  <main class="d-flex flex-column justify-content-center align-items-center">
     <div class="contenedor_carga" hidden>
       <div class="loader"></div>
       <div class="loading-text">Cargando..</div>
     </div>
 
-
-    <!-- toast
-    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button> -->
-
-    <!-- toast alerta -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080; margin-top: 50px;">
-      <div id="myToast" class="toast bg-danger text-white border-0 shadow" role="alert" aria-live="assertive"
-        aria-atomic="true">
-        <div class="toast-header bg-danger text-white border-0">
-          <i class="fa-solid fa-circle-exclamation me-2"></i>
-          <strong class="me-auto">Swap</strong>
-          <small>Ahora mismo</small>
-          <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast"></button>
-        </div>
-        <div class="toast-body">
-          Los datos de acceso son incorrectos. Por favor, inténtalo de nuevo.
-        </div>
-      </div>
-    </div>
-    <!-- fin toast -->
-
-
-
     <!--LOGIN ------------------------------------>
-    <section id="card_login" class="border rounded-5 p-4 mx-auto ">
-      <section class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-4">
+    <div id="card_login">
+      <div class="panel izquierdo">
+        <div class="text-center mb-3">
+          <h3 class="mt-3">Bienvenidos al</h3>
+          <h3 class="mt-3">Sistema Integrado (SINTEG)</h3>
+        </div>
 
-        <section class="col-5">
-          <form action="auth/auth.php" method="POST" id="loginForm">
-            <section class="mb-3">
-              <label for="ingresaUsuario" class="form-label fw-bold">Usuario</label>
-              <input id="ingresaUsuario" name="ingresaUsuario" type="text"
+        <form action="auth/auth.php" method="POST" id="loginForm">
+          <section class="mb-3 mt-5">
+            <label for="ingresaUsuario" class="form-label fw-bold">
+              <i class="fas fa-user"></i> Usuario
+            </label>
+            <input id="ingresaUsuario" name="ingresaUsuario" type="text"
+              class="form-control form-control-lg fs-6 text-center" />
+          </section>
+
+          <section class="mb-3">
+            <label for="ingresaPassword" class="form-label fw-bold">
+              <i class="fas fa-unlock-alt"></i> Contraseña
+            </label>
+            <div class="input-group">
+              <input id="ingresaPassword" name="ingresaPassword" type="password"
                 class="form-control form-control-lg fs-6 text-center" />
-            </section>
+              <button id="showPasswordBtn" class="btn btn-outline-secondary" type="button" onclick="mostrarPassword();">
+                <i id="eyeIcon" class="fas fa-eye"></i>
+              </button>
+            </div>
+          </section>
 
-            <section class="mb-3">
-              <label for="ingresaPassword" class="form-label fw-bold">Contraseña</label>
-              <div class="input-group">
-                <input id="ingresaPassword" name="ingresaPassword" type="password"
-                  class="form-control form-control-lg fs-6 text-center" />
-                <button id="showPasswordBtn" class="btn btn-outline-secondary" type="button"
-                  onclick="mostrarPassword();">
-                  <i id="eyeIcon" class="fas fa-eye"></i>
-                </button>
-              </div>
-            </section>
+          <button class="btn btn-lg btn-sistema metal-shine w-100 fs-6 mt-4" id="btn_toast" type="submit">
+            <i class="fa-solid fa-right-to-bracket"></i> Entrar
+          </button>
 
-            <button class="btn btn-lg btn-primary w-100 fs-6 mt-4" id="btn_toast" type="submit">
-              <i class="fa-solid fa-right-to-bracket"></i> Entrar
-            </button>
-          </form>
-
-          <div class="text-center mt-3">
+          <div class="text-center mt-5">
             <a href="https://www.rtp.cdmx.gob.mx/">MÁS SOBRE RTP</a>
           </div>
-        </section>
 
-        <section class="featured-image text-center">
-          <img src="./includes/img/logoRTPMI.png" class="img-fluid" width="650" />
-          <h3 class="mt-3">Sistema Integrado (SINTEG)</h3>
-        </section>
+          <div class="text-center mt-3">
+            <label>Copyright ©
+              <?php echo date('Y'); ?>.- Derechos reservados
+            </label>
+          </div>
+        </form>
+      </div>
 
-      </section>
-    </section>
+      <div class="panel derecho">
+        <!-- aqui solo se ocupa el ancho del contenedor para que se vea la imagen de fondo -->
 
+      </div>
+    </div>
   </main>
   <!-- Scripts JS de Bootstrap  --------------------------------------->
   <script src="./lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -101,10 +88,12 @@
   <script type="text/javascript" src="./lib/fontawesome/js/all.min.js"></script>
   <!-- Scripts JS JQuery  --------------------------------------->
   <script src="./lib/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+  <!-- CARGAR TEMAS LIGHT Y DARCK CON JS -->
+  <script src="./includes/js/cargar_temas.js"></script>
   <!-- Script Notyf -->
   <script src="./lib/Notyf/notyf.min.js"></script>
   <!-- Scripts de Login----------------->
-  <script src="./includes/js/index.js"></script>
+  <script type="module" src="./includes/js/index.js"></script>
 </body>
 
 </html>

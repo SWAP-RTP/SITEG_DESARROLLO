@@ -1,33 +1,27 @@
 <?php
 require_once __DIR__ . '/../../conf/conexion.php';
-
-function getUsuarios($host, $port, $dbname, $user, $password)
+function getUsuarios()
 {
-    $conexion = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
-    if (!$conexion) {
+    try {
+        //1. Obtenemos la conexion
+        $conexion = Database::conectar();
+        //2. Usamos manejo de errores en caso de que la conexion falle
+        if (!$conexion) {
+            throw new Exception("Error de conexion a la DB");
+        }
+        //3. Ejecutamos la consulta
+        $sqlUsuarios = "SELECT * FROM usuarios";
+        $resultadoUsuarios = pg_query($conexion, $sqlUsuarios);
+        if (!$resultadoUsuarios) {
+            throw new ErrorException("Error al ejecutar la consulta:" . pg_last_error($conexion));
+        }
+        $usuarios = pg_fetch_all($resultadoUsuarios);
+        return $usuarios ?: []; //SI NO HAY DATOS RETORNA UN ARRAY VACIO
+
+    } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(["error" => "Error de conexión a la base de datos"]);
-        exit;
+        return ["error" => $e->getMessage()];
     }
-
-    $sql = "SELECT * FROM usuarios";
-    $resultado = pg_query($conexion, $sql);
-
-    if (!$resultado) {
-        http_response_code(500);
-        echo json_encode(["error" => "Error en la consulta SQL"]);
-        exit;
-    }
-
-    $json = [];
-    while ($row = pg_fetch_assoc($resultado)) {
-        $json[] = $row;
-    }
-
-    pg_close($conexion);
-
-    return $json;
 }
-
 // Devuelve solo el array de usuarios
-echo json_encode(getUsuarios($host, $port, $dbname, $user, $password));
+echo json_encode(getUsuarios());

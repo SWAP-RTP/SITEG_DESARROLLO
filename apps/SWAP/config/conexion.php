@@ -1,10 +1,9 @@
 <?php
-$host = "10.10.30.28";
-$port = 5437;
-$dbname = "swap_2025";
-$user = "desarrollo";
-$password = "desarrollo";
-
+$host = "10.10.31.177";
+$port = 5432;
+$dbname = "almacen";
+$user = "almacen";
+$password = "Almacen";
 function conexion()
 {
     global $host, $port, $dbname, $user, $password;

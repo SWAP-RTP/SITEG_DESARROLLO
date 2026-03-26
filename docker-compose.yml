@@ -8,7 +8,6 @@ services:
     container_name: app_login
     volumes:
       - ./apps/login:/var/www/html
-      - ./apps/common:/var/www/common
     networks:
       - internal-network
 
@@ -19,7 +18,10 @@ services:
     container_name: app_swap
     volumes:
       - ./apps/SWAP:/var/www/html
-      - ./apps/common:/var/www/common
+      #MAPEAMOS LA CONEXION Y LIBRERIAS DE LOGIN 
+      - ./apps/login/conf:/var/www/login_shared/conf:ro
+      - ./apps/login/vendor:/var/www/login_shared/vendor:ro
+      - ./apps/login/middleware.php:/var/www/login_shared/middleware.php:ro
     networks:
       - internal-network
 
@@ -30,6 +32,10 @@ services:
     container_name: app_tain
     volumes:
       - ./apps/TAIN:/var/www/html
+      #MAPEAMOS LA CONEXION Y LIBRERIAS DE LOGIN 
+      - ./apps/login/conf:/var/www/login_shared/conf:ro
+      - ./apps/login/vendor:/var/www/login_shared/vendor:ro
+      - ./apps/login/middleware.php:/var/www/login_shared/middleware.php:ro
     networks:
       - internal-network
 

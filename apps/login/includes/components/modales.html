@@ -1,0 +1,43 @@
+<!-- MODAL REGISTRO NUEVO SISTEMA -->
+<div class="modal fade" id="modal_nueva_sistema" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_nueva_sistemaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Nuevo sistema</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <div id="preview-container" class="mb-3 border-0 d-flex align-items-center justify-content-center mt-4 mb-4">
+                        <img id="img-preview" src="" class="img-fluid d-none" alt="Previsualización">
+                        <span id="placeholder-text" class="text-white">No se ha seleccionado ninguna imagen</span>
+                    </div>
+
+                    <input type="file" id="input-imagen" accept="image/*" class="d-none">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('input-imagen').click()">
+                        <i class="fas fa-upload me-2"></i> Cargar imagen
+                    </button>
+                </div>
+                    
+                <div class="mt-4">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="col-3">Acronimo:</span>
+                        <input type="text" class="form-control" id="acronimo">
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="col-3">Nombre Completo:</span>
+                        <input type="text" class="form-control" id="nombre_completo_sistema">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+                <button type="button" class="btn btn-success" id="guardar_nuevo_sistema">
+                    <i class="fas fa-check"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
