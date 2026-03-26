@@ -22,6 +22,7 @@ services:
       - ./apps/login/conf:/var/www/login_shared/conf:ro
       - ./apps/login/vendor:/var/www/login_shared/vendor:ro
       - ./apps/login/middleware.php:/var/www/login_shared/middleware.php:ro
+      - ./apps/login/auth:/var/www/login_shared/auth:ro
     networks:
       - internal-network
 
@@ -36,6 +37,7 @@ services:
       - ./apps/login/conf:/var/www/login_shared/conf:ro
       - ./apps/login/vendor:/var/www/login_shared/vendor:ro
       - ./apps/login/middleware.php:/var/www/login_shared/middleware.php:ro
+      - ./apps/login/auth:/var/www/login_shared/auth:ro
     networks:
       - internal-network
 

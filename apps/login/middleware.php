@@ -5,20 +5,24 @@ header("Expires: 0");
 
 // 1. Detectamos dinámicamente dónde está vendor
 // Si existe en la ruta local (__DIR__) o en la ruta compartida de Docker
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    $autoloadPath = __DIR__ . '/vendor/autoload.php';
-} else {
-    $autoloadPath = '/var/www/login_shared/vendor/autoload.php';
-}
+$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php')
+    ? __DIR__ . '/vendor/autoload.php' : '/var/www/login_shared/vendor/autoload.php';
+
 
 if (!file_exists($autoloadPath)) {
     die("Error: No se encontró la carpeta vendor en " . $autoloadPath);
 }
-
-require_once $autoloadPath;
-
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+
+require_once $autoloadPath;
+$repoPath = __DIR__ . '/auth/UsuarioRepository.php';
+
+if (file_exists($repoPath)) {
+    require_once $repoPath;
+} else {
+    require_once '/var/www/login_shared/auth/UsuarioRepository.php';
+}
 
 function validarAcceso()
 {
@@ -26,7 +30,7 @@ function validarAcceso()
     if (!file_exists($confPath)) {
         die("Error: No se encontró el archivo de configuración en " . $confPath);
     }
-    require $confPath;
+    require_once $confPath;
 
     //requerimos la conexion a la base de datos para validar el session_id del token con el que esta registrado en la bd
     //Verificamos que la clave secreta exista
@@ -43,21 +47,12 @@ function validarAcceso()
         //VALIDACION DE SESION UNICA 
         //1. Conectamos a la DB 
         $db = Database::conectar();
-        if (!$db) {
-            throw new Exception("Error de conexion a la base de datos");
-        }
+        $repo = new UsuarioRepository($db);
 
-        //2. Consultamos el session_id actual guardado en la tabla 
-        $query = "SELECT session_id FROM usuarios WHERE correo = $1";
-        $result = pg_query_params($db, $query, array($decoded->data->id));
-
-        if (!$result) {
-            throw new Exception("Error en la consulta");
-        }
-
-        $fila = pg_fetch_assoc($result);
-        $session_en_db = $fila['session_id'] ?? null;
-        //3.Comparamos el ID del token contra el de la base de datos
+        //USAMOS EL METODO DE REPOSITORIO
+        $id_usuario = $decoded->data->id;
+        $session_en_db = $repo->obtenerSessionId($id_usuario);
+        //Comparamos el ID del token contra el de la base de datos
         //Si no coinciden, significa que el usuario inició sesión en otro dispositivo o navegador, invalidando la sesión actual
         if ($decoded->session_id !== $session_en_db) {
             //Borramos la cookie para que el usuario no entre en un bucle 
@@ -67,6 +62,7 @@ function validarAcceso()
         }
         // FIN DE LA VALIDACION DE SESION UNICA
         // Retornamos los datos para poder usarlos en el HTML (ej: echo $user->name)
+        // $decoded->data->id = $id_usuario;
         return $decoded->data;
 
     } catch (Exception $e) {
@@ -74,6 +70,8 @@ function validarAcceso()
         setcookie("access_token", "", time() - 3600, "/");
         header("Location: /login.html?error=sesion_invalida");
         exit;
+    } finally {
+        if (isset($db))
+            Database::desconectar();
     }
-
 }

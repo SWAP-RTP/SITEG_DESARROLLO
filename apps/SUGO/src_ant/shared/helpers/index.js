@@ -1,7 +1,0 @@
-export *  from './columns'
-export *  from './datesFuncs'
-export *  from './funcsToArrays'
-export *  from './funcsToNumbers'
-export *  from './funcsToStrings'
-export *  from './getDataInTokenByPath'
-export *  from './prubeasFuncs'

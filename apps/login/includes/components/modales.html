@@ -1,3 +1,47 @@
+<!-- MODAL EDITAR REGISTRO USUARIO -->
+<div class="modal fade" id="modal_editar_usuario" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Editar usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 mb-2">
+                    <div class="col-md-2">
+                        <label class="form-label">Credencial</label>
+                        <p id="edit_id_user"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Nombre</label>
+                        <p id="edit_nomb_user"></p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="text" id="edit_correo_user" class="form-control" required>
+                        <div class="invalid-feedback">
+                            El correo es requerido
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Nueva Contraseña</label>
+                        <input type="text" id="edit_contra_user" class="form-control" required>
+                        <div class="invalid-feedback">
+                            La contraseña es requerida
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-warning" id="guardar_usuario_editado">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL REGISTRO NUEVO SISTEMA -->
 <div class="modal fade" id="modal_nueva_sistema" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_nueva_sistemaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -18,17 +62,53 @@
                         <i class="fas fa-upload me-2"></i> Cargar imagen
                     </button>
                 </div>
+
+                <form class="row g-3 mt-4 needs-validation" novalidate>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de sistema</label>
+                        <select class="form-select tip_sistem" id="tip_sistem" required>
+                            <option value="" selected>-- SELECCIONA --</option>
+                            <option value="1">Interno</option>
+                            <option value="2">Externo</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Selecciona un tipo de sistema
+                        </div>
+                    </div>
                     
-                <div class="mt-4">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="col-3">Acronimo:</span>
-                        <input type="text" class="form-control" id="acronimo">
+                    <div class="col-md-4 ip" hidden>
+                        <label class="form-label">Dirección IP</label>
+                        <input type="text" class="form-control" id="direcc_ip">
+                        <div class="invalid-feedback">
+                            Ingresa una IP válida
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="col-3">Nombre Completo:</span>
-                        <input type="text" class="form-control" id="nombre_completo_sistema">
+
+                    <div class="col-md-2 puert" hidden>
+                        <label class="form-label">Puerto</label>
+                        <input type="text" class="form-control" id="puerto">
+                        <div class="invalid-feedback">
+                            Ingresa un puerto válido
+                        </div>
                     </div>
-                </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Acronimo</label>
+                        <input type="text" class="form-control" id="acronimo" required>
+                        <div class="invalid-feedback">
+                            Ingresa un acrónimo
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" id="nombre_completo_sistema" required>
+                        <div class="invalid-feedback">
+                            Ingresa el nombre completo
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -36,6 +116,60 @@
                 </button>
                 <button type="button" class="btn btn-success" id="guardar_nuevo_sistema">
                     <i class="fas fa-check"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR REGISTRO SISTEMA -->
+<div class="modal fade" id="modal_editar_sistema" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_editar_sistemaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Editar sistema</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3 mt-4 needs-validation" id="formulario_edit" novalidate>
+                    <input type="text" class="form-control" id="id_sistem" disabled hidden>
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de sistema anterior</label>
+                        <input type="text" class="form-control" id="anter_tip_sistem2" disabled hidden>
+                        <select id="anter_tip_sistem" class="form-select tip_sistem">
+                            <option value="" selected>-- SELECCIONA --</option>
+                            <option value="1">Interno</option>
+                            <option value="2">Externo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 ip" hidden>
+                        <label class="form-label">Dirección IP anterior</label>
+                        <input type="text" class="form-control" id="anter_direcc_ip2" disabled hidden>
+                        <input type="text" class="form-control" id="anter_direcc_ip">
+                    </div>
+                    <div class="col-md-2 puert" hidden>
+                        <label class="form-label">Puerto anterior</label>
+                        <input type="text" class="form-control" id="anter_puerto2" disabled hidden>
+                        <input type="text" class="form-control" id="anter_puerto">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Acronimo anterior</label>
+                        <input type="text" class="form-control" id="anter_acronimo2" disabled hidden>
+                        <input type="text" class="form-control" id="anter_acronimo">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre Completo anterior</label>
+                        <input type="text" class="form-control" id="anter_nombre_completo_sistema2" disabled hidden>
+                        <input type="text" class="form-control" id="anter_nombre_completo_sistema">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+                <button type="button" class="btn btn-warning" id="guardar_sistema_editado">
+                    <i class="fas fa-check"></i> Guardar Cambios
                 </button>
             </div>
         </div>

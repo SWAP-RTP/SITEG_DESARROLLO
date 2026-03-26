@@ -16,13 +16,14 @@ $user = validarAcceso();
     <link href="/lib/Bootstrap-5-5.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- FONTAWESOME -->
     <link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css" />
-    <!-- Alertas Notyf -->
-    <link rel="stylesheet" href="/lib/Notyf/notyf.min.css">
     <!-- DataTable CSS -->
     <link rel="stylesheet" href="/lib/datatables.net-1.13.6/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body class="body_index">
+    <!-- alerta bootstrap -->
+    <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
     <!-- ! Componente header -->
     <?php include '../includes/components/header.html'; ?>
     <?php include '../includes/components/menu.html'; ?>
@@ -86,9 +87,8 @@ $user = validarAcceso();
     <script src="/lib/datatables.net-1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Bootstrap JavaScript -->
     <script src="/lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- Script Notyf -->
-    <script src="/lib/Notyf/notyf.min.js"></script>
     <!--  -->
     <script type="module" src="../admin/scripts/index.js"></script>
+    <script type="module" src="/app-swap/includes/helpers/js.js"></script>
 </body>
 </html>

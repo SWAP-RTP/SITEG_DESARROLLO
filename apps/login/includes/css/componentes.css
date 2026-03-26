@@ -2,6 +2,9 @@
 body {
     margin: 0;
     padding: 0;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
 }
 /* ESTE ES EL BODY DEL LOGIN */
 
@@ -180,31 +183,57 @@ body {
 /* ESTE ES EL BODY DEL INDEX DONDE ESTAN LOS ACCESOS */
 html,
 .body_index {
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
+  margin:0;
 
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
 }
 /* evita que el contenido se oculte bajo el header */
 .body_index {
-  padding-top: 95px;
+  padding-top: 100px;
 }
 
 /* Header */
 header nav{
   background: transparent;
-  position:relative;
+  position: relative;
 }
-header nav .moon{
-  font-size: 22px;
+
+/* contenedor del header */
+header nav .d-flex{
+  flex-wrap: wrap;
+  align-items: center;
+  gap:10px;
 }
+
+/* nombre del usuario */
+.nombre-usuario{
+  max-width:180px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* iconos */
+header nav .moon,
 header nav .sun{
-  font-size: 22px;
+  font-size:22px;
+}
+
+/* 📱 Responsive */
+@media (max-width:576px){
+
+  header nav .d-flex{
+    justify-content: space-between;
+  }
+
+  .nombre-usuario{
+    max-width:120px;
+    font-size:12px;
+  }
+
 }
 .theme-switch{
   display:flex;
@@ -409,6 +438,18 @@ footer {
 }
 
 /* ---------ESTILO DEL FOLDER -----------*/
+.nav-tabs .nav-link {
+  white-space: nowrap; /* evita salto de línea */
+  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem;
+}
+@media (max-width: 400px) {
+  .nav-tabs .nav-link {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
 .card-folder {
   width: 93%; /* Ocupa todo el ancho de la ventana */
   max-width: 100vw; /* No se limita */
@@ -419,6 +460,16 @@ footer {
   margin-right: auto;
   display: block;
 }
+@media (max-width: 990px) {
+  .card-folder {
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-left: 0;
+  }
+  .contenedor-tabla {
+    overflow-x: auto;
+  }
+}
 .card-folder .card-body {
   border-radius: 3px;
 }
@@ -428,6 +479,13 @@ footer {
 .dataTables_wrapper .dataTables_length {
   float: left;
 }
+.dataTables_scrollHeadInner {
+  width:100% !important;
+}
+.dataTables_scrollHeadInner table {
+  width:100% !important;
+}
+
 /* Fondo de la tabla y ancho completo */
 table thead tr th{
   border-radius: 3px;
@@ -439,11 +497,39 @@ table tbody tr td{
   border-bottom: 0;
   vertical-align: middle;
 }
-/* Centrar la paginación debajo de la tabla */
-.dataTables_wrapper .dataTables_paginate {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+/* Contenedor general de los controles inferiores */
+.dataTables_wrapper .row:last-child {
+    display: flex !important;
+    flex-direction: column !important; /* Pone el texto arriba y botones abajo */
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Centrar el texto "Mostrando 1 a 7 de 7 registros" */
+.dataTables_info {
+    width: 100% !important;
+    text-align: center !important;
+    padding-top: 1rem !important;
+    float: none !important;
+}
+
+/* Centrar los botones de página 1, 2, Siguiente... */
+.dataTables_paginate {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    float: none !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 20px !important;
+}
+
+/* Ajuste específico para la lista de paginación de Bootstrap */
+.dataTables_paginate .pagination {
+    justify-content: center !important;
+    margin: 0 !important;
 }
 
 /* Esto suaviza el cambio de color de fondo, texto y bordes cuando cargamos los estilos */
@@ -452,4 +538,9 @@ table tbody tr td{
 .tema-transicion *:before,
 .tema-transicion *:after {
     transition: background-color 1s ease, color 1s ease, border-color 1s ease !important;
+}
+
+/* va a estar sobre todas las capas */
+.toast-container {
+  z-index: 99999 !important;
 }

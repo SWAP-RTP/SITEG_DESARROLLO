@@ -198,3 +198,121 @@ function obtenerUniformes($conexion, $data){
 
     return $data;
 }
+
+function obtenerRegistrosUniformes($modulo_usuario){
+
+    $conexion = Database::conectar();
+    if (!$conexion) {
+        return ["error" => "Error de conexión"];
+    }
+
+    $filtro = generarFiltroModulo($modulo_usuario);
+
+    $trabajadores = obtenerTrabajadores($conexion, $filtro);
+
+    return $trabajadores;
+}
+
+function generarFiltroModulo($modulo_usuario){
+    return ($modulo_usuario === 0) ? "AND tv.mod_clave = $1" : "";
+}
+
+function obtenerTrabajadores($conexion, $modulo_usuario){
+
+    $filtroModulo = ($modulo_usuario === 0) ? "AND tu.modulo = $1" : "";
+
+    $sql = "
+        SELECT 
+            tu.id,
+            tu.credencial,
+            t.trab_nombre || ' ' || t.trab_apaterno || ' ' || t.trab_amaterno AS nombre_completo,
+            ts.trab_sex_desc AS genero,
+            tc.tipo_contrato_desc,
+            p.puesto_descripcion AS puesto,
+            tu.total_prendas_adquiridas,
+            tu.observaciones,
+            tu.modulo
+        FROM trabajador_uniforme tu
+
+        INNER JOIN trabajador t 
+            ON t.trab_credencial = tu.credencial
+
+        INNER JOIN trab_puesto p 
+            ON t.puesto_clave = p.puesto_clave
+
+        INNER JOIN trab_tipo_contrato tc 
+            ON t.tipo_contrato_cve = tc.tipo_contrato_cve
+
+        INNER JOIN trab_sex ts
+            ON t.trab_sex_cve = ts.trab_sex_cve
+
+        WHERE tu.estatus = 1
+        ORDER BY tu.id DESC
+    ";
+
+    $params = [];
+    if ($modulo_usuario === 0) {
+        $params[] = $modulo_usuario;
+    }
+
+    $res = empty($params)
+        ? pg_query($conexion, $sql)
+        : pg_query_params($conexion, $sql, $params);
+
+    if (!$res) return [];
+
+    $registros = [];
+
+    while($fila = pg_fetch_assoc($res)){
+
+        $detalle = obtenerDetalleUniformes($conexion, $fila['id']);
+
+        $registros[] = [
+            "id" => (int)$fila['id'],
+            "credencial" => $fila['credencial'],
+            "nombre_completo" => $fila['nombre_completo'],
+            "genero" => $fila['genero'],
+            "tipo_contrato" => $fila['tipo_contrato_desc'],
+            "puesto" => $fila['puesto'],
+            "total_prenda" => (int)$fila['total_prendas_adquiridas'],
+            "obs" => $fila['observaciones'],
+            "modulo" => (int)$fila['modulo'],
+            "detalles_registro" => $detalle,
+            // "habilitado" => (int)$fila['habilitado']
+        ];
+    }
+
+    return $registros;
+}
+
+function obtenerDetalleUniformes($conexion, $id_trabajador){
+
+    $sql = "
+        SELECT 
+            dtu.id,
+            cu.nombre_uniforme,
+            cu.num_prenda,
+            dtu.talla
+        FROM detalle_trabajador_uniforme dtu
+        JOIN catalogo_uniformes cu 
+            ON cu.id = dtu.id_catalogo_uniforme
+        WHERE dtu.id_trabajador_uniforme = $1
+    ";
+
+    $res = pg_query_params($conexion, $sql, [$id_trabajador]);
+
+    if (!$res) return [];
+
+    $detalle = [];
+
+    while($fila = pg_fetch_assoc($res)){
+        $detalle[] = [
+            "id" => (int)$fila['id'],
+            "nombre_prenda" => $fila['nombre_uniforme'],
+            "cantidad" => (int)$fila['num_prenda'],
+            "talla" => $fila['talla']
+        ];
+    }
+
+    return $detalle;
+}

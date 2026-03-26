@@ -1,4 +1,6 @@
-import { notyf } from "./notyf.js";
+// importamos alerta de notificacion
+import { ToastBootstrap } from "./toast.js";
+
 // AUTENTICACION
 function auth() {
   const loginForm = document.getElementById("loginForm");
@@ -8,7 +10,7 @@ function auth() {
 
     const formData = new FormData(loginForm);
     if (!formData.get('ingresaUsuario') || !formData.get('ingresaPassword')) {
-      notyf.error("Usuario y Contraseña son requeridos")
+      ToastBootstrap.warning("Usuario y Contraseña son requeridos");
       return
     }
 
@@ -22,21 +24,24 @@ function auth() {
       success: function (res) {
 
         if (res.status === "success") {
-          notyf.success("Bienvenido(a) " + (res.usuario.name || ""));
+          ToastBootstrap.success("Bienvenido(a) " + (res.usuario.name || ""));
 
           $(".contenedor_carga").removeAttr('hidden');
           $("#card_login").attr('hidden');
+
+          sessionStorage.setItem('permisos_usuario', JSON.stringify(res.permisos));
+          sessionStorage.setItem('datos_usuario', JSON.stringify(res.usuario));
 
           setTimeout(() => {
             window.location.href = "index.html";
           }, 1500);
         } else {
-          notyf.error(res.message);
+          ToastBootstrap.error(res.message);
         }
       },
       error: function (xhr) {
         console.log(xhr.responseText); // para ver qué respondió el servidor
-        notyf.error(xhr.message,);
+        ToastBootstrap.error(xhr.message,);
       }
     });
   });
@@ -75,14 +80,15 @@ const errorType = urlParams.get("error");
 const sesionCerrada = urlParams.get("message")
 if (errorType || sesionCerrada) {
   if (errorType === "sesion_duplicada") {
-    notyf.error("Acceso detectado en un nuevo equipo, hemos cerrado tu sesion.");
+    ToastBootstrap.error("Acceso detectado en un nuevo equipo, hemos cerrado tu sesion.");
   } else if (errorType === "sesion_invalida") {
-    notyf.error("La sesión ha expirado. Por favor, ingresa de nuevo.");
+    ToastBootstrap.info("La sesión ha expirado. Por favor, ingresa de nuevo.");
   } else if (sesionCerrada === "sesion_cerrada") {
-    notyf.error("Sesion cerrada correctamente");
+    ToastBootstrap.success('Sesion cerrada correctamente');
   }
   // Limpia la URL para que no se repita el mensaje al recargar
   window.history.replaceState({}, document.title, window.location.pathname);
+  sessionStorage.clear();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

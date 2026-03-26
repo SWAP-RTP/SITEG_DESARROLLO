@@ -189,6 +189,7 @@ function crearSelectTallas(id, opciones) {
   </select>`;
 }
 
+//mostrar guia de tallas
 function mostrarGuiaTallas(puesto_clave, genero) {
   const guiaWrap = document.getElementById("guia_tallas");
   const tabs = document.getElementById("guia_tabs");
@@ -218,10 +219,11 @@ function mostrarGuiaTallas(puesto_clave, genero) {
       tab.classList.add("active");
 
       img.style.opacity = 0;
+
       setTimeout(() => {
         img.src = `../img/${archivo}`;
         img.style.opacity = 1;
-      }, 150);
+      }, 200);
     });
 
     tabs.appendChild(tab);
@@ -377,6 +379,7 @@ async function cargarTablaUniformes(dataTrabajador) {
   }
 }
 
+//mostar y ocultar tabla de uniformes
 function mostrarTabla() {
   divTablaUniforme.classList.remove("d-none");
 }
@@ -409,7 +412,6 @@ async function manejarCambioCredencial(e) {
   // cargar tabla automáticamente
   await cargarTablaUniformes(data);
 }
-
 
 // Inicializa
 function init() {

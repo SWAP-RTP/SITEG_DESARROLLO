@@ -14,8 +14,6 @@
   <link href="./lib/Bootstrap-5-5.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
   <!-- FONTAWESOME -->
   <link rel="stylesheet" type="text/css" href="./lib/fontawesome/css/all.min.css" />
-  <!-- Alertas Notyf -->
-  <link rel="stylesheet" href="./lib/Notyf/notyf.min.css">
   <!-- ESTILOS PERSONALIZADOS CSS -->
   <link class="theme-link theme-dark" rel="stylesheet" href="./includes/css/dark.css">
   <link class="theme-link theme-light" rel="stylesheet" href="./includes/css/light.css" disabled>
@@ -23,6 +21,9 @@
 </head>
 
 <body>
+  <!-- alerta bootstrap -->
+  <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
   <!-- Main Container ----------------------------------------------------------------->
   <main class="d-flex flex-column justify-content-center align-items-center">
     <div class="contenedor_carga" hidden>
@@ -44,7 +45,7 @@
               <i class="fas fa-user"></i> Usuario
             </label>
             <input id="ingresaUsuario" name="ingresaUsuario" type="text"
-              class="form-control form-control-lg fs-6 text-center" />
+              class="form-control form-control-lg fs-6 text-center" value="@rtp.cdmx.gob.mx"/>
           </section>
 
           <section class="mb-3">
@@ -90,8 +91,6 @@
   <script src="./lib/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
   <!-- CARGAR TEMAS LIGHT Y DARCK CON JS -->
   <script src="./includes/js/cargar_temas.js"></script>
-  <!-- Script Notyf -->
-  <script src="./lib/Notyf/notyf.min.js"></script>
   <!-- Scripts de Login----------------->
   <script type="module" src="./includes/js/index.js"></script>
 </body>

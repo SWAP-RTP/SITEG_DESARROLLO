@@ -9,8 +9,17 @@ if (!$conexion) {
     exit;
 }
 
+$credencial_user = $_POST['credencial_user'];
 $acronimo = $_POST['acronimo'];
 $nombre_sistema = $_POST['nombre_sistema'];
+// I = INTERNO, E = EXTERNO
+if($_POST['tip_sistem'] == 1){
+    $tip_sistem = 'I';
+}else{
+    $tip_sistem = 'E';
+}
+$ip = isset($_POST['ip']) && $_POST['ip'] != '' ? $_POST['ip']: NULL;
+$puerto = isset($_POST['puerto']) && $_POST['puerto'] != '' ? $_POST['puerto']: NULL;
 
 $nombre_temp = $_FILES['imagen']['tmp_name'];
 $nombre_original = $_FILES['imagen']['name'];
@@ -40,8 +49,8 @@ if ($res > 0) {
     exit;
 }
 
-$sql = "INSERT INTO sistemas_sinteg (id, acronimo, nombre_completo, sistema_imagen, estatus, usr_alta, fecha_alta) 
-        VALUES ((SELECT COALESCE(MAX(id) + 1, 1) AS id FROM sistemas_sinteg), '$acronimo', '$nombre_sistema', '$nuevo_nombre_img', TRUE, 12045, now());";
+$sql = "INSERT INTO sistemas_sinteg (id, acronimo, nombre_completo, sistema_imagen, direccion_ip, puerto, tipo_sistema, estatus, usr_alta, fecha_alta) 
+        VALUES ((SELECT COALESCE(MAX(id) + 1, 1) AS id FROM sistemas_sinteg), '$acronimo', '$nombre_sistema', '$nuevo_nombre_img', '$ip', '$puerto', '$tip_sistem', TRUE, $credencial_user, now());";
 $qry = @pg_query($conexion, $sql);
 
 if (!$qry) {

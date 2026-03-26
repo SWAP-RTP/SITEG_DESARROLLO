@@ -9,9 +9,10 @@ function getSistemas_sinteg()
         echo json_encode(["error" => "Error de conexión a la base de datos"]);
         exit;
     }
-    $sql = "SELECT id, acronimo, nombre_completo, usr_alta, fecha_alta FROM sistemas_sinteg WHERE estatus = TRUE";
+    $sql = "SELECT id, acronimo, nombre_completo, direccion_ip, puerto, tipo_sistema, usr_alta, fecha_alta 
+            FROM sistemas_sinteg 
+            WHERE estatus = TRUE";
     $resultado = @pg_query($conexion, $sql);
-
 
     if (!$resultado) {
         http_response_code(500);
@@ -24,3 +25,4 @@ function getSistemas_sinteg()
 
 }
 echo json_encode(getSistemas_sinteg());
+Database::desconectar();

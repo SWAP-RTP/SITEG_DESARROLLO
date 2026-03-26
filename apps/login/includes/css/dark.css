@@ -1,6 +1,9 @@
 /* ESTE ES EL BODY DEL LOGIN */
-body{
-   background: #161616;
+html, body{
+  background-image:
+  linear-gradient(rgba(0, 0, 0, 0.7), rgba(48, 48, 48, 0.7)),
+  url("../img/logoRTPMI.png");
+  background-color: #000000;
 }
 /* ESTILO DEL CARD DEL LOGIN */
 #card_login .izquierdo {
@@ -50,14 +53,8 @@ body{
 .contenedor_carga {
   background-color: #161616;
 }
-/* ESTE ES EL BODY DEL INDEX DONDE ESTAN LOS ACCESOS */
-html,
-.body_index {
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.7), rgba(48, 48, 48, 0.7)),
-    url("../img/logoRTPMI.png");
-  background-color: #000000;
-}
+
+/* estlo del header */
 header nav{
   color: #ffffff;
 }

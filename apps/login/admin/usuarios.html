@@ -1,35 +1,50 @@
-<div class="d-flex justify-content-center align-items-start flex-row gap-5 mb-5 mt-4 componentes-tabla">
-    <div class="d-flex align-items-center gap-2">
-        <span>Credencial:</span>
-        <input type="text" class="form-control">
-    </div>
+<div class="row justify-content-center">
+    <div class="card-body">
+        <form id="nuevo_usuario" class="needs-validation" novalidate>
+            <div class="row g-3 justify-content-center align-items-end">
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Credencial</label>
+                    <input type="number" class="form-control" id="cred_user" name="creden_user" required>
+                    <div class="invalid-feedback">La credencial es obligatoria.</div>
+                </div>
+                
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Nombre</label>
+                    <input autocomplete="off" type="text" list="lista" class="form-control" id="nom_user" name="nombre_user" required>
+                    <div class="invalid-feedback">El nombre es obligatoria.</div>
+                    <datalist id="lista"></datalist>
+                </div>
 
-    <div class="d-flex align-items-center gap-2">
-        <span>Nombre:</span>
-        <input type="text" class="form-control">
-    </div>
-    <div class="d-flex align-items-center gap-2">
-        <span>Correo:</span>
-        <input type="text" class="form-control" value="@rtp.gob.mx">
-    </div>
-    <div class="d-flex align-items-center gap-2">
-        <span>Contraseña:</span>
-        <input type="password" class="form-control">
-    </div>
-    <div class="d-flex align-items-center gap-2">
-        <span>Modulo:</span>
-        <select name="select_modulos" id="select_modulos" class="form-select">
-        </select>
-    </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Correo Electrónico</label>
+                    <div class="input-group">
+                        <span class="input-group-text">@</span>
+                        <input type="email" class="form-control" value="@rtp.cdmx.gob.mx"  name="correo_user" required>
+                        <div class="invalid-feedback">Ingresa un correo válido.</div>
+                    </div>
+                </div>
 
-    <div>
-        <button class="btn btn-success">
-            <i class="fas fa-check"></i> Guardar
-        </button>
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
+                        <input type="text" class="form-control" name="contra_user" required>
+                        <div class="invalid-feedback">Ingresa una contraseña.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+                <div>
+                    <button type="button" class="btn btn-success" id="guardar_nuevo_usuario">
+                        <i class="fas fa-check"></i> Guardar Usuario
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <hr>
-<table id="tabla_orden_alta" class="table table-striped w-100">
+<table id="tabla_usuarios" class="table table-striped w-100">
     <thead>
         <tr>
             <th>Columna 1</th>
@@ -37,7 +52,6 @@
             <th>Columna 3</th>
             <th>Columna 4</th>
             <th>Columna 5</th>
-            <th>Columna 6</th>
         </tr>
     </thead>
     <tbody>
