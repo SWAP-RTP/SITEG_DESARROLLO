@@ -1,14 +1,12 @@
 export const MaterialesService = {
-    /**
-     * Busca un material por su folio/código.
-     */
     async buscarPorFolio(folio) {
         try {
-            // El PHP lee $_GET['folio_material']
-            const res = await fetch(`query_sql/buscar_datos.php?folio_material=${folio}`);
+            const res = await fetch(`query_sql/Autocompletar.php?folio=${encodeURIComponent(folio)}`);
             const data = await res.json();
-            // El PHP devuelve directamente el objeto del material (no envuelto en status/datos)
-            if (res.ok && data.folio_material) {
+            if (res.ok && data?.status === 'ok' && data?.datos?.folio_material) {
+                return { status: 'ok', datos: data.datos };
+            }
+            if (res.ok && data?.folio_material) {
                 return { status: 'ok', datos: data };
             }
             return { status: 'error', message: data.error || 'Material no encontrado' };
@@ -17,10 +15,6 @@ export const MaterialesService = {
             return { status: 'error', message: 'Error de conexión' };
         }
     },
-
-    /**
-     * Guarda un nuevo registro de entrada de material.
-     */
     async guardarEntrada(datos) {
         try {
             // El PHP espera: folio, descripcion, unidad, estado, id_categoria, adscripcion, cantidad
@@ -35,19 +29,15 @@ export const MaterialesService = {
             return { status: 'error', message: 'Error al procesar la entrada' };
         }
     },
-
-    /**
-     * Guarda un nuevo registro de salida de material.
-     */
     async guardarSalida(datos) {
         try {
             // Mapeo de llaves para materiales_salida_guardados.php
             const payload = {
-                folio_material:              datos.folio,
+                folio_material: datos.folio,
                 descripcion_material_salida: datos.descripcion,
-                id_estado_material_salida:   datos.estado,
-                cantidad_material_salida:    datos.cantidad,
-                adscripcion_modulo:          datos.adscripcion
+                id_estado_material_salida: datos.estado,
+                cantidad_material_salida: datos.cantidad,
+                adscripcion_modulo: datos.adscripcion
             };
 
             console.log('[guardarSalida] Enviando datos:', payload);
@@ -76,10 +66,6 @@ export const MaterialesService = {
             return { status: 'error', message: 'Error de red al procesar la salida: ' + error.message };
         }
     },
-
-    /**
-     * Obtiene la lista de materiales.
-     */
     async obtenerMateriales() {
         try {
             const res = await fetch('query_sql/modales_datos.php?tipo=material');
@@ -89,10 +75,6 @@ export const MaterialesService = {
             return { status: 'error', message: 'Error de conexión' };
         }
     },
-
-    /**
-     * Consulta historial de entradas.
-     */
     async consultarEntradas() {
         try {
             const res = await fetch('query_sql/consultas_materiales.php?tipo=entradas');
@@ -102,10 +84,6 @@ export const MaterialesService = {
             return { status: 'error', message: 'Error de conexión' };
         }
     },
-
-    /**
-     * Consulta historial de salidas.
-     */
     async consultarSalidas() {
         try {
             const res = await fetch('query_sql/consultas_materiales.php?tipo=salidas');
@@ -115,4 +93,5 @@ export const MaterialesService = {
             return { status: 'error', message: 'Error de conexión' };
         }
     }
+
 };

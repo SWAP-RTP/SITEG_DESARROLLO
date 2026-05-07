@@ -5,17 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salida de Materiales - RTP</title>
-    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
+    <link rel="stylesheet"  href="/app-swap/public/fontawesome/css/all.min.css" />
+    <link rel="stylesheet"  href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet"  href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
 </head>
 
 <body>
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+  
     <?php include './components/encabezado.html'; ?>
     <?php include './components/menu.html'; ?>
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="container py-5">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-12">
@@ -25,6 +26,7 @@
                             <i class="bi bi-box-arrow-up me-2"></i>REGISTRO DE SALIDA DE MATERIALES
                         </h2>
                     </div>
+                    <!-- FORMULARIO SALIDA DE MATERIALES -->
                     <div class="card-body modern-form-body p-5">
                         <form id="form-salida-material" class="row g-4" novalidate>
                             <!-- FOLIO -->
@@ -40,7 +42,7 @@
                                 <div class="input-group align-items-center">
                                     <input type="text" class="form-control" id="descripcion_salida" name="descripcion">
 
-                                    <button class="btn btn-primary" type="button" id="btn-modal-salida">
+                                    <button class="btn btn-primary btn-search-modern" type="button" id="btn-modal-salida">
                                         <i class="bi bi-search"></i>
                                     </button>
                                 </div>
@@ -48,45 +50,37 @@
                             <!-- SELECTS -->
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Unidad de Medida</label>
-                                <select class="form-select" id="unidad_salida" name="unidad" required>
-                                </select>
+                                <select class="form-select" id="unidad_salida" name="unidad" required></select>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Estado Físico Material</label>
-                                <select class="form-select" id="estado_salida" name="estado" required>
-                                </select>
+                                <select class="form-select" id="estado_salida" name="estado" required></select>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Categoría</label>
-                                <select class="form-select" id="categoria_salida" name="id_categoria" required>
-                                    <!-- <option value="" selected disabled>Selecciona...</option> -->
-                                </select>
+                                <select class="form-select" id="categoria_salida" name="id_categoria" required></select>
                             </div>
                             <!-- ADSCRIPCION -->
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Adscripción</label>
-                                <input type="text" class="form-control" id="adscripcion_salida"
-                                    name="adscripcion_modulo" required placeholder="Ej: ALMACEN CENTRAL o MODULO 4">
+                                <input type="text" class="form-control" id="adscripcion_salida"name="adscripcion_modulo" required placeholder="Ej: ALMACEN CENTRAL o MODULO 4">
                             </div>
                             <!-- CANTIDAD -->
                             <div class="col-md-2">
                                 <label class="form-label fw-bold">Cantidad</label>
-                                <input type="number" class="form-control" id="cantidad_salida" name="cantidad" min="1"
-                                    required>
+                                <input type="number" class="form-control" id="cantidad_salida" name="cantidad" min="1"required>
                             </div>
                             <!-- BOTONES -->
                             <div class="col-12 text-center mt-4">
-                                <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm me-2"
-                                    id="btn-guardar-salida">
-                                    <i class="bi bi-check2-all me-2"></i>Finalizar Salida
+                               <button type="submit" class="btn btn-outline-success" id="btn-guardar-salida">
+                                    <i class="bi bi-save me-2"></i>Guardar Salida
                                 </button>
-                                <button type="button" class="btn btn-info btn-lg px-4 shadow-sm"
-                                    id="btn-consultar-salidas">
-                                    <i class="bi bi-search me-2"></i>Consultar salidas
+                                <button type="button" class="btn btn-outline-info" id="btn-consultar-salidas">
+                                    <i class="bi bi-search me-2"></i>
+                                     Consultar salidas
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary btn-lg px-4 shadow-sm"
-                                    id="btn-limpiar-salida">
-                                    <i class="bi bi-eraser me-2"></i>Limpiar
+                                 <button type="button" class="btn btn-outline-secondary px-4 shadow-sm" id="btn-limpiar-salida">
+                                <i class="bi bi-eraser me-2"></i> Limpiar
                                 </button>
                             </div>
                         </form>
@@ -94,16 +88,15 @@
                 </div>
             </div>
         </div>
-        <!-- TABLA -->
-        <div class="card mt-3 shadow-lg" id="contenedor-tabla-salidas" style="display: none;">
+        <!-- TABLA DE CONSULTA SALIDAS -->
+        <div class="card mt-3 shadow-lg oculto"  id="contenedor-tabla-salidas">
             <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
                 <h3 class="mb-0 fw-bold">Últimos Registros de Salida</h3>
-                <div class="input-group input-group-sm" style="width: 180px;">
+                <div class="input-group input-group-sm ancho-busqueda">
                     <span class="input-group-text bg-white">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input type="text" id="busqueda-salida" class="form-control form-control-sm"
-                        placeholder="Buscar por folio o descripción...">
+                    <input type="text" id="busqueda-salida" class="form-control form-control-sm" placeholder="Buscar por folio o descripción...">
                 </div>
             </div>
             <div class="card-body p-0 bg-light">
@@ -122,44 +115,38 @@
                         <tbody id="tabla-salidas" class="text-center">
                         </tbody>
                     </table>
-                    <!--PAGINACION PARA CONSULTA-->
-                    <nav aria-label="Paginación" class="my-3">
+                    <!--PAGINACION PARA CONSULTA DE SALIDAS-->
+                    <nav aria-label="Paginación" class="my-3 oculto">
                         <ul class="pagination justify-content-center" id="paginacion-salidas"></ul>
                     </nav>
                 </div>
             </div>
         </div>
     </main>
-    <!-- MODAL -->
-    <div class="modal fade" id="modalMaterialSalida" tabindex="-1" aria-labelledby="modalMaterialSalidaTitle"
-        aria-hidden="true">
+    <!-- MODAL REGISTRO DE SALIDAS -->
+    <div class="modal fade" id="modalMaterialSalida" tabindex="-1" aria-labelledby="modalMaterialSalidaTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modalMaterialSalidaTitle">
-                        <i class="bi bi-search me-2"></i>Resultados de búsqueda
+                        <i class="bi bi-search me-2"></i>
+                        Resultados de búsqueda
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="buscar-material-modal-salida"
-                            placeholder="Buscar por código o descripción...">
+                        <input type="text" class="form-control" id="buscar-material-modal-salida" placeholder="Buscar por código o descripción...">
                     </div>
                     <div id="contenedor-materiales-modal-salida">
                         <p class="text-center text-muted">
                             Escriba para buscar materiales...
                         </p>
                     </div>
-                    <nav class="mt-3" id="nav-paginacion-materiales-salida" style="display: none;">
+                    <nav class="mt-3" id="nav-paginacion-materiales-salida" >
                         <ul class="pagination justify-content-end" id="ul-paginacion-materiales-salida"></ul>
                     </nav>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-2"></i>Cerrar
-                    </button>
-                </div> -->
             </div>
         </div>
     </div>

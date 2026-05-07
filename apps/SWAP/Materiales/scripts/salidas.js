@@ -3,10 +3,10 @@ import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
 
-//******* 2. Variables de control *******
+// ── variable de control ──────────────────
 let timeoutBusqueda = null;
 
-//******* 3. Automatización *******
+// ── Autocompleta el formulario con los datos del material ──────────────────
 async function cargarMaterialSalida(folio) {
     const result = await MaterialesService.buscarPorFolio(folio);
 
@@ -18,13 +18,30 @@ async function cargarMaterialSalida(folio) {
         document.getElementById('categoria_salida').value = mat.id_categoria_material;
         document.getElementById('adscripcion_salida').value = mat.adscripcion_modulo;
 
+        const bloqueoGris = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
+        bloqueoGris.forEach(id => {
+            const elemento = document.getElementById(id);
+            if (elemento) {
+           
+                elemento.classList.add('bg-light');
+                
+       
+                if (elemento.tagName === 'SELECT') {
+                    elemento.disabled = true; 
+                } else {
+                    elemento.readOnly = true;
+                }
+            }
+        });
+        
+        // 3. Validación de Stock y Foco
         if (parseInt(mat.stock_actual) <= 0) {
             Swal.fire('Aviso', 'Material sin stock actual.', 'warning');
         }
         document.getElementById('cantidad_salida').focus();
     }
 }
-
+// ── Carga la tabla de registros de salidas ────────────────────────────────
 async function cargarRegistrosSalida() {
     const data = await MaterialesService.consultarSalidas();
     if (data.status === 'ok') {
@@ -42,7 +59,6 @@ async function cargarRegistrosSalida() {
         document.getElementById('contenedor-tabla-salidas').style.display = 'block';
     }
 }
-
 async function guardarSalida(e) {
     e.preventDefault();
 
@@ -56,23 +72,45 @@ async function guardarSalida(e) {
         adscripcion: document.getElementById('adscripcion_salida').value,
         cantidad: document.getElementById('cantidad_salida').value
     };
-
-    if (!data.folio || !data.cantidad) {
+if (!data.folio || !data.cantidad) {
         Swal.fire('Atención', 'Folio y cantidad obligatorios', 'warning');
         return;
     }
 
     const res = await MaterialesService.guardarSalida(data);
+
     if (res.status === 'ok') {
         Swal.fire('Éxito', res.message, 'success');
+        
+        // 1. Resetear valores del formulario
         e.target.reset();
+
+        // 2. Desbloqueo manual de campos y estilos
+        const camposABloquear = [
+            'descripcion_salida', 
+            'unidad_salida', 
+            'estado_salida', 
+            'categoria_salida', 
+            'adscripcion_salida'
+        ];
+        
+        camposABloquear.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.readOnly = false;             // Permite escribir
+                el.disabled = false;             // Habilita Selects
+                el.classList.remove('bg-light'); // Quita el fondo gris
+            }
+        });
+
+        // 3. Actualizar la tabla de registros
         cargarRegistrosSalida();
+
     } else {
         Swal.fire('Error', res.message, 'error');
     }
 }
-
-//******* 4. Eventos *******
+// ── 4. Eventos  ────────────────────────────────
 function configurarEventosSalida() {
     const folioInput = document.getElementById('folio_salida');
     if (folioInput) {
@@ -100,9 +138,13 @@ function configurarEventosSalida() {
             }
         });
     });
-
+  // Consultar y Limpiar
     document.getElementById('btn-consultar-salidas')?.addEventListener('click', () => cargarRegistrosSalida());
     document.getElementById('form-salida-material')?.addEventListener('submit', guardarSalida);
+    document.getElementById('btn-limpiar-salida')?.addEventListener('click', () => {
+        document.getElementById('form-salida-material').reset();
+        document.getElementById('contenedor-tabla-salidas').style.display = 'none';
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -1,7 +1,7 @@
 import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
-
+// ── variable de control ──────────────────
 let timeoutBusqueda = null;
 
 // ── Autocompleta el formulario con los datos del material ──────────────────
@@ -11,7 +11,6 @@ async function cargarMaterial(folio) {
     if (result.status === 'ok' && result.datos) {
         const mat = result.datos;
 
-        // IDs exactos del HTML + propiedades exactas del PHP
         document.getElementById('descripcion').value = mat.descripcion_material ?? '';
         document.getElementById('unidad').value = mat.id_unidad_material ?? '';
         document.getElementById('estado').value = mat.id_estado_material ?? '';
@@ -19,18 +18,23 @@ async function cargarMaterial(folio) {
         document.getElementById('adscripcion').value = mat.adscripcion_modulo ?? '';
 
         // Bloquear campos para material existente
-        document.getElementById('descripcion').readOnly = true;
-        document.getElementById('adscripcion').readOnly = true;
-
+      
+        document.getElementById('descripcion').disabled = true;
+        document.getElementById('unidad').disabled = true;
+        document.getElementById('estado').disabled = true;
+        document.getElementById('id_categoria').disabled = true;
+        document.getElementById('adscripcion').disabled = true;
         document.getElementById('cantidad').focus();
 
     } else {
         // Material nuevo: desbloquear
-        document.getElementById('descripcion').readOnly = false;
-        document.getElementById('adscripcion').readOnly = false;
+        document.getElementById('descripcion').disabled = false;
+        document.getElementById('unidad').disabled = false;
+        document.getElementById('estado').disabled = false;
+        document.getElementById('id_categoria').disabled = false;
+        document.getElementById('adscripcion').disabled = false;
     }
 }
-
 // ── Carga la tabla de registros de entradas ────────────────────────────────
 async function cargarRegistros() {
     const data = await MaterialesService.consultarEntradas();
@@ -49,24 +53,38 @@ async function cargarRegistros() {
         document.getElementById('contenedor-tabla-registros').style.display = 'block';
     }
 }
-
 // ── Guarda el registro de entrada ──────────────────────────────────────────
 async function guardarEntrada(e) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target).entries());
+    const form = e.target;
+    const camposBloqueados = form.querySelectorAll('input:disabled, select:disabled, input[readonly]');
+    camposBloqueados.forEach(c => {
+        c.disabled = false;
+        c.readOnly = false;
+    });
+    const data = Object.fromEntries(new FormData(form).entries());
     const res = await MaterialesService.guardarEntrada(data);
 
     if (res.status === 'ok') {
         Swal.fire('Éxito', res.message, 'success');
-        e.target.reset();
-        document.getElementById('descripcion').readOnly = false;
-        document.getElementById('adscripcion').readOnly = false;
-        cargarRegistros();
+        form.reset(); 
+
+        const todosLosCampos = form.querySelectorAll('input, select, textarea');
+        todosLosCampos.forEach(campo => {
+            campo.disabled = false;   
+            campo.readOnly = false;   
+            campo.classList.remove('bg-light'); 
+        });
+        if(typeof cargarRegistros === 'function') cargarRegistros();
+        document.getElementById('folio')?.focus();
+
     } else {
+     
+        camposBloqueados.forEach(c => {
+        });
         Swal.fire('Error', res.message, 'error');
     }
 }
-
 // ── Eventos ────────────────────────────────────────────────────────────────
 function configurarEventos() {
     // Folio: formateo automático MA- y disparo de búsqueda
@@ -86,7 +104,7 @@ function configurarEventos() {
         });
     }
 
-    // Botón lupa → modal
+    // ── Botón lupa → modal ────────────────────────────────────────────────────────────────
     document.getElementById('modal-material-entrada')?.addEventListener('click', () => {
         ModalService.abrir({
             modalId: 'exampleModalCenter',
@@ -98,14 +116,14 @@ function configurarEventos() {
         });
     });
 
-    // Consultar y Limpiar
+    // ── Consultar y Limpiar ────────────────────────────────────────────────────────────────
     document.getElementById('btn-consultar-entradas')?.addEventListener('click', cargarRegistros);
     document.getElementById('form-entrada-material')?.addEventListener('submit', guardarEntrada);
     document.getElementById('btn-limpiar-entrada')?.addEventListener('click', () => {
         document.getElementById('form-entrada-material').reset();
         document.getElementById('contenedor-tabla-registros').style.display = 'none';
-        document.getElementById('descripcion').readOnly = false;
-        document.getElementById('adscripcion').readOnly = false;
+        document.getElementById('descripcion').disabled = false;
+        document.getElementById('adscripcion').disabled = false;
     });
 }
 
