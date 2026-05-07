@@ -115,7 +115,7 @@ function guardarEntradaMaterial($data)
 
     /* COMENTADO PARA EVITAR DUPLICIDAD: 
        El Trigger 'tr_entrada_material_stock' en la BD ya realiza esta suma.
-    
+    */
     pg_query_params(
         $conexion,
         "UPDATE control_materiales
@@ -123,7 +123,7 @@ function guardarEntradaMaterial($data)
          WHERE folio_material = $2",
         [$cantidad, $folio]
     );
-    */
+    
 
     pg_query($conexion, "COMMIT");
 

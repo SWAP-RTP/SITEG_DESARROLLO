@@ -20,8 +20,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-12">
                 <div class="card modern-form shadow">
-                    <div class="card-header modern-form-header text-white p-4 text-center"
-                        style="background-color: #003366;">
+                    <div class="card-header modern-form-header text-white p-4 text-center">
                         <h2 class="mb-0 fw-bold">
                             <i class="bi bi-box-arrow-up me-2"></i>REGISTRO DE SALIDA DE MATERIALES
                         </h2>
@@ -34,15 +33,12 @@
                                 <input type="text" class="form-control" id="folio_salida" name="folio" maxlength="11"
                                     pattern="^MA-[0-9]{8}$" title="Formato válido: MA-00000001"
                                     placeholder="Ej: MA-00000001">
-                                <div id="estado-material-salida" class="mt-1"
-                                    style="min-height: 25px; font-size: 0.85rem;"></div>
                             </div>
                             <!-- DESCRIPCION -->
                             <div class="col-md-9 position-relative">
                                 <label class="form-label fw-bold">Descripción del Material</label>
                                 <div class="input-group align-items-center">
-                                    <input type="text" class="form-control" id="descripcion_salida" name="descripcion"
-                                        oninput="this.value = this.value.toUpperCase()" required>
+                                    <input type="text" class="form-control" id="descripcion_salida" name="descripcion">
 
                                     <button class="btn btn-primary" type="button" id="btn-modal-salida">
                                         <i class="bi bi-search"></i>
@@ -53,19 +49,17 @@
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Unidad de Medida</label>
                                 <select class="form-select" id="unidad_salida" name="unidad" required>
-                                    <option value="" selected disabled>Selecciona...</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Estado Físico Material</label>
                                 <select class="form-select" id="estado_salida" name="estado" required>
-                                    <option value="" selected disabled>Selecciona...</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Categoría</label>
                                 <select class="form-select" id="categoria_salida" name="id_categoria" required>
-                                    <option value="" selected disabled>Selecciona...</option>
+                                    <!-- <option value="" selected disabled>Selecciona...</option> -->
                                 </select>
                             </div>
                             <!-- ADSCRIPCION -->
@@ -150,8 +144,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input type="text" class="form-control" id="buscar-material-modal-salida"
-                            placeholder="Buscar por código o descripción..."
-                          >
+                            placeholder="Buscar por código o descripción...">
                     </div>
                     <div id="contenedor-materiales-modal-salida">
                         <p class="text-center text-muted">
@@ -171,11 +164,10 @@
         </div>
     </div>
     <?php include './components/pie.html'; ?>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="../public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
     <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../public/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="../includes/utils/menu.js"></script>
-    <!-- JS MODULAR -->
     <script src="/app-swap/Materiales/scripts/salidas.js" type="module"></script>
 </body>
 

@@ -13,32 +13,34 @@
 </head>
 
 <body>
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+   
     <?php include './components/encabezado.html'; ?>
     <?php include './components/menu.html'; ?>
     <main class="container py-5">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-12">
                 <div class="card modern-form shadow">
-                    <div class="card-header modern-form-header text-white p-4" style="background-color: #003366;">
+                    <div class="card-header modern-form-header text-white p-4">
                         <h2 class="mb-0 fw-bold text-center">
                             <i class="bi bi-box-arrow-in-down me-2"></i>REGISTRO DE ENTRADA DE MATERIALES
                         </h2>
                     </div>
+
                     <div class="card-body modern-form-body p-5">
                         <form id="form-entrada-material" autocomplete="off" novalidate>
                             <div class="row g-3">
                                 <div class="col-md-3">
                                     <label class="form-label fw-bold">Código</label>
-                                    <input type="text" class="form-control" id="folio" name="folio" maxlength="11"
-                                        pattern="^MA-[0-9]{8}$" placeholder="Ej: MA-00000001">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="folio" name="folio" maxlength="11"
+                                            pattern="^MA-[0-9]{8}$" placeholder="Ej: MA-00000001">
+                                    </div>
                                     <div id="estado-material" class="mt-1"></div>
                                 </div>
                                 <div class="col-md-9">
                                     <label class="form-label fw-bold">Descripción</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="descripcion" name="descripcion"
-                                            oninput="this.value = this.value.toUpperCase()" required>
+                                        <input type="text" class="form-control" id="descripcion" name="descripcion">
                                         <button class="btn btn-primary" type="button" id="modal-material-entrada">
                                             <i class="bi bi-search"></i>
                                         </button>
@@ -58,19 +60,15 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label fw-bold">Adscripción</label>
-                                    <input type="text" class="form-control" id="adscripcion" name="adscripcion"
-                                        oninput="this.value = this.value.toUpperCase()">
+                                    <input type="text" class="form-control" id="adscripcion" name="adscripcion">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">Cantidad</label>
                                     <input type="number" class="form-control" id="cantidad" name="cantidad" min="1">
                                 </div>
                                 <div class="col-12 text-center mt-4">
-                                    <button type="submit" class="btn btn-success btn-lg" id="btn-guardar-entrada">
-                                        Registrar Entrada
-                                    </button>
-                                    <button type="button" class=" bi bi-search me-2 btn btn-info btn-lg px-4 shadow-sm" id="btn-consultar-entradas">
-                                        Consultar Entradas
+                                    <button type="submit" class="btn btn-success btn-lg" id="btn-guardar-entrada">Registrar Entrada</button>
+                                    <Consultar type="button" class=" bi bi-search me-2 btn btn-info btn-lg px-4 shadow-sm" id="btn-consultar-entradas" >Consultar Entradas
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary btn-lg"
                                         id="btn-limpiar-entrada">
@@ -121,7 +119,7 @@
     </main>
     <!-- MODAL -->
     <div class="modal fade" id="exampleModalCenter">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h5>Buscar Material</h5>
@@ -136,10 +134,11 @@
         </div>
     </div>
     <?php include './components/pie.html'; ?>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <script src="../public/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="/app-swap/Materiales/scripts/entradas.js" type="module"></script>
+
 </body>
 
 </html>

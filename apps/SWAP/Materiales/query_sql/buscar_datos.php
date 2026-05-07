@@ -27,6 +27,7 @@ try {
         c.id_unidad_material,
         c.id_categoria_material,
         c.adscripcion_modulo,
+        c.stock_actual,
 
         COALESCE(ult_salida.estado, ult_entrada.estado) AS id_estado_material
 

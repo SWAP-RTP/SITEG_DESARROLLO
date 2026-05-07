@@ -44,7 +44,7 @@ if ($tipo === 'entradas') {
             um.descripcion_unidad_material AS unidad,
             est.descripcion_estado_material AS estado,
             em.cantidad_material_entrada AS cantidad,
-            em.fecha_registro_entrada AS fecha_registro
+            TO_CHAR(em.fecha_registro_entrada, 'DD/MM/YYYY HH24:MI') AS fecha_registro
         FROM entradas_materiales em
         INNER JOIN control_materiales cm 
             ON em.folio_material = cm.folio_material
@@ -109,7 +109,7 @@ if ($tipo === 'salidas') {
             um.descripcion_unidad_material AS unidad,
             est.descripcion_estado_material AS estado,
             sm.cantidad_material_salida AS cantidad,
-            sm.fecha_registro_salida AS fecha_registro
+            TO_CHAR(sm.fecha_registro_salida, 'DD/MM/YYYY HH24:MI') AS fecha_registro
         FROM salidas_materiales sm
         INNER JOIN control_materiales cm 
             ON sm.folio_material = cm.folio_material
