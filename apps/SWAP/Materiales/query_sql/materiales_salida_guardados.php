@@ -1,4 +1,6 @@
 <?php
+ob_start();                          // captura cualquier output extra (warnings, notices)
+error_reporting(0);                  // silencia notices en producción
 header('Content-Type: application/json; charset=utf-8');
 require '/var/www/login_shared/conf/conexion.php';
 
@@ -84,10 +86,11 @@ function guardarSalidaMaterial() {
     $result = pg_query_params($conexion, $sql, $params);
 
     if (!$result) {
+        $pg_error = pg_last_error($conexion);
         pg_query($conexion, "ROLLBACK");
         echo json_encode([
-            'status' => 'error',
-            'message' => 'Error al registrar salida: ' . pg_last_error($conexion)
+            'status'  => 'error',
+            'message' => 'Error al registrar salida: ' . $pg_error
         ]);
         exit;
     }

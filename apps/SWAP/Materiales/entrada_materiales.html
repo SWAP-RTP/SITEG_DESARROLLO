@@ -5,40 +5,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Entrada de Materiales - RTP</title>
-    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet" href="/app-swap/public/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/app-swap/includes/css/custom_rtp.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
+    <link rel="stylesheet" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
 </head>
 
 <body>
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+
     <?php include './components/encabezado.html'; ?>
     <?php include './components/menu.html'; ?>
+    <!--CONTENEDOR PRINCIPAL-->
     <main class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-lg-12">
+            <div class="col-12">
                 <div class="card modern-form shadow">
-                    <div class="card-header modern-form-header text-white p-4" style="background-color: #003366;">
+                    <div class="card-header modern-form-header text-white p-4">
                         <h2 class="mb-0 fw-bold text-center">
                             <i class="bi bi-box-arrow-in-down me-2"></i>REGISTRO DE ENTRADA DE MATERIALES
                         </h2>
                     </div>
+                    <!-- FORMULARIO ENTRADA DE MATERIALES -->
                     <div class="card-body modern-form-body p-5">
                         <form id="form-entrada-material" autocomplete="off" novalidate>
                             <div class="row g-3">
                                 <div class="col-md-3">
+                                    
                                     <label class="form-label fw-bold">Código</label>
                                     <input type="text" class="form-control" id="folio" name="folio" maxlength="11"
                                         pattern="^MA-[0-9]{8}$" placeholder="Ej: MA-00000001">
                                     <div id="estado-material" class="mt-1"></div>
                                 </div>
                                 <div class="col-md-9">
+                                
                                     <label class="form-label fw-bold">Descripción</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="descripcion" name="descripcion"
-                                            oninput="this.value = this.value.toUpperCase()" required>
+                                        <input type="text" class="form-control" id="descripcion" name="descripcion">
                                         <button class="btn btn-primary" type="button" id="modal-material-entrada">
                                             <i class="bi bi-search"></i>
                                         </button>
@@ -58,23 +61,23 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label fw-bold">Adscripción</label>
-                                    <input type="text" class="form-control" id="adscripcion" name="adscripcion"
-                                        oninput="this.value = this.value.toUpperCase()">
+                                    <input type="text" class="form-control" id="adscripcion" name="adscripcion" required placeholder="Ej: ALMACEN CENTRAL o MODULO 4">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">Cantidad</label>
                                     <input type="number" class="form-control" id="cantidad" name="cantidad" min="1">
                                 </div>
                                 <div class="col-12 text-center mt-4">
-                                    <button type="submit" class="btn btn-success btn-lg" id="btn-guardar-entrada">
-                                        Registrar Entrada
+                                    <button type="submit" class="btn btn-outline-success" id="btn-guardar-entrada">
+                                        <i class="bi bi-save me-2"></i>Guardar Registro
                                     </button>
-                                    <button type="button" class=" bi bi-search me-2 btn btn-info btn-lg px-4 shadow-sm" id="btn-consultar-entradas">
-                                        Consultar Entradas
+                                  
+                                    <button type="button" class="btn btn-outline-info" id="btn-consultar-entradas">
+                                        <i class="bi bi-search me-2"></i>Consultar Entradas
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary btn-lg"
+                                    <button type="button" class="btn btn-outline-secondary px-4 shadow-sm"
                                         id="btn-limpiar-entrada">
-                                        Limpiar
+                                        <i class="bi bi-eraser me-2"></i> Limpiar
                                     </button>
                                 </div>
                             </div>
@@ -83,11 +86,11 @@
                 </div>
             </div>
         </div>
-        <!-- TABLA -->
-        <div class="card mt-3 shadow-lg" id="contenedor-tabla-registros" style="display:none;">
+        <!-- TABLA DE CONSULTA ENTRADAS -->
+        <div class="card mt-3 shadow-lg oculto" id="contenedor-tabla-registros">
             <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
                 <h3 class="mb-0">Últimos Registros de Entradas</h3>
-                <div class="input-group input-group-sm" style="width: 180px;">
+                <div class="input-group input-group-sm ancho-busqueda">
                     <span class="input-group-text bg-white">
                         <i class="bi bi-search"></i>
                     </span>
@@ -119,9 +122,9 @@
             </div>
         </div>
     </main>
-    <!-- MODAL -->
+    <!-- MODAL REGISTRO DE ENTRADAS -->
     <div class="modal fade" id="exampleModalCenter">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h5>Buscar Material</h5>
@@ -136,10 +139,11 @@
         </div>
     </div>
     <?php include './components/pie.html'; ?>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <script src="../public/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="/app-swap/Materiales/scripts/entradas.js" type="module"></script>
+
 </body>
 
 </html>
