@@ -1,33 +1,57 @@
 import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
-// ── variable de control ──────────────────
+// ** VARIABLE DE CONTROL **
 let timeoutBusqueda = null;
 
-// ── Autocompleta el formulario con los datos del material ──────────────────
+//******* AUTOCOMPLETAR FORMULARIO ********************
 async function cargarMaterial(folio) {
-    const result = await MaterialesService.buscarPorFolio(folio);
+    const resultado = await MaterialesService.buscarPorFolio(folio);
 
-    if (result.status === 'ok' && result.datos) {
-        const mat = result.datos;
+    // Si el folio existe
+    if (resultado.status === 'ok' && resultado.datos) {
 
-        document.getElementById('descripcion').value = mat.descripcion_material ?? '';
-        document.getElementById('unidad').value = mat.id_unidad_material ?? '';
-        document.getElementById('estado').value = mat.id_estado_material ?? '';
-        document.getElementById('id_categoria').value = mat.id_categoria_material ?? '';
-        document.getElementById('adscripcion').value = mat.adscripcion_modulo ?? '';
+        const material = resultado.datos;
 
-        // Bloquear campos para material existente
-      
+        document.getElementById('descripcion').value =
+            material.descripcion_material ?? '';
+
+        document.getElementById('unidad').value =
+            material.id_unidad_material ?? '';
+
+        document.getElementById('estado').value =
+            material.id_estado_material ?? '';
+
+        document.getElementById('id_categoria').value =
+            material.id_categoria_material ?? '';
+
+        document.getElementById('adscripcion').value =
+            material.adscripcion_modulo ?? '';
+
+        // Bloquear campos
         document.getElementById('descripcion').disabled = true;
         document.getElementById('unidad').disabled = true;
         document.getElementById('estado').disabled = true;
         document.getElementById('id_categoria').disabled = true;
         document.getElementById('adscripcion').disabled = true;
+
         document.getElementById('cantidad').focus();
 
     } else {
-        // Material nuevo: desbloquear
+
+        // Si NO existe → generar nuevo folio
+        const nuevoFolio = await MaterialesService.generarFolio();
+
+        if (nuevoFolio.status === 'ok') {
+            document.getElementById('folio').value = nuevoFolio.folio;
+        }
+
+        Swal.fire({
+            icon: "info",
+            title: "Folio no encontrado",
+            text: "El código ingresado no existe. Se generará un nuevo folio automáticamente."
+        });
+        // Desbloquear campos
         document.getElementById('descripcion').disabled = false;
         document.getElementById('unidad').disabled = false;
         document.getElementById('estado').disabled = false;
@@ -35,7 +59,8 @@ async function cargarMaterial(folio) {
         document.getElementById('adscripcion').disabled = false;
     }
 }
-// ── Carga la tabla de registros de entradas ────────────────────────────────
+
+// ****CARGAR LA TABLA DE REGISTROS DE ENTRADAS **************
 async function cargarRegistros() {
     const data = await MaterialesService.consultarEntradas();
     if (data.status === 'ok') {
@@ -53,7 +78,7 @@ async function cargarRegistros() {
         document.getElementById('contenedor-tabla-registros').style.display = 'block';
     }
 }
-// ── Guarda el registro de entrada ──────────────────────────────────────────
+// *** GUARDAR EL REGISTRO DE ENTRADA **************
 async function guardarEntrada(e) {
     e.preventDefault();
     const form = e.target;
@@ -67,27 +92,27 @@ async function guardarEntrada(e) {
 
     if (res.status === 'ok') {
         Swal.fire('Éxito', res.message, 'success');
-        form.reset(); 
+        form.reset();
 
         const todosLosCampos = form.querySelectorAll('input, select, textarea');
         todosLosCampos.forEach(campo => {
-            campo.disabled = false;   
-            campo.readOnly = false;   
-            campo.classList.remove('bg-light'); 
+            campo.disabled = false;
+            campo.readOnly = false;
+            campo.classList.remove('bg-light');
         });
-        if(typeof cargarRegistros === 'function') cargarRegistros();
+        if (typeof cargarRegistros === 'function') cargarRegistros();
         document.getElementById('folio')?.focus();
 
     } else {
-     
+
         camposBloqueados.forEach(c => {
         });
         Swal.fire('Error', res.message, 'error');
     }
 }
-// ── Eventos ────────────────────────────────────────────────────────────────
+// ** EVENTOS **
 function configurarEventos() {
-    // Folio: formateo automático MA- y disparo de búsqueda
+    // ** FOLIO: formateo automático MA- y disparo de búsqueda **
     const folioInput = document.getElementById('folio');
     if (folioInput) {
         folioInput.addEventListener('input', (e) => {
@@ -104,7 +129,7 @@ function configurarEventos() {
         });
     }
 
-    // ── Botón lupa → modal ────────────────────────────────────────────────────────────────
+    //** EL BOTÓN DE LUPA DEL MODAL**
     document.getElementById('modal-material-entrada')?.addEventListener('click', () => {
         ModalService.abrir({
             modalId: 'exampleModalCenter',
@@ -116,17 +141,20 @@ function configurarEventos() {
         });
     });
 
-    // ── Consultar y Limpiar ────────────────────────────────────────────────────────────────
+    // ** CONSULTAR Y LIMPIAR **
     document.getElementById('btn-consultar-entradas')?.addEventListener('click', cargarRegistros);
     document.getElementById('form-entrada-material')?.addEventListener('submit', guardarEntrada);
     document.getElementById('btn-limpiar-entrada')?.addEventListener('click', () => {
         document.getElementById('form-entrada-material').reset();
         document.getElementById('contenedor-tabla-registros').style.display = 'none';
+        document.getElementById('unidad').disabled = false;
+        document.getElementById('estado').disabled = false;
+        document.getElementById('id_categoria').disabled = false;
         document.getElementById('descripcion').disabled = false;
         document.getElementById('adscripcion').disabled = false;
     });
 }
-
+//**ARRANCAR TODO AL CARGAR LA PÁGINA**
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarCatalogos();
     configurarEventos();

@@ -3,15 +3,16 @@ import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
 
-// ── variable de control ──────────────────
+// ** variable de control **
 let timeoutBusqueda = null;
 
-// ── Autocompleta el formulario con los datos del material ──────────────────
+// ** Autocompleta el formulario con los datos del material **
 async function cargarMaterialSalida(folio) {
     const result = await MaterialesService.buscarPorFolio(folio);
 
     if (result.status === 'ok' && result.datos) {
         const mat = result.datos;
+        //alert("folio existente")
         document.getElementById('descripcion_salida').value = mat.descripcion_material;
         document.getElementById('unidad_salida').value = mat.id_unidad_material;
         document.getElementById('estado_salida').value = mat.id_estado_material;
@@ -22,26 +23,30 @@ async function cargarMaterialSalida(folio) {
         bloqueoGris.forEach(id => {
             const elemento = document.getElementById(id);
             if (elemento) {
-           
                 elemento.classList.add('bg-light');
-                
-       
                 if (elemento.tagName === 'SELECT') {
-                    elemento.disabled = true; 
+                    elemento.disabled = true;
                 } else {
                     elemento.readOnly = true;
                 }
             }
         });
-        
-        // 3. Validación de Stock y Foco
+
+
+        //** 3. Validación de Stock y Foco**
         if (parseInt(mat.stock_actual) <= 0) {
             Swal.fire('Aviso', 'Material sin stock actual.', 'warning');
         }
         document.getElementById('cantidad_salida').focus();
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "ERROR...",
+            text: "El código que ingresó no existe!"
+        });
     }
 }
-// ── Carga la tabla de registros de salidas ────────────────────────────────
+// ** Carga la tabla de registros de salidas **
 async function cargarRegistrosSalida() {
     const data = await MaterialesService.consultarSalidas();
     if (data.status === 'ok') {
@@ -62,7 +67,7 @@ async function cargarRegistrosSalida() {
 async function guardarSalida(e) {
     e.preventDefault();
 
-    // Automatización: Captura manual de campos por ID para asegurar llaves
+    //** Automatización: Captura manual de campos por ID para asegurar llaves**
     const data = {
         folio: document.getElementById('folio_salida').value,
         descripcion: document.getElementById('descripcion_salida').value,
@@ -72,7 +77,7 @@ async function guardarSalida(e) {
         adscripcion: document.getElementById('adscripcion_salida').value,
         cantidad: document.getElementById('cantidad_salida').value
     };
-if (!data.folio || !data.cantidad) {
+    if (!data.folio || !data.cantidad) {
         Swal.fire('Atención', 'Folio y cantidad obligatorios', 'warning');
         return;
     }
@@ -81,19 +86,19 @@ if (!data.folio || !data.cantidad) {
 
     if (res.status === 'ok') {
         Swal.fire('Éxito', res.message, 'success');
-        
-        // 1. Resetear valores del formulario
+
+        //** 1. Resetear valores del formulario**
         e.target.reset();
 
-        // 2. Desbloqueo manual de campos y estilos
+        //** 2. Desbloqueo manual de campos y estilos**
         const camposABloquear = [
-            'descripcion_salida', 
-            'unidad_salida', 
-            'estado_salida', 
-            'categoria_salida', 
+            'descripcion_salida',
+            'unidad_salida',
+            'estado_salida',
+            'categoria_salida',
             'adscripcion_salida'
         ];
-        
+
         camposABloquear.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
@@ -103,14 +108,14 @@ if (!data.folio || !data.cantidad) {
             }
         });
 
-        // 3. Actualizar la tabla de registros
+        //** 3. Actualizar la tabla de registros**
         cargarRegistrosSalida();
 
     } else {
         Swal.fire('Error', res.message, 'error');
     }
 }
-// ── 4. Eventos  ────────────────────────────────
+// ** Eventos **
 function configurarEventosSalida() {
     const folioInput = document.getElementById('folio_salida');
     if (folioInput) {
@@ -138,13 +143,33 @@ function configurarEventosSalida() {
             }
         });
     });
-  // Consultar y Limpiar
+    //** Consultar y Limpiar**
     document.getElementById('btn-consultar-salidas')?.addEventListener('click', () => cargarRegistrosSalida());
     document.getElementById('form-salida-material')?.addEventListener('submit', guardarSalida);
     document.getElementById('btn-limpiar-salida')?.addEventListener('click', () => {
+        //** 1. Resetear valores del formulario**
         document.getElementById('form-salida-material').reset();
         document.getElementById('contenedor-tabla-salidas').style.display = 'none';
+
+        //** 2. Desbloqueo manual de campos y estilos (misma lógica que en guardarSalida)**
+        const camposABloquear = [
+            'descripcion_salida',
+            'unidad_salida',
+            'estado_salida',
+            'categoria_salida',
+            'adscripcion_salida'
+        ];
+
+        camposABloquear.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.readOnly = false;
+                el.disabled = false;
+                el.classList.remove('bg-light');
+            }
+        });
     });
+
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

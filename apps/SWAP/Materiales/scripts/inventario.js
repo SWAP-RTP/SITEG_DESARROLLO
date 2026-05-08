@@ -2,8 +2,10 @@ import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
 
+// ** VARIABLE DE CONTROL **
 let timeoutBusqueda = null;
 
+// ** AUTCOMPLETA EL FORMULARIO CON LOS DATOS DEL MATERIAL **
 function actualizarUIInventario(datos, bloquear = false) {
     const descripcion = document.getElementById('descripcion_inventario');
     const adscripcion = document.getElementById('adscripcion_inventario');
@@ -16,13 +18,13 @@ function actualizarUIInventario(datos, bloquear = false) {
     [descripcion, adscripcion, stock].forEach(elemento => {
         if (elemento) {
             elemento.readOnly = bloquear;
-            if (bloquear) elemento.classList.add('bg-light');
-            else elemento.classList.remove('bg-light');
+            if (bloquear) elemento.classList.add('bg-light'); //es cuando se poner el gris del autocompletado
+            else elemento.classList.remove('bg-light'); //es cuando se quita el gris del autocompletado
         }
     });
 }
 
-// 3. FUNCIÓN DEL DASHBOARD
+//**  FUNCIÓN DEL DASHBOARD **
 async function cargarDashboard() {
     try {
         const res = await fetch('query_sql/dashboard.php');
@@ -44,37 +46,37 @@ async function cargarDashboard() {
     } catch (e) { console.error(e); }
 }
 
-// 4. CONFIGURACIÓN DE EVENTOS (Aquí es donde activamos todo)
+// ** CONFIGURACIÓN DE EVENTOS (Aquí es donde activamos todo) **
 function configurarEventosInventario() {
     const folioInput = document.getElementById('folio_inventario');
 
-    // --- ESTO ES LO QUE TE FALTABA: Detectar cuando escribes con el teclado ---
+    // ** Detectar cuando se escribe con el teclado **
     folioInput?.addEventListener('input', (e) => {
         let valor = e.target.value.toUpperCase();
-        
-        // Formato MA-00000000
+
+        //** Formato MA-00000000 **
         if (!valor.startsWith('MA-')) valor = 'MA-' + valor.replace(/[^0-9]/g, '');
         else valor = 'MA-' + valor.slice(3).replace(/[^0-9]/g, '');
         e.target.value = valor;
 
-        clearTimeout(timeoutBusqueda); // Limpia la espera anterior
+        clearTimeout(timeoutBusqueda); //**limpia la espera anterior**
 
-        // Si ya escribiste los 11 caracteres (ej: MA-00000001)
+        //** Si ya se escribieron los 11 caracteres (ej: MA-00000001) **
         if (valor.length === 11) {
-            // Espera un poquito (500ms) para no saturar y busca
+            //** espera (500ms) para no saturar **
             timeoutBusqueda = setTimeout(async () => {
                 const result = await MaterialesService.buscarPorFolio(valor);
                 if (result.status === 'ok' && result.datos) {
-                    actualizarUIInventario(result.datos, true); // <--- Llama a la función maestra
+                    actualizarUIInventario(result.datos, true);
                 }
             }, 500);
         } else {
-            // Si borras texto, quita el gris y limpia
+            //** Limpia el texto en gris **
             actualizarUIInventario(null, false);
         }
     });
 
-    // --- EVENTO DEL MODAL ---
+    // ** EVENTO DEL MODAL **
     document.getElementById('btn-modal-inventario')?.addEventListener('click', () => {
         ModalService.abrir({
             modalId: 'modalMaterialInventario',
@@ -89,19 +91,19 @@ function configurarEventosInventario() {
         });
     });
 
-    // --- EVENTO CONSULTAR ---
+    // ** EVENTO CONSULTAR **
     document.getElementById('btn-consultar-inventario')?.addEventListener('click', cargarDashboard);
 
-    // --- EVENTO LIMPIAR ---
+    // ** EVENTO LIMPIAR **
     document.getElementById('btn-limpiar-inventario')?.addEventListener('click', () => {
         document.getElementById('form-inventario-material').reset();
-        actualizarUIInventario(null, false); 
+        actualizarUIInventario(null, false);
         const dash = document.getElementById('dashboard-inventario');
         if (dash) dash.style.display = 'none';
     });
 }
 
-// 5. ARRANCAR TODO AL CARGAR LA PÁGINA
+// ** ARRANCAR TODO AL CARGAR LA PÁGINA **
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarCatalogos();
     configurarEventosInventario();
