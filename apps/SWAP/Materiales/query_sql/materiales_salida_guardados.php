@@ -1,6 +1,4 @@
 <?php
-ob_start();                          // captura cualquier output extra (warnings, notices)
-error_reporting(0);                  // silencia notices en producción
 header('Content-Type: application/json; charset=utf-8');
 require '/var/www/login_shared/conf/conexion.php';
 
