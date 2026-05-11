@@ -16,7 +16,7 @@ switch ($tipo) {
         $sqlBase = "
             SELECT 
                 c.folio_material,
-                c.descripcion_material,
+                UPPER(c.descripcion_material) AS descripcion_material,
                 COALESCE(e.total_entrada, 0) - COALESCE(s.total_salida, 0) AS stock_actual
             FROM control_materiales c
             LEFT JOIN (
@@ -47,7 +47,7 @@ switch ($tipo) {
         $sql = "
             SELECT 
                 folio_material,
-                descripcion_material_entrada
+                UPPER(descripcion_material_entrada) AS descripcion_material_entrada
             FROM entradas_materiales
             ORDER BY fecha_registro_entrada DESC
             LIMIT 100

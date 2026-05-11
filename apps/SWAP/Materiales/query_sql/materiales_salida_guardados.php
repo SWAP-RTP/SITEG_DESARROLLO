@@ -16,10 +16,13 @@ function guardarSalidaMaterial() {
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
-
-    # Validar campos
+ 
+    # Validar campos y transformar a mayusculas
     $folio = trim($data['folio_material'] ?? '');
     $cantidad = $data['cantidad_material_salida'] ?? null;
+    $descripcion = mb_strtoupper(trim($data['descripcion_material_salida'] ?? ''),'UTF-8');
+    $adscripcion = mb_strtoupper(trim($data['adscripcion_modulo'] ?? ''),'UTF-8');
+    $estado = $data['id_estado_material_salida'] ?? '';
 
     if ($folio === '' || $cantidad === null || $cantidad === '') {
         echo json_encode([
@@ -41,33 +44,31 @@ function guardarSalidaMaterial() {
 
     // Consultamos el stock para validar si hay suficiente antes de intentar la salida
     $sql_stock = "SELECT stock_actual FROM control_materiales WHERE folio_material = $1";
-    $res_stock = pg_query_params($conexion, $sql_stock, [$folio]);
+   $res_stock = pg_query_params($conexion, $sql_stock, [$folio]);
 
-    if (!$res_stock || pg_num_rows($res_stock) === 0) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Material no encontrado.'
-        ]);
-        exit;
-    }
+if (!$res_stock || pg_num_rows($res_stock) === 0) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Material no encontrado.'
+    ]);
+    exit;
+}
 
-    $row = pg_fetch_assoc($res_stock);
-    $stock_actual = (int)$row['stock_actual'];
+$row = pg_fetch_assoc($res_stock);
+$stock_actual = (int)$row['stock_actual'];
 
-    if ($cantidad > $stock_actual) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Stock insuficiente.'
-        ]);
-        exit;
-    }
+// ponemos la validacion permitida(lo maximo para sacar productos)
+if ($cantidad >= $stock_actual) {
+    $maximo = $stock_actual - 1;
 
-    $descripcion = trim($data['descripcion_material_salida'] ?? '');
-    $estado = $data['id_estado_material_salida'] ?? null;
-    $adscripcion = trim($data['adscripcion_modulo'] ?? '');
+    echo json_encode([
+        'status' => 'error',
+        'message' => "No puede retirar toda la existencia. Máximo permitido: {$maximo} pieza(s)."
+    ]);
+    exit;
+}
 
-    pg_query($conexion, "BEGIN");
-
+pg_query($conexion, "BEGIN");
     # Insertar salida
     $sql = "INSERT INTO salidas_materiales 
         (folio_material, descripcion_material_salida, id_estado_material_salida, cantidad_material_salida, adscripcion_modulo)
@@ -111,7 +112,7 @@ function guardarSalidaMaterial() {
         ]);
         exit;
     }
-    */
+    */    
 
     pg_query($conexion, "COMMIT");
 

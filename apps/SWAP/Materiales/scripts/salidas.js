@@ -9,18 +9,18 @@ let timeoutBusqueda = null;
 
 //*********************AUTOCOMPLETAR FORMULARIO CON DATOS DEL MATERIAL*********************************
 async function cargarMaterialSalida(folio) {
-    const result = await MaterialesService.buscarPorFolio(folio);
+    const resultado = await MaterialesService.buscarPorFolio(folio);
 
     const inputFolio = document.getElementById('folio_salida');
     const estadoMaterial = document.getElementById('estado-material-salida');
 
-    if (result.status === 'ok' && result.datos) {
+    if (resultado.status === 'ok' && resultado.datos) {
 
         // Si existe → quitar alerta roja
         inputFolio.classList.remove('is-invalid');
         estadoMaterial.innerHTML = '';
 
-        const mat = result.datos;
+        const mat = resultado.datos;
 
         // Llenar formulario
         document.getElementById('descripcion_salida').value = mat.descripcion_material;
@@ -130,35 +130,33 @@ async function guardarSalida(e) {
         return;
     }
 
-    const res = await MaterialesService.guardarSalida(data);
+    const respuesta = await MaterialesService.guardarSalida(data);
 
-    if (res.status === 'ok') {
-        Swal.fire(
-            'Éxito',
-            res.message,
-            'success'
-        );
+    if (respuesta.status === 'ok') {
+        // Revisar si el stock quedó bajo
+        if (respuesta.stock_restante <= 30) {
+            Swal.fire(
+                'Stock por terminarse',
+                `Salida registrada correctamente.\nSolo quedan ${respuesta.stock_restante} piezas disponibles.`,
+                'warning'
+            );
+        } else {
+            Swal.fire(
+                'Éxito',
+                respuesta.message,
+                'success'
+            );
+        }
 
         // Resetear formulario
         e.target.reset();
 
         // Quitar borde rojo
-        document.getElementById('folio_salida')
-            .classList.remove('is-invalid');
-
+        document.getElementById('folio_salida').classList.remove('is-invalid');
         // Borrar mensaje rojo
-        document.getElementById(
-            'estado-material-salida'
-        ).innerHTML = '';
-
+        document.getElementById('estado-material-salida').innerHTML = '';
         // Desbloquear campos
-        const camposABloquear = [
-            'descripcion_salida',
-            'unidad_salida',
-            'estado_salida',
-            'categoria_salida',
-            'adscripcion_salida'
-        ];
+        const camposABloquear = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
 
         camposABloquear.forEach(id => {
             const el = document.getElementById(id);
@@ -176,7 +174,7 @@ async function guardarSalida(e) {
     } else {
         Swal.fire(
             'Error',
-            res.message,
+            respuesta.message,
             'error'
         );
     }
@@ -256,9 +254,9 @@ function configurarEventosSalida() {
 
 
     //******** GUARDAR ********
-    document.getElementById('form-salida-material')?.addEventListener('submit',guardarSalida);
+    document.getElementById('form-salida-material')?.addEventListener('submit', guardarSalida);
     //******** LIMPIAR ********
-    document.getElementById( 'btn-limpiar-salida' )?.addEventListener('click', () => {
+    document.getElementById('btn-limpiar-salida')?.addEventListener('click', () => {
         // Resetear formulario
         document.getElementById('form-salida-material').reset();
         // Ocultar tabla
@@ -267,7 +265,7 @@ function configurarEventosSalida() {
         document.getElementById('folio_salida').classList.remove('is-invalid');
         // Borrar mensaje rojo
         document.getElementById('estado-material-salida').innerHTML = '';
-      // Desbloquear campos
+        // Desbloquear campos
         const camposABloquear = [
             'descripcion_salida',
             'unidad_salida',

@@ -23,20 +23,11 @@ async function cargarMaterial(folio) {
 
         const material = resultado.datos;
 
-        document.getElementById('descripcion').value =
-            material.descripcion_material ?? '';
-
-        document.getElementById('unidad').value =
-            material.id_unidad_material ?? '';
-
-        document.getElementById('estado').value =
-            material.id_estado_material ?? '';
-
-        document.getElementById('id_categoria').value =
-            material.id_categoria_material ?? '';
-
-        document.getElementById('adscripcion').value =
-            material.adscripcion_modulo ?? '';
+        document.getElementById('descripcion').value = material.descripcion_material ?? '';
+        document.getElementById('unidad').value = material.id_unidad_material ?? '';
+        document.getElementById('estado').value = material.id_estado_material ?? '';
+        document.getElementById('id_categoria').value = material.id_categoria_material ?? '';
+        document.getElementById('adscripcion').value = material.adscripcion_modulo ?? '';
 
         // Bloquear campos
         document.getElementById('descripcion').disabled = true;
@@ -48,6 +39,7 @@ async function cargarMaterial(folio) {
         document.getElementById('cantidad').focus();
 
     } else {
+        //ocultar el div con el id folio-oculto
 
         // Si NO existe → generar nuevo folio
         const nuevoFolio = await MaterialesService.generarFolio();
@@ -57,14 +49,27 @@ async function cargarMaterial(folio) {
         }
 
         // Mostrar alerta visual
-        inputFolio.classList.add('is-invalid');
+        // inputFolio.classList.add('is-invalid');
 
-        estadoMaterial.innerHTML = `
-            <small class="text-danger">
-                Folio no encontrado. Se va a generar automáticamente uno nuevo.
-                Llene los campos para registrar este nuevo material.
-            </small>
-        `;
+        // estadoMaterial.innerHTML = `
+        //     <small class="text-danger">
+        //         Folio no encontrado. Se va a generar automáticamente uno nuevo.
+        //         Llene los campos para registrar este nuevo material.
+        //     </small>
+        // `;
+        // alerta emergente
+        Swal.fire({
+            icon: 'info',
+            title: 'Nuevo material detectado',
+            text: 'El folio no existe. Capture los datos del material y se generará un nuevo código automáticamente.',
+            timer: 4000,
+            showConfirmButton: false
+        });
+
+        //Se agrega para ocultarse, pero espera 3 segundos
+
+        document.getElementById('folio-oculto').style.display = 'none';
+
 
         // Desbloquear campos
         document.getElementById('descripcion').disabled = false;
@@ -83,16 +88,32 @@ async function cargarRegistros() {
     if (data.status === 'ok') {
         const tbody = document.getElementById('tabla-registros');
 
-        tbody.innerHTML = data.datos.map(reg => `
-            <tr>
-                <td class="fw-bold">${reg.folio_material}</td>
-                <td>${reg.descripcion_material_entrada}</td>
-                <td>${reg.unidad}</td>
-                <td><span class="badge bg-info text-dark">${reg.estado}</span></td>
-                <td>${reg.cantidad}</td>
-                <td class="small">${reg.fecha_registro}</td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = data.datos.map(reg => {
+            // 1. Definimos una clase por defecto (azul)
+            let claseColor = 'bg-info text-dark';
+            const estado = (reg.estado || '').toUpperCase();
+
+            // 2. Evaluamos con un IF/ELSE directo
+            if (estado.includes('BUENO')) {
+                claseColor = 'bg-success text-white'; // Verde
+            } else if (estado.includes('REGULAR')) {
+                claseColor = 'bg-warning text-dark';  // Amarillo
+            } else if (estado.includes('MALO')) {
+                claseColor = 'bg-danger text-white';  // Rojo
+            }
+
+            // 3. Retornamos la fila usando la variable "claseColor"
+            return `
+                <tr>
+                    <td class="fw-bold">${reg.folio_material}</td>
+                    <td>${reg.descripcion_material_entrada}</td>
+                    <td>${reg.unidad}</td>
+                    <td><span class="badge ${claseColor}">${reg.estado}</span></td>
+                    <td>${reg.cantidad}</td>
+                    <td class="small">${reg.fecha_registro}</td>
+                </tr>
+            `;
+        }).join('');
 
         document.getElementById('contenedor-tabla-registros').style.display = 'block';
     }
@@ -124,6 +145,8 @@ async function guardarEntrada(e) {
         Swal.fire('Éxito', res.message, 'success');
 
         form.reset();
+        //ocultar el div con el id folio-oculto
+        document.getElementById('folio-oculto').style.display = 'block';
 
         const todosLosCampos = form.querySelectorAll(
             'input, select, textarea'
@@ -139,9 +162,9 @@ async function guardarEntrada(e) {
         // limpiar mensaje del folio
         document.getElementById('estado-material').innerHTML = '';
 
-        if (typeof cargarRegistros === 'function') {
-            cargarRegistros();
-        }
+        // if (typeof cargarRegistros === 'function') {
+        //     cargarRegistros();
+        // }
 
         document.getElementById('folio')?.focus();
 
@@ -218,9 +241,9 @@ function configurarEventos() {
     document.getElementById('btn-limpiar-entrada')
         ?.addEventListener('click', () => {
             document.getElementById('form-entrada-material').reset();
-
+            //Se agrega para que se vuelva a mostrar el div con el id folio-oculto
+            document.getElementById('folio-oculto').style.display = 'block';
             document.getElementById('contenedor-tabla-registros').style.display = 'none';
-
             document.getElementById('unidad').disabled = false;
             document.getElementById('estado').disabled = false;
             document.getElementById('id_categoria').disabled = false;
@@ -238,3 +261,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     await cargarCatalogos();
     configurarEventos();
 });
+

@@ -38,6 +38,9 @@ function guardarEntradaMaterial($data)
 
     $folio = $data['folio'];
     $cantidad = (int)$data['cantidad'];
+    //para hacer cambio de minusculas a mayuscula
+    $descripcion = mb_strtoupper(trim($data['descripcion']), 'UTF-8');
+    $adscripcion = mb_strtoupper(trim($data['adscripcion']), 'UTF-8');
 
     if (!$folio || !$cantidad) {
         echo json_encode(['status' => 'error', 'message' => 'Folio y cantidad obligatorios']);
@@ -100,10 +103,10 @@ function guardarEntradaMaterial($data)
         VALUES ($1,$2,$3,$4,$5)",
         [
             $folio,
-            $data['descripcion'],
+            $descripcion,
             $data['estado'],
             $cantidad,
-            $data['adscripcion']
+            $adscripcion
         ]
     );
 
@@ -145,6 +148,9 @@ function guardarSalidaMaterial($data)
 
     $folio = $data['folio'];
     $cantidad = (int)$data['cantidad'];
+    //se agrega para hacer cambio de minúscula a mayúsculas
+    $descripcion = mb_strtoupper(trim($data['descripcion']), 'UTF-8');
+    $adscripcion = mb_strtoupper(trim($data['adscripcion']), 'UTF-8');
 
     if (!$folio || !$cantidad) {
         echo json_encode(['status' => 'error', 'message' => 'Folio y cantidad obligatorios']);
@@ -184,10 +190,10 @@ function guardarSalidaMaterial($data)
         VALUES ($1,$2,$3,$4,$5)",
         [
             $folio,
-            $data['descripcion'],
+            $descripcion,
             $data['estado'],
             $cantidad,
-            $data['adscripcion']
+            $adscripcion
         ]
     );
 
