@@ -228,6 +228,135 @@
                 </div>
             </div>
         </div>
+
+        <!---Modal Solicitud para actualizar uniformes-->
+        <div class="modal fade" id="modalSolicitudUniformes" tabindex="-1" aria-labelledby="modalSolicitudLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="modalSolicitudLabel">
+                            Solicitud para actualizar uniforme
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="form_solicitud_uniformes">
+
+                            <input type="hidden" id="sol_id_trabajador" name="id_trabajador">
+
+                            <!-- Datos del trabajador -->
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Credencial</label>
+                                    <input type="text" class="form-control" id="sol_credencial" disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Nombre</label>
+                                    <input type="text" class="form-control" id="sol_nombre" disabled>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Tipo Contrato</label>
+                                    <input type="text" class="form-control" id="sol_contrato" disabled>
+                                </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold">Observaciones</label>
+                                    <textarea id="observaciones" name="observaciones" rows="2"
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="submit" form="form_solicitud_uniformes" class="btn btn-success">
+                            Solicitar actualización
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--Modal para actualizar tallas-->
+        <div class="modal fade" id="modalActualizarUniformes" tabindex="-1" aria-labelledby="modalActualizarLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="modalActualizarLabel">
+                            Actualizar Uniformes
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <form id="form_actualizar_uniformes">
+
+                            <input type="hidden" id="update_id_trabajador" name="id_trabajador">
+
+                            <!-- Datos del trabajador -->
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Credencial</label>
+                                    <input type="text" class="form-control" id="update_credencial" disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Nombre</label>
+                                    <input type="text" class="form-control" id="update_nombre" disabled>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Tipo Contrato</label>
+                                    <input type="text" class="form-control" id="update_contrato" disabled>
+                                </div>
+                            </div>
+
+                            <!-- Tabla de tallas -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="tabla_actualizar_uniformes_container">
+                                        <!-- Aquí se cargará la tabla con las prendas y tallas -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="submit" form="form_actualizar_uniformes" class="btn btn-success">
+                            Guardar Cambios
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </main>
 
     <!-- PIE -->

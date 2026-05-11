@@ -94,6 +94,7 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.0);
 .guia-img-wrap {
   margin-top: 10px;
   text-align: center;
+  
 }
 
 .guia-img-wrap img {
@@ -122,4 +123,12 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.0);
 .tabla_catalogo_uniforme {
   flex: 0 0 30%;
   max-width: 30%;
+}
+
+tr.shown {
+  background-color: #f8f9fa;
+}
+
+.btn_down {
+  cursor: pointer;
 }

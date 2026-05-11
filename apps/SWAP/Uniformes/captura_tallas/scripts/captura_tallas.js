@@ -1,3 +1,4 @@
+
 // Elementos del DOM
 const inputCredencial = document.getElementById("input_credencial");
 const inputNombre = document.getElementById("input_nombre");
@@ -166,7 +167,7 @@ function obtenerTallasPorPrenda(nombre, grupo) {
   }
 
   // fallback
-  if (n.includes('TOALLA') || n.includes('GORRA')) return ['UNITALLA'];
+  if (n.includes('TOALLA') || n.includes('CORBATA') || n.includes('GORRA')) return ['UNITALLA'];
 
   if (n.includes('ZAPATO') || n.includes('BOTAS')) {
     return ['22','23','24','25','26','27','28','29','30'];
@@ -278,7 +279,8 @@ function mostrarRegistrar() {
   btnRegistrar.disabled = false;
   btnRegistrar.classList.remove("d-none");
 }
-//
+
+//si alguna talla está vacía, ocultar el botón de registrar
 function evaluarEstadoRegistrar() {
   const selects = document.querySelectorAll("#tabla_uniformes select");
 
@@ -297,7 +299,8 @@ function evaluarEstadoRegistrar() {
     mostrarRegistrar();
   }
 }
-//
+
+//Tallas compleetas, activa boton de registrar
 function activarEventosTallas() {
   const tbody = document.querySelector("#tabla_uniformes tbody");
 
@@ -316,6 +319,7 @@ function activarEventosTallas() {
   });
 }
 
+//envio de formulario de registro
 registro.addEventListener("submit", async function (e) {
   e.preventDefault(); 
 
@@ -346,8 +350,12 @@ registro.addEventListener("submit", async function (e) {
     const data = await res.json();
 
     if (data.ok) {
+    
+      document.dispatchEvent(new CustomEvent("uniformes:registrado", { detail: data }));
       Swal.fire("Éxito", data.mensaje, "success");
+   
       registro.reset();
+      limpiarFormulario(); 
       ocultarRegistrar();
       divTablaUniforme.style.display = "none";
     } else {
@@ -359,6 +367,7 @@ registro.addEventListener("submit", async function (e) {
     Swal.fire("Error", "Fallo en la conexión", "error");
   }
 });
+
 //Tabla carga de uniformes
 async function cargarTablaUniformes(dataTrabajador) {
   try {
@@ -379,16 +388,32 @@ async function cargarTablaUniformes(dataTrabajador) {
   }
 }
 
-//mostar y ocultar tabla de uniformes
+//mostar tabla de uniformes
 function mostrarTabla() {
   divTablaUniforme.classList.remove("d-none");
 }
 
+//ocultar tabla de uniformes y guia de tallas
 function ocultarTabla() {
   divTablaUniforme.classList.add("d-none");
+
+  const guia = document.getElementById("guia_tallas");
+  if (guia) {
+    guia.style.display = "none";
+  }
 }
 
-// Se ejecuta cuando cambia el valor de la credencial.
+async function validarUniformeExistente(credencial) {
+  try {
+    const res = await fetch(`./query_sql/validar_uniforme.php?credencial=${credencial}`);
+    return await res.json();
+  } catch (error) {
+    console.error("Error validando uniforme:", error);
+    return { registro: false };
+  }
+}
+
+//se ejecuta cuando cambia el valor de la credencial.
 async function manejarCambioCredencial(e) {
   const credencial = e.target.value.trim();
 
@@ -406,10 +431,23 @@ async function manejarCambioCredencial(e) {
     return;
   }
 
-  // llenar datos
   llenarFormulario(data);
+
+  const validacion = await validarUniformeExistente(credencial);
+
+  if (validacion.registro) {
+  await Swal.fire({
+    icon: "warning",
+    title: "Registro existente",
+    text: "Este trabajador ya tiene un registro de uniforme."
+  });
+
+  limpiarFormulario();
+  inputCredencial.value = "";
+
+  return;
+}
   mostrarGuiaTallas(data.puesto_clave, data.genero);
-  // cargar tabla automáticamente
   await cargarTablaUniformes(data);
 }
 

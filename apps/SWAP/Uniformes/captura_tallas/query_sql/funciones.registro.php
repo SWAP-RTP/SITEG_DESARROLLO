@@ -1,6 +1,13 @@
 <?php
 require_once '/var/www/login_shared/conf/conexion.php';
 
+//buscar_trabajador.php
+//getUniformes.php
+//obtener_registros_uniformes.php
+//registrar_uniforme.php
+//validar_uniforme.php
+
+//registrar uniforme
 function registroUniformes($data) {
     $conexion = Database::conectar();
     if (!$conexion) {
@@ -28,7 +35,7 @@ function registroUniformes($data) {
 
     return empty($errores) ? true : $errores;
 }
-
+//clasificar puesto para determinar tipo de uniforme
 function clasificarPuesto($puesto){
     $puestos_operadores = [42,214,215,221];
     $puestos_mantenimiento = [1,2,3,5,6,7,9,10,11,13,14,15,40,222,223,224,225];
@@ -40,7 +47,7 @@ function clasificarPuesto($puesto){
 
     return 0;
 }
-
+//verificar si el trabajador ya tiene un registro activo
 function verificarTrabajadorExistente($conexion,$credencial){
     $sql = "SELECT 1 FROM trabajador_uniforme 
             WHERE credencial = $1 AND estatus = 1 LIMIT 1";
@@ -49,7 +56,7 @@ function verificarTrabajadorExistente($conexion,$credencial){
 
     return pg_fetch_assoc($res) ? true : false;
 }
-
+//calcular el total de prendas seleccionadas
 function calcularPrendasSeleccionadas($conexion,$prendas){
     $total = 0;
 
@@ -64,7 +71,7 @@ function calcularPrendasSeleccionadas($conexion,$prendas){
 
     return $total;
 }
-
+//insertar registro principal del uniforme
 function insertarEncabezado($conexion,$data,$total){
 
     $sql = "INSERT INTO trabajador_uniforme
@@ -93,7 +100,7 @@ function insertarEncabezado($conexion,$data,$total){
     $row = pg_fetch_assoc($res);
     return $row['id'];
 }
-
+//insertar detalle de prendas para cada uniforme registrado
 function insertarDetallePrendas($conexion,$id_trabajador,$prendas){
     $errores = [];
 
@@ -121,7 +128,7 @@ function insertarDetallePrendas($conexion,$id_trabajador,$prendas){
 
     return $errores;
 }
-
+//validar si el trabajador ya tiene un uniforme registrado
 function validarUniforme($conexion, $credencial) {
     $sql = "SELECT id, fecha_registro, observaciones
             FROM trabajador_uniforme
@@ -148,7 +155,7 @@ function validarUniforme($conexion, $credencial) {
 
     return ["registro" => false];
 }
-
+//obtener uniformes para el trabajador según su puesto, género y tipo de contrato
 function obtenerUniformes($conexion, $data){
 
     $puesto = clasificarPuesto($data['puesto_clave']);
@@ -198,7 +205,7 @@ function obtenerUniformes($conexion, $data){
 
     return $data;
 }
-
+//obtener registros de uniformes para mostrar en la tabla principal
 function obtenerRegistrosUniformes($modulo_usuario){
 
     $conexion = Database::conectar();
@@ -212,11 +219,11 @@ function obtenerRegistrosUniformes($modulo_usuario){
 
     return $trabajadores;
 }
-
+//generar filtro para consulta de registros según módulo del usuario
 function generarFiltroModulo($modulo_usuario){
     return ($modulo_usuario === 0) ? "AND tv.mod_clave = $1" : "";
 }
-
+//obtener trabajadores con registros de uniformes según módulo del usuario
 function obtenerTrabajadores($conexion, $modulo_usuario){
 
     $filtroModulo = ($modulo_usuario === 0) ? "AND tu.modulo = $1" : "";
@@ -231,8 +238,20 @@ function obtenerTrabajadores($conexion, $modulo_usuario){
             p.puesto_descripcion AS puesto,
             tu.total_prendas_adquiridas,
             tu.observaciones,
-            tu.modulo
+            tu.modulo,
+
+             COALESCE(au.estatus, 0) AS estatus_solicitud
+             
         FROM trabajador_uniforme tu
+
+        LEFT JOIN (
+            SELECT DISTINCT ON (id_trabajdor_uniforme)
+                id_trabajdor_uniforme,
+                estatus
+            FROM actualizar_uniforme
+            ORDER BY id_trabajdor_uniforme, id DESC
+        ) au 
+        ON au.id_trabajdor_uniforme = tu.id
 
         INNER JOIN trabajador t 
             ON t.trab_credencial = tu.credencial
@@ -277,14 +296,14 @@ function obtenerTrabajadores($conexion, $modulo_usuario){
             "total_prenda" => (int)$fila['total_prendas_adquiridas'],
             "obs" => $fila['observaciones'],
             "modulo" => (int)$fila['modulo'],
-            "detalles_registro" => $detalle,
-            // "habilitado" => (int)$fila['habilitado']
+            "estatus_solicitud" => (int)$fila['estatus_solicitud'],
+            "detalles_registro" => $detalle
         ];
     }
 
     return $registros;
 }
-
+//obtener detalle de prendas para cada uniforme registrado
 function obtenerDetalleUniformes($conexion, $id_trabajador){
 
     $sql = "
