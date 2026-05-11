@@ -83,14 +83,15 @@
                             </div>
                             <!-- BOTONES -->
                             <div class="col-12 text-center mt-4">
-                                <button type="button" class="btn btn-success btn-lg px-4 shadow-sm me-2"
-                                    id="btn-consultar-inventario">
-                                    <i class="bi bi-clipboard-data me-2"></i>Consultar inventario
+                                <button type="button" class="btn btn-outline-info" id="btn-consultar-inventario">
+                                    <i class="bi bi-search me-2"></i>Consultar Inventario
                                 </button>
-                                <button type="reset" class="btn btn-outline-secondary btn-lg px-4 shadow-sm"
-                                    id="btn-limpiar-inventario">
-                                    <i class="bi bi-eraser me-2"></i>Limpiar
-                                </button>
+                                   <button type="button" class="btn btn-outline-secondary px-4 shadow-sm"
+                                        id="btn-limpiar-inventario">
+                                        <i class="bi bi-eraser me-2"></i> Limpiar
+                                    </button>
+                            
+
                             </div>
                             <style></style>
                             <!-- DASHBOARD -->
@@ -119,10 +120,10 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-3">
-                                        <div class="card card-dark text-center">
-                                            <div class="card-body">
+                                        <div class="card card-dark text-center" id="kpi-card-bajo">
+                                            <div class="card-body kpis-completo-rojo">
                                                 <i class="bi bi-exclamation-triangle-fill fs-1"
-                                                    style="color:#e74c3c;"></i>
+                                                    style="color: #721c24;"></i>
                                                 <div class="kpi-label mt-2">Stock Bajo</div>
                                                 <div class="kpi-value" id="stock_bajo">0</div>
                                             </div>
@@ -197,7 +198,7 @@
     <script src="../public/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="../includes/utils/menu.js"></script>
-    <script src="/app-swap/Materiales/scripts/entradas.js" type="module"></script>
+    <script src="/app-swap/Materiales/scripts/inventario.js" type="module"></script>
 </body>
 
 </html>

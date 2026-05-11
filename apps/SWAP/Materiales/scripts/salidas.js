@@ -3,113 +3,89 @@ import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
 
-// ** variable de control **
+// ** Variable de control para el debounce de búsqueda **
 let timeoutBusqueda = null;
 
-
-//*********************AUTOCOMPLETAR FORMULARIO CON DATOS DEL MATERIAL*********************************
+//********************* AUTOCOMPLETAR FORMULARIO *********************************
 async function cargarMaterialSalida(folio) {
     const resultado = await MaterialesService.buscarPorFolio(folio);
-
     const inputFolio = document.getElementById('folio_salida');
     const estadoMaterial = document.getElementById('estado-material-salida');
 
     if (resultado.status === 'ok' && resultado.datos) {
-
-        // Si existe → quitar alerta roja
         inputFolio.classList.remove('is-invalid');
         estadoMaterial.innerHTML = '';
 
         const mat = resultado.datos;
 
-        // Llenar formulario
-        document.getElementById('descripcion_salida').value = mat.descripcion_material;
-        document.getElementById('unidad_salida').value = mat.id_unidad_material;
-        document.getElementById('estado_salida').value = mat.id_estado_material;
-        document.getElementById('categoria_salida').value = mat.id_categoria_material;
-        document.getElementById('adscripcion_salida').value = mat.adscripcion_modulo;
+        // Llenar campos del formulario
+        document.getElementById('descripcion_salida').value = mat.descripcion_material ?? '';
+        document.getElementById('unidad_salida').value = mat.id_unidad_material ?? '';
+        document.getElementById('estado_salida').value = mat.id_estado_material ?? '';
+        document.getElementById('categoria_salida').value = mat.id_categoria_material ?? '';
+        document.getElementById('adscripcion_salida').value = mat.adscripcion_modulo ?? '';
 
-        // Bloquear campos y poner gris
-        const bloqueoGris = [
-            'descripcion_salida',
-            'unidad_salida',
-            'estado_salida',
-            'categoria_salida',
-            'adscripcion_salida'
-        ];
-
-        bloqueoGris.forEach(id => {
-            const elemento = document.getElementById(id);
-
-            if (elemento) {
-                elemento.classList.add('bg-light');
-
-                if (elemento.tagName === 'SELECT') {
-                    elemento.disabled = true;
-                } else {
-                    elemento.readOnly = true;
-                }
+        // Bloquear campos y aplicar estilo gris (solo lectura para salidas)
+        const campos = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
+        campos.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('bg-light');
+                if (el.tagName === 'SELECT') el.disabled = true;
+                else el.readOnly = true;
             }
         });
 
-        // Validar stock
+        // Validar existencias
         if (parseInt(mat.stock_actual) <= 0) {
-            Swal.fire(
-                'Aviso',
-                'Material sin stock actual.',
-                'warning'
-            );
+            Swal.fire('Aviso', 'Material sin stock actual.', 'warning');
         }
 
-        // Enviar foco a cantidad
         document.getElementById('cantidad_salida').focus();
-
     } else {
-
-        // Si NO existe → mostrar alerta roja
         inputFolio.classList.add('is-invalid');
-
-        estadoMaterial.innerHTML = `
-            <small class="text-danger">
-                El código no está registrado. Verifique el folio.
-            </small>
-        `;
+        Swal.fire({
+            title: 'Material no encontrado',
+            text: 'El folio ingresado no existe en el sistema.',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#6f42c1'
+        });
     }
 }
 
-
-//*********************CARGAR TABLA DE REGISTROS*********************************
+//********************* CARGAR TABLA DE REGISTROS *********************************
 async function cargarRegistrosSalida() {
     const data = await MaterialesService.consultarSalidas();
-
     if (data.status === 'ok') {
         const tbody = document.getElementById('tabla-salidas');
-
         tbody.innerHTML = data.datos.map(reg => `
             <tr>
                 <td class="fw-bold">${reg.folio_material}</td>
                 <td>${reg.descripcion_material_salida}</td>
                 <td>${reg.unidad}</td>
-                <td>
-                    <span class="badge bg-warning text-dark">
-                        ${reg.estado}
-                    </span>
-                </td>
+                <td><span class="badge bg-warning text-dark">${reg.estado}</span></td>
                 <td>${reg.cantidad}</td>
                 <td class="small">${reg.fecha_registro}</td>
-            </tr>
-        `).join('');
+            </tr>`).join('');
 
-        document.getElementById(
-            'contenedor-tabla-salidas'
-        ).style.display = 'block';
+        document.getElementById('contenedor-tabla-salidas').style.display = 'block';
     }
 }
 
-//*************** GUARDAR SALIDA***************************************
+//*************** GUARDAR SALIDA ***************************************
 async function guardarSalida(e) {
     e.preventDefault();
+    const form = e.target;
+    
+    // Habilitar campos temporalmente para que el navegador permita leer los valores
+    const camposABloquear = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
+    camposABloquear.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) { el.disabled = false; el.readOnly = false; }
+    });
 
+    // Captura de datos manual para asegurar que no viajen vacíos
     const data = {
         folio: document.getElementById('folio_salida').value,
         descripcion: document.getElementById('descripcion_salida').value,
@@ -120,179 +96,163 @@ async function guardarSalida(e) {
         cantidad: document.getElementById('cantidad_salida').value
     };
 
-    // Validación mínima
     if (!data.folio || !data.cantidad) {
-        Swal.fire(
-            'Atención',
-            'Datos insuficientes',
-            'warning'
-        );
+        Swal.fire('Atención', 'Folio y cantidad son obligatorios.', 'warning');
+        // Re-bloquear si falló la validación
+        camposABloquear.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.disabled = true; el.classList.add('bg-light'); }
+        });
         return;
     }
 
     const respuesta = await MaterialesService.guardarSalida(data);
 
     if (respuesta.status === 'ok') {
-        // Revisar si el stock quedó bajo
         if (respuesta.stock_restante <= 30) {
-            Swal.fire(
-                'Stock por terminarse',
-                `Salida registrada correctamente.\nSolo quedan ${respuesta.stock_restante} piezas disponibles.`,
-                'warning'
-            );
+            Swal.fire('Stock Bajo', `Salida registrada. Quedan ${respuesta.stock_restante} piezas.`, 'warning');
         } else {
-            Swal.fire(
-                'Éxito',
-                respuesta.message,
-                'success'
-            );
+            Swal.fire('Éxito', respuesta.message, 'success');
         }
-
-        // Resetear formulario
-        e.target.reset();
-
-        // Quitar borde rojo
+        
+        form.reset();
         document.getElementById('folio_salida').classList.remove('is-invalid');
-        // Borrar mensaje rojo
         document.getElementById('estado-material-salida').innerHTML = '';
-        // Desbloquear campos
-        const camposABloquear = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
-
-        camposABloquear.forEach(id => {
-            const el = document.getElementById(id);
-
-            if (el) {
-                el.readOnly = false;
-                el.disabled = false;
-                el.classList.remove('bg-light');
-            }
+        
+        // Desbloquear todo para el siguiente registro
+        const todos = form.querySelectorAll('input, select');
+        todos.forEach(c => {
+            c.disabled = false;
+            c.readOnly = false;
+            c.classList.remove('bg-light');
         });
 
-        // Actualizar tabla
         cargarRegistrosSalida();
-
     } else {
-        Swal.fire(
-            'Error',
-            respuesta.message,
-            'error'
-        );
+        Swal.fire('Error', respuesta.message, 'error');
+        // Re-bloquear en caso de error
+        camposABloquear.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.disabled = true; el.classList.add('bg-light'); }
+        });
     }
 }
 
-
-
-//**************** CONFIGURAR EVENTOS**************************************
-function configurarEventosSalida() {
-
-    //******** INPUT DEL FOLIO ********
-    const folioInput = document.getElementById('folio_salida');
-
-    if (folioInput) {
-        folioInput.maxLength = 11;
-
-        folioInput.addEventListener('input', (e) => {
-            let valor = e.target.value.toUpperCase();
-
-            // Formato automático MA-00000001
-            if (!valor.startsWith('MA-')) {
-                valor = 'MA-' + valor.replace(/[^0-9]/g, '');
-            } else {
-                valor = 'MA-' + valor
-                    .slice(3)
-                    .replace(/[^0-9]/g, '');
-            }
-
-            e.target.value = valor;
-
-            // Quitar alerta roja mientras escribe
-            e.target.classList.remove('is-invalid');
-
-            document.getElementById(
-                'estado-material-salida'
-            ).innerHTML = '';
-
-            clearTimeout(timeoutBusqueda);
-
-            if (valor.length === 11) {
-                timeoutBusqueda = setTimeout(
-                    () => cargarMaterialSalida(valor),
-                    400
-                );
-            }
-        });
+// --- RENDERIZAR RESULTADOS MODAL SALIDA ---
+function renderizarResultadosEnModalSalida(materiales, contenedor) {
+    if (materiales.length === 0) {
+        contenedor.innerHTML = '<div class="alert alert-secondary text-center">No se encontraron coincidencias</div>';
+        return;
     }
 
+    let html = `<table class="table table-sm table-hover align-middle mt-2">
+        <thead class="table-dark">
+            <tr><th>Folio</th><th>Descripción</th><th class="text-center">Acción</th></tr>
+        </thead>
+        <tbody>`;
 
-    //******** BOTÓN DEL MODAL ********
-    document.getElementById('btn-modal-salida')
-        ?.addEventListener('click', () => {
+    materiales.forEach(mat => {
+        html += `
+            <tr>
+                <td class="fw-bold">${mat.folio_material}</td>
+                <td class="small">${mat.descripcion_material}</td>
+                <td class="text-center">
+                    <button class="btn btn-primary btn-sm btn-seleccionar-salida" data-folio="${mat.folio_material}">
+                        Seleccionar
+                    </button>
+                </td>
+            </tr>`;
+    });
 
-            ModalService.abrir({
-                modalId: 'modalMaterialSalida',
-                contenedorId:
-                    'contenedor-materiales-modal-salida',
+    html += `</tbody></table>`;
+    contenedor.innerHTML = html;
 
-                callback: (folio) => {
-                    document.getElementById(
-                        'folio_salida'
-                    ).value = folio;
-
-                    cargarMaterialSalida(folio);
-                }
-            });
-        });
-
-
-    //******** CONSULTAR ********
-    document.getElementById(
-        'btn-consultar-salidas'
-    )?.addEventListener(
-        'click',
-        () => cargarRegistrosSalida()
-    );
-
-
-    //******** GUARDAR ********
-    document.getElementById('form-salida-material')?.addEventListener('submit', guardarSalida);
-    //******** LIMPIAR ********
-    document.getElementById('btn-limpiar-salida')?.addEventListener('click', () => {
-        // Resetear formulario
-        document.getElementById('form-salida-material').reset();
-        // Ocultar tabla
-        document.getElementById('contenedor-tabla-salidas').style.display = 'none';
-        // Quitar borde rojo
-        document.getElementById('folio_salida').classList.remove('is-invalid');
-        // Borrar mensaje rojo
-        document.getElementById('estado-material-salida').innerHTML = '';
-        // Desbloquear campos
-        const camposABloquear = [
-            'descripcion_salida',
-            'unidad_salida',
-            'estado_salida',
-            'categoria_salida',
-            'adscripcion_salida'
-        ];
-        camposABloquear.forEach(id => {
-            const el = document.getElementById(id);
-
-            if (el) {
-                el.readOnly = false;
-                el.disabled = false;
-                el.classList.remove('bg-light');
-            }
+    contenedor.querySelectorAll('.btn-seleccionar-salida').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const folio = e.currentTarget.getAttribute('data-folio');
+            document.getElementById('folio_salida').value = folio;
+            cargarMaterialSalida(folio);
+            const instance = bootstrap.Modal.getInstance(document.getElementById('modalMaterialSalida'));
+            if (instance) instance.hide();
         });
     });
 }
 
-
-
-
-//************ES LA CARGA INICIAL******************************************************
-document.addEventListener(
-    'DOMContentLoaded',
-    async () => {
-        await cargarCatalogos();
-        configurarEventosSalida();
+//**************** CONFIGURAR EVENTOS **************************************
+function configurarEventosSalida() {
+    // Formato de Folio y Búsqueda Automática
+    const folioInput = document.getElementById('folio_salida');
+    if (folioInput) {
+        folioInput.addEventListener('input', (e) => {
+            let valor = e.target.value.toUpperCase();
+            valor = valor.startsWith('MA-') ? 'MA-' + valor.slice(3).replace(/[^0-9]/g, '') : 'MA-' + valor.replace(/[^0-9]/g, '');
+            e.target.value = valor;
+            clearTimeout(timeoutBusqueda);
+            if (valor.length === 11) timeoutBusqueda = setTimeout(() => cargarMaterialSalida(valor), 400);
+        });
     }
-);
+
+    // Buscador Dinámico en Modal
+    const inputModalBusqueda = document.getElementById('buscar-material-modal-salida'); 
+    const contenedorResultados = document.getElementById('contenedor-materiales-modal-salida');
+
+    if (inputModalBusqueda) {
+        inputModalBusqueda.addEventListener('input', async (e) => {
+            const texto = e.target.value.trim();
+            if (texto.length < 2) return;
+            const materiales = await MaterialesService.buscarDinamico(texto);
+            renderizarResultadosEnModalSalida(materiales, contenedorResultados);
+        });
+    }
+
+    //  Abrir Modal y Resetear Buscador
+    document.getElementById('btn-modal-salida')?.addEventListener('click', () => {
+        ModalService.abrir({
+            modalId: 'modalMaterialSalida',
+            contenedorId: 'contenedor-materiales-modal-salida',
+            callback: (folio) => {
+                document.getElementById('folio_salida').value = folio;
+                cargarMaterialSalida(folio);
+            }
+        });
+        if(inputModalBusqueda) {
+            inputModalBusqueda.value = '';
+            setTimeout(() => inputModalBusqueda.focus(), 500);
+        }
+    });
+
+    //  Otros Botones de Acción
+    document.getElementById('btn-consultar-salidas')?.addEventListener('click', cargarRegistrosSalida);
+    document.getElementById('form-salida-material')?.addEventListener('submit', guardarSalida);
+    
+    //  BOTÓN LIMPIAR (Lógica Completa: Reset + Ocultar Consulta)
+    document.getElementById('btn-limpiar-salida')?.addEventListener('click', () => {
+        document.getElementById('form-salida-material').reset();
+        
+        // Ocultar la tabla de registros
+        const contenedorTabla = document.getElementById('contenedor-tabla-salidas');
+        if (contenedorTabla) contenedorTabla.style.display = 'none';
+
+        // Resetear alertas visuales
+        document.getElementById('folio_salida').classList.remove('is-invalid');
+        document.getElementById('estado-material-salida').innerHTML = '';
+
+        // Habilitar campos bloqueados
+        const campos = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
+        campos.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.readOnly = false;
+                el.disabled = false;
+                el.classList.remove('bg-light');
+            }
+        });
+        document.getElementById('folio_salida')?.focus();
+    });
+}
+
+// INICIO DE LA APLICACIÓN
+document.addEventListener('DOMContentLoaded', async () => {
+    await cargarCatalogos();
+    configurarEventosSalida();
+});

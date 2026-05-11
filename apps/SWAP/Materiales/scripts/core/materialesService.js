@@ -100,5 +100,15 @@ export const MaterialesService = {
             console.error("Error al consultar salidas:", error);
             return { status: 'error', message: 'Error de conexión' };
         }
-    }
+    },
+//funcion recomendado para buscador
+    async buscarDinamico(texto) {
+        try {
+            const resp = await fetch(`query_sql/buscador_dinamico.php?termino=${encodeURIComponent(texto)}`);
+            return await resp.json();
+        } catch (error) {
+            console.error("Error en búsqueda dinámica:", error);
+            return [];
+        }
+    },
 };

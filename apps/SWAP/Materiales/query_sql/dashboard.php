@@ -20,7 +20,7 @@ $stockTotal = pg_fetch_result(
 $resBajo = pg_query($conexion, "
     SELECT COUNT(*) 
     FROM control_materiales 
-    WHERE stock_actual <= stock_minimo
+    WHERE stock_actual <= 5
 ");
 $stockBajo = pg_fetch_result($resBajo, 0, 0);
 
@@ -28,7 +28,7 @@ $stockBajo = pg_fetch_result($resBajo, 0, 0);
 $resLista = pg_query($conexion, "
     SELECT folio_material, descripcion_material, stock_actual
     FROM control_materiales
-    WHERE stock_actual <= stock_minimo
+    WHERE stock_actual <= 5
     ORDER BY stock_actual ASC
 ");
 
