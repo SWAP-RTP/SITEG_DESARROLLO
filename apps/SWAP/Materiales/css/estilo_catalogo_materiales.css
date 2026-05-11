@@ -168,4 +168,13 @@
 .icono-purpura {color: #4055da;}
 
 
+/*tarjeta completa roja*/
+.tarjeta-roja {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+}
 

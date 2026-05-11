@@ -18,21 +18,37 @@ function actualizarUIInventario(datos, bloquear = false) {
     [descripcion, adscripcion, stock].forEach(elemento => {
         if (elemento) {
             elemento.readOnly = bloquear;
-            if (bloquear) elemento.classList.add('bg-light'); //es cuando se poner el gris del autocompletado
-            else elemento.classList.remove('bg-light'); //es cuando se quita el gris del autocompletado
+            if (bloquear) elemento.classList.add('bg-light'); 
+            else elemento.classList.remove('bg-light'); 
         }
     });
 }
 
-//**  FUNCIÓN DEL DASHBOARD **
+//** FUNCIÓN DEL DASHBOARD (CAMBIO AQUÍ: Alerta visual dinámica) **
 async function cargarDashboard() {
     try {
         const res = await fetch('query_sql/dashboard.php');
         const data = await res.json();
+        
+        const cantidadBajo = parseInt(data.stock_bajo) || 0;
+
         document.getElementById('total_materiales').textContent = data.total_materiales || 0;
         document.getElementById('stock_total').textContent = data.stock_total || 0;
-        document.getElementById('stock_bajo').textContent = data.stock_bajo || 0;
+        document.getElementById('stock_bajo').textContent = cantidadBajo;
         document.getElementById('movimientos_hoy').textContent = data.movimientos_hoy || 0;
+
+        // --- LÓGICA PARA VOLVER EL KPI COMPLETAMENTE ROJO ---
+        const kpiCardBajo = document.getElementById('kpi-card-bajo');
+        const kpiIcono = kpiCardBajo.querySelector('i');
+
+        if (cantidadBajo > 0) {
+            kpiCardBajo.classList.add('bg-danger', 'text-white');
+            kpiIcono.style.setProperty('color', '#ffffff', 'important'); // Icono blanco para contraste
+        } else {
+            kpiCardBajo.classList.remove('bg-danger', 'text-white');
+            kpiIcono.style.setProperty('color', '#e74c3c', 'important'); // Icono rojo original
+        }
+        // ----------------------------------------------------
 
         const tbody = document.getElementById('tabla_stock_bajo');
         tbody.innerHTML = (data.materiales_bajo || []).map(m => `
@@ -42,11 +58,12 @@ async function cargarDashboard() {
                 <td><span class="badge bg-danger">${m.stock_actual}</span></td>
             </tr>
         `).join('') || '<tr><td colspan="3" class="text-center">No hay stock bajo</td></tr>';
+        
         document.getElementById('dashboard-inventario').style.display = 'block';
     } catch (e) { console.error(e); }
 }
 
-// ** CONFIGURACIÓN DE EVENTOS (Aquí es donde activamos todo) **
+// ** CONFIGURACIÓN DE EVENTOS **
 function configurarEventosInventario() {
     const folioInput = document.getElementById('folio_inventario');
 
@@ -54,24 +71,31 @@ function configurarEventosInventario() {
     folioInput?.addEventListener('input', (e) => {
         let valor = e.target.value.toUpperCase();
 
-        //** Formato MA-00000000 **
         if (!valor.startsWith('MA-')) valor = 'MA-' + valor.replace(/[^0-9]/g, '');
         else valor = 'MA-' + valor.slice(3).replace(/[^0-9]/g, '');
         e.target.value = valor;
 
-        clearTimeout(timeoutBusqueda); //**limpia la espera anterior**
+        clearTimeout(timeoutBusqueda); 
 
-        //** Si ya se escribieron los 11 caracteres (ej: MA-00000001) **
         if (valor.length === 11) {
-            //** espera (500ms) para no saturar **
             timeoutBusqueda = setTimeout(async () => {
                 const result = await MaterialesService.buscarPorFolio(valor);
                 if (result.status === 'ok' && result.datos) {
                     actualizarUIInventario(result.datos, true);
+                } else {
+                    actualizarUIInventario(null, false);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Material no encontrado',
+                        text: 'El folio ingresado no existe en el inventario.',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        folioInput.value = '';
+                        folioInput.focus();
+                    });
                 }
             }, 500);
         } else {
-            //** Limpia el texto en gris **
             actualizarUIInventario(null, false);
         }
     });
@@ -85,7 +109,7 @@ function configurarEventosInventario() {
                 folioInput.value = folio;
                 const result = await MaterialesService.buscarPorFolio(folio);
                 if (result.status === 'ok' && result.datos) {
-                    actualizarUIInventario(result.datos, true); // <--- Llama a la función maestra
+                    actualizarUIInventario(result.datos, true); 
                 }
             }
         });
@@ -94,12 +118,20 @@ function configurarEventosInventario() {
     // ** EVENTO CONSULTAR **
     document.getElementById('btn-consultar-inventario')?.addEventListener('click', cargarDashboard);
 
-    // ** EVENTO LIMPIAR **
+    // ** EVENTO LIMPIAR (CAMBIO AQUÍ: Se restablece el estilo original del KPI) **
     document.getElementById('btn-limpiar-inventario')?.addEventListener('click', () => {
         document.getElementById('form-inventario-material').reset();
         actualizarUIInventario(null, false);
         const dash = document.getElementById('dashboard-inventario');
         if (dash) dash.style.display = 'none';
+
+        // Restablecer el KPI de Stock Bajo a su estado base oscuro
+        const kpiCardBajo = document.getElementById('kpi-card-bajo');
+        if (kpiCardBajo) {
+            kpiCardBajo.classList.remove('bg-danger', 'text-white');
+            const kpiIcono = kpiCardBajo.querySelector('i');
+            if (kpiIcono) kpiIcono.style.setProperty('color', '#e74c3c', 'important');
+        }
     });
 }
 

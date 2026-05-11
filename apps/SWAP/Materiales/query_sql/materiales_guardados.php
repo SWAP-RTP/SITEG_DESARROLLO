@@ -82,10 +82,10 @@ function guardarEntradaMaterial($data)
             VALUES ($1,$2,$3,$4,$5,0)",
             [
                 $folio,
-                $data['descripcion'],
+                $descripcion,
                 $data['unidad'],
                 $data['id_categoria'],
-                $data['adscripcion']
+                $adscripcion
             ]
         );
 
