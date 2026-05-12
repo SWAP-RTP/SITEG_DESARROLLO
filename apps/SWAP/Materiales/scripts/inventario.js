@@ -24,6 +24,50 @@ function actualizarUIInventario(datos, bloquear = false) {
     });
 }
 
+//** RENDERIZAR RESULTADOS MODAL INVENTARIO */ 
+function renderizarResultadosEnModalInventario(materiales, contenedor) {
+    if (!contenedor) return;
+    if (materiales.length === 0) {
+        contenedor.innerHTML = '<div class="alert alert-secondary text-center">No se encontraron coincidencias</div>';
+        return;
+    }
+
+    let html = `<table class="table table-sm table-hover align-middle mt-2">
+        <thead class="table-dark">
+            <tr><th>Folio</th><th>Descripción</th><th class="text-center">Acción</th></tr>
+        </thead>
+        <tbody>`;
+
+    materiales.forEach(mat => {
+        html += `
+            <tr>
+                <td class="fw-bold">${mat.folio_material}</td>
+                <td class="small">${mat.descripcion_material}</td>
+                <td class="text-center">
+                    <button class="btn btn-primary btn-sm btn-seleccionar-inventario" data-folio="${mat.folio_material}">
+                        Seleccionar
+                    </button>
+                </td>
+            </tr>`;
+    });
+
+    html += `</tbody></table>`;
+    contenedor.innerHTML = html;
+
+    contenedor.querySelectorAll('.btn-seleccionar-inventario').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const folio = e.currentTarget.getAttribute('data-folio');
+            document.getElementById('folio_inventario').value = folio;
+            
+            const inputEvent = new Event('input', { bubbles: true });
+            document.getElementById('folio_inventario').dispatchEvent(inputEvent);
+
+            const instance = bootstrap.Modal.getInstance(document.getElementById('modalMaterialInventario'));
+            if (instance) instance.hide();
+        });
+    });
+}
+
 //** FUNCIÓN DEL DASHBOARD (CAMBIO AQUÍ: Alerta visual dinámica) **
 async function cargarDashboard() {
     try {
@@ -101,7 +145,25 @@ function configurarEventosInventario() {
     });
 
     // ** EVENTO DEL MODAL **
+    const inputModalBusqueda = document.getElementById('buscar-material-modal-inventario');
+    const contenedorResultados = document.getElementById('contenedor-materiales-modal-inventario');
+
+    // Configurar el listener del input una sola vez, fuera del click
+    if (inputModalBusqueda) {
+        inputModalBusqueda.addEventListener('input', async (e) => {
+            const texto = e.target.value.trim();
+            const materiales = await MaterialesService.buscarDinamico(texto);
+            renderizarResultadosEnModalInventario(materiales, contenedorResultados);
+        });
+    }
+
     document.getElementById('btn-modal-inventario')?.addEventListener('click', () => {
+        // Al abrir el modal, simplemente cargamos los datos iniciales y lo mostramos
+        if (inputModalBusqueda) inputModalBusqueda.value = '';
+        MaterialesService.buscarDinamico('').then(materiales => {
+            renderizarResultadosEnModalInventario(materiales, contenedorResultados);
+        });
+
         ModalService.abrir({
             modalId: 'modalMaterialInventario',
             contenedorId: 'contenedor-materiales-modal-inventario',

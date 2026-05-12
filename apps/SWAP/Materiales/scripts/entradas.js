@@ -1,10 +1,122 @@
-//**importaciones */
+//** importaciones */
 import { cargarCatalogos } from './core/catalogosService.js';
 import { ModalService } from './core/modalService.js';
 import { MaterialesService } from './core/materialesService.js';
 
-// ** VARIABLE DE CONTROL **
+// ** VARIABLES DE CONTROL GLOBAL **
 let timeoutBusqueda = null;
+let registrosCompletos = []; 
+let paginaActual = 1;       
+const registrosPorPagina = 5; 
+
+
+// ** FILTRA, PAGINA Y MANDA A PINTAR **
+function procesarYMostrarTabla() {
+    const inputFiltro = document.getElementById('busqueda-entrada');
+    const termino = inputFiltro ? inputFiltro.value.toLowerCase() : '';
+
+    //  FILTRAR: Primero filtramos sobre el array original
+    const filtrados = registrosCompletos.filter(reg => {
+        const folio = (reg.folio_material || '').toLowerCase();
+        const desc = (reg.descripcion_material_entrada || '').toLowerCase();
+        return folio.includes(termino) || desc.includes(termino);
+    });
+
+    //  SEGMENTAR (Paginación): Cortamos el array filtrado para la vista actual
+    const inicio = (paginaActual - 1) * registrosPorPagina;
+    const fin = inicio + registrosPorPagina;
+    const datosParaVer = filtrados.slice(inicio, fin);
+
+    //  RENDERIZAR: Mandamos a pintar la tabla y los botones
+    renderizarTabla(datosParaVer);
+    actualizarPaginacion(filtrados); // Basamos los botones en el total de filtrados
+}
+
+// ** FUNCIÓN PARA PINTAR LAS FILAS EN LA TABLA **
+function renderizarTabla(datos) {
+    const tbody = document.getElementById('tabla-registros');
+    if (!tbody) return;
+
+    if (datos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-muted">No se encontraron registros</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = datos.map(reg => {
+        let claseColor = 'bg-info text-dark';
+        const estado = (reg.estado || '').toUpperCase();
+        if (estado.includes('BUENO')) claseColor = 'bg-success text-white';
+        else if (estado.includes('REGULAR')) claseColor = 'bg-warning text-dark';
+        else if (estado.includes('MALO')) claseColor = 'bg-danger text-white';
+
+        return `
+            <tr>
+                <td class="fw-bold">${reg.folio_material}</td>
+                <td>${reg.descripcion_material_entrada}</td>
+                <td>${reg.unidad}</td>
+                <td><span class="badge ${claseColor}">${reg.estado}</span></td>
+                <td>${reg.cantidad}</td>
+                <td class="small">${reg.fecha_registro}</td>
+            </tr>`;
+    }).join('');
+}
+
+// ** FUNCIÓN PARA CREAR LOS BOTONES DE PAGINACIÓN **
+function actualizarPaginacion(datosFiltrados) {
+    const navPaginacion = document.getElementById('contenedor-paginacion');
+    if (!navPaginacion) return;
+
+    const totalPaginas = Math.ceil(datosFiltrados.length / registrosPorPagina);
+    let html = '';
+
+    if (totalPaginas <= 1) {
+        navPaginacion.innerHTML = '';
+        return;
+    }
+
+    // Botón Anterior
+    html += `<li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-pagina="${paginaActual - 1}">Anterior</a>
+             </li>`;
+
+    // Números
+    for (let i = 1; i <= totalPaginas; i++) {
+        html += `<li class="page-item ${i === paginaActual ? 'active' : ''}">
+                    <a class="page-link" href="#" data-pagina="${i}">${i}</a>
+                 </li>`;
+    }
+
+    // Botón Siguiente
+    html += `<li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-pagina="${paginaActual + 1}">Siguiente</a>
+             </li>`;
+
+    navPaginacion.innerHTML = html;
+
+    // Eventos a los botones generados
+    navPaginacion.querySelectorAll('.page-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const nuevaPagina = parseInt(e.target.getAttribute('data-pagina'));
+            if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
+                paginaActual = nuevaPagina;
+                procesarYMostrarTabla(); // Volver a procesar para cambiar de página
+            }
+        });
+    });
+}
+
+// ** CARGAR REGISTROS DESDE EL SERVIDOR **
+async function cargarRegistros() {
+    const data = await MaterialesService.consultarEntradas();
+    if (data.status === 'ok') {
+        registrosCompletos = data.datos; 
+        paginaActual = 1; // Resetear a la primera página
+        procesarYMostrarTabla(); 
+        document.getElementById('contenedor-tabla-registros').classList.remove('oculto');
+        document.getElementById('contenedor-tabla-registros').style.display = 'block';
+    }
+}
 
 //******* AUTOCOMPLETAR FORMULARIO ********************
 async function cargarMaterial(folio) {
@@ -39,7 +151,7 @@ async function cargarMaterial(folio) {
             icon: 'info',
             title: 'Nuevo material detectado',
             text: 'El folio no existe. Capture los datos del material.',
-            timer: 4000,
+            timer: 3000,
             showConfirmButton: false
         });
 
@@ -48,31 +160,6 @@ async function cargarMaterial(folio) {
             const el = document.getElementById(id);
             if(el) el.disabled = false;
         });
-    }
-}
-// **** CARGAR LA TABLA DE REGISTROS **************
-async function cargarRegistros() {
-    const data = await MaterialesService.consultarEntradas();
-    if (data.status === 'ok') {
-        const tbody = document.getElementById('tabla-registros');
-        tbody.innerHTML = data.datos.map(reg => {
-            let claseColor = 'bg-info text-dark';
-            const estado = (reg.estado || '').toUpperCase();
-            if (estado.includes('BUENO')) claseColor = 'bg-success text-white';
-            else if (estado.includes('REGULAR')) claseColor = 'bg-warning text-dark';
-            else if (estado.includes('MALO')) claseColor = 'bg-danger text-white';
-
-            return `
-                <tr>
-                    <td class="fw-bold">${reg.folio_material}</td>
-                    <td>${reg.descripcion_material_entrada}</td>
-                    <td>${reg.unidad}</td>
-                    <td><span class="badge ${claseColor}">${reg.estado}</span></td>
-                    <td>${reg.cantidad}</td>
-                    <td class="small">${reg.fecha_registro}</td>
-                </tr>`;
-        }).join('');
-        document.getElementById('contenedor-tabla-registros').style.display = 'block';
     }
 }
 
@@ -88,7 +175,7 @@ async function guardarEntrada(e) {
 
     if (res.status === 'ok') {
         Swal.fire('Éxito', res.message, 'success');
-        cargarRegistros();
+        // cargarRegistros();
         form.reset();
         document.getElementById('folio-oculto').style.display = 'block';
         form.querySelectorAll('input, select, textarea').forEach(c => {
@@ -109,24 +196,22 @@ function renderizarResultadosEnModal(materiales, contenedor) {
         return;
     }
 
-    let html = `
-        <table class="table table-sm table-hover align-middle mt-2">
-            <thead class="table-dark">
-                <tr><th>Folio</th><th>Descripción</th><th class="text-center">Acción</th></tr>
-            </thead>
-            <tbody>`;
+    let html = `<table class="table table-sm table-hover align-middle mt-2">
+                    <thead class="table-dark">
+                        <tr><th>Folio</th><th>Descripción</th><th class="text-center">Acción</th></tr>
+                    </thead>
+                    <tbody>`;
 
     materiales.forEach(mat => {
-        html += `
-            <tr>
-                <td class="fw-bold">${mat.folio_material}</td>
-                <td class="small">${mat.descripcion_material}</td>
-                <td class="text-center">
-                    <button class="btn btn-primary btn-sm btn-seleccionar-modal" data-folio="${mat.folio_material}">
-                        Seleccionar
-                    </button>
-                </td>
-            </tr>`;
+        html += `<tr>
+                    <td class="fw-bold">${mat.folio_material}</td>
+                    <td class="small">${mat.descripcion_material}</td>
+                    <td class="text-center">
+                        <button class="btn btn-primary btn-sm btn-seleccionar-modal" data-folio="${mat.folio_material}">
+                            Seleccionar
+                        </button>
+                    </td>
+                 </tr>`;
     });
 
     html += `</tbody></table>`;
@@ -142,43 +227,60 @@ function renderizarResultadosEnModal(materiales, contenedor) {
         });
     });
 }
-// ** EVENTOS **
-// ** EVENTOS CORREGIDOS **
+
+// ** CONFIGURACIÓN DE EVENTOS **
 function configurarEventos() {
     const folioInput = document.getElementById('folio');
-    
-    //  Manejo del input de Folio (Formato y búsqueda automática)
     if (folioInput) {
         folioInput.addEventListener('input', (e) => {
             let valor = e.target.value.toUpperCase();
-            valor = valor.startsWith('MA-') ? 'MA-' + valor.slice(3).replace(/[^0-9]/g, '') : 'MA-' + valor.replace(/[^0-9]/g, '');
+            
+            // Si el valor no empieza con "MA-" y no está vacío, se lo agregamos.
+            if (!valor.startsWith('MA-') && valor.length > 0) {
+                valor = 'MA-' + valor.replace(/[^0-9]/g, '');
+            } else {
+                // Si ya empieza con "MA-", solo limpiamos lo que sigue.
+                valor = 'MA-' + valor.substring(3).replace(/[^0-9]/g, '');
+            }
+
             e.target.value = valor;
+
             clearTimeout(timeoutBusqueda);
-            if (valor.length === 11) timeoutBusqueda = setTimeout(() => cargarMaterial(valor), 400);
+            if (valor.length === 11) {
+                timeoutBusqueda = setTimeout(() => cargarMaterial(valor), 400);
+            } else if (valor.length <= 3) { // Si se borra el folio o solo queda "MA-"
+                document.getElementById('form-entrada-material').reset();
+                e.target.value = valor; // Mantenemos el "MA-" si es lo que queda
+                ['descripcion', 'unidad', 'estado', 'id_categoria', 'adscripcion'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.disabled = false;
+                });
+            }
         });
     }
 
-    //  Convertir Adscripción a Mayúsculas automáticamente
     document.getElementById('adscripcion')?.addEventListener('input', (e) => {
         e.target.value = e.target.value.toUpperCase();
     });
 
-    //  Buscador Dinámico en el Modal
     const inputModalBusqueda = document.getElementById('buscar-material-modal-entrada');
     const contenedorResultados = document.getElementById('contenedor-materiales-modal');
 
     if (inputModalBusqueda) {
         inputModalBusqueda.addEventListener('input', async (e) => {
             const texto = e.target.value.trim();
-            if (texto.length < 2) return;
-            
-            // Llama al servicio (asegúrate de haber puesto el espacio en "static async buscarDinamico")
+            if (texto.length < 2) {
+                if (texto.length === 0) {
+                    const materiales = await MaterialesService.buscarDinamico(''); // Cargar todos
+                    renderizarResultadosEnModal(materiales, contenedorResultados);
+                }
+                return;
+            }
             const materiales = await MaterialesService.buscarDinamico(texto);
             renderizarResultadosEnModal(materiales, contenedorResultados);
         });
     }
 
-    // 4. Configuración de apertura del Modal
     document.getElementById('modal-material-entrada')?.addEventListener('click', () => {
         ModalService.abrir({
             modalId: 'exampleModalCenter',
@@ -188,47 +290,35 @@ function configurarEventos() {
                 cargarMaterial(folio);
             }
         });
-        if(inputModalBusqueda) {
-            inputModalBusqueda.value = '';
-            setTimeout(() => inputModalBusqueda.focus(), 500);
-        }
     });
 
-    // 5. Botones de Acción (Consultar y Guardar)
+    // --- LÓGICA DEL FILTRO DE LA TABLA INTEGRADA CON PAGINACIÓN ---
+    const inputFiltroTabla = document.getElementById('busqueda-entrada');
+    if (inputFiltroTabla) {
+        inputFiltroTabla.addEventListener('input', () => {
+            paginaActual = 1; // IMPORTANTE: Al buscar, siempre volvemos a la pág 1
+            procesarYMostrarTabla();
+        });
+    }
+
     document.getElementById('btn-consultar-entradas')?.addEventListener('click', cargarRegistros);
     document.getElementById('form-entrada-material')?.addEventListener('submit', guardarEntrada);
     
-    // 6. BOTÓN LIMPIAR
     document.getElementById('btn-limpiar-entrada')?.addEventListener('click', () => {
-        // Resetear valores del formulario
         document.getElementById('form-entrada-material').reset();
-        
-        //  OCULTAR LA TABLA DE CONSULTA
-        const contenedorTabla = document.getElementById('contenedor-tabla-registros');
-        if (contenedorTabla) {
-            contenedorTabla.style.display = 'none';
-        }
-
-        //  Restablecer alertas y visibilidad
+        document.getElementById('contenedor-tabla-registros').style.display = 'none';
         document.getElementById('folio-oculto').style.display = 'block';
         document.getElementById('estado-material').innerHTML = '';
-        document.getElementById('folio')?.classList.remove('is-invalid');
-        
-        // HABILITAR TODOS LOS CAMPOS Y QUITAR EL GRIS (bg-light)
-        const camposALimpiar = ['unidad', 'estado', 'id_categoria', 'descripcion', 'adscripcion', 'cantidad'];
-        camposALimpiar.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) {
-                el.disabled = false;
-                el.readOnly = false;
-                el.classList.remove('bg-light');
-            }
-        });
-
-        // Regresar el foco al folio para nueva captura
         document.getElementById('folio')?.focus();
+        
+        ['unidad', 'estado', 'id_categoria', 'descripcion', 'adscripcion', 'cantidad'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.disabled = false; el.readOnly = false; }
+        });
     });
 }
+
+// INICIO DE LA APLICACIÓN
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarCatalogos();
     configurarEventos();

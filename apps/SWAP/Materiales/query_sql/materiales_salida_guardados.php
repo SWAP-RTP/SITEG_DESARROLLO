@@ -97,7 +97,7 @@ pg_query($conexion, "BEGIN");
     /* BLOQUE COMENTADO PARA EVITAR DUPLICIDAD:
        Al insertar en 'salidas_materiales', el Trigger 'tr_salida_material_stock' 
        de la base de datos restará automáticamente el stock.
-
+    */
     $sql_update = "UPDATE control_materiales 
                    SET stock_actual = stock_actual - $1 
                    WHERE folio_material = $2";
@@ -112,7 +112,7 @@ pg_query($conexion, "BEGIN");
         ]);
         exit;
     }
-    */    
+       
 
     pg_query($conexion, "COMMIT");
 
