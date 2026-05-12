@@ -23,7 +23,7 @@ function acceso() {
       handleButtonClick("app-tain");
     });
   } else {
-    console.error("No se encontró el botón con ID 'tain'.");
+    console.error("No se encontró el botón con IgdfgdfgD 'tain'.");
   }
 
   // if (sugoButton) {
