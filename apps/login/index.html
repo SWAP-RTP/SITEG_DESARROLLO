@@ -1,0 +1,52 @@
+<?php
+require_once 'middleware.php';
+$user = validarAcceso();
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="../includes/img/Logo_RTP.png" type="image/x-icon">
+  <!-- TÍTULO DE LA PÁGINA -->
+  <title>SINTEG</title>
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+    type="text/css" />
+  <!-- BOOTSTRAP CSS -->
+  <link href="./lib/Bootstrap-5-5.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <!-- FONTAWESOME -->
+  <link rel="stylesheet" type="text/css" href="./lib/fontawesome/css/all.min.css" />
+</head>
+
+<body class="body_index">
+  <!--------------------------- HEADER Y MENU-------------------------------------------------------->
+  <?php include './includes/components/header.html'; ?>
+  <?php include './includes/components/menu.html'; ?>
+  <!--------------------------- HEADER Y MENU-------------------------------------------------------->
+
+  <main>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 justify-content-center" id="container">
+
+      <!-- AQUI SE PINTAN LOS CARDS DINAMICOS -->
+
+    </div>
+  </main>
+  <!--------------------------- FOOTER -------------------------------------------------------->
+  <?php include './includes/components/pie.html'; ?>
+  <!--------------------------- FOOTER -------------------------------------------------------->
+
+  <!-- Scripts JS de Bootstrap  --------------------------------------->
+  <script src="./lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <!-- Fontawesome -->
+  <script type="text/javascript" src="./lib/fontawesome/js/all.min.js"></script>
+  <!-- Scripts JS JQuery  --------------------------------------->
+  <script src="./lib/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+  <!-- TOCKER PARA LA AUTENTICACION-->
+  <script src="./includes/js/auth_name.js"></script>
+  <!-- Scripts de menu----------------->
+  <script src="./includes/js/menu.js"></script>
+</body>
+
+</html>

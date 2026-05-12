@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gesti&oacute;n de Incidencias Operativas</title>
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../public/fontawesome/css/all.min.css" />
+    <!-- BOOTSTRAP CSS -->
+    <link rel="stylesheet" type="text/css" href="../public/Bootstrap-5-5.3.0/css/bootstrap.min.css">
+    <!-- CSS del Menu  -->
+    <link rel="stylesheet" type="text/css" href="../includes/css/custom_rtp.css" />
+</head>
+
+<body class="">
+    <? include "./components/encabezado.html";?>
+    <? include "./components/menu.html";?>
+    </head>
+
+    <body>
+        <!-- inicio modal de edicion -->
+
+        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content" style="max-height: 130vh; overflow-y: auto;">
+
+                    <!-- Encabezado -->
+                    <div class="modal-header d-flex justify-content-center align-content-center  "
+                        style="background-color: #0a251c; color: white;">
+                        <h5 class="modal-title justify-content-center" id="formModalLabel">Modificacion de Reporte</h5>
+                    </div>
+
+                    <form id="formIncidencias_modal" class="p-3">
+
+                        <div class="row p-2">
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" class="btn btn-success btn-sm" id="btnAyuda">
+                                    <i class="bi bi-question-circle"></i> Ayuda
+                                </button>
+                                <style>
+                                    #btnAyuda {
+                                        animation: parpadeo 1s infinite;
+                                    }
+
+                                    @keyframes parpadeo {
+
+                                        0%,
+                                        100% {
+                                            opacity: 1;
+                                        }
+
+                                        50% {
+                                            opacity: 0.3;
+                                        }
+                                    }
+                                </style>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-2">
+                            <label class="form-label fw-bold mb-2">ID seleccionado:</label>
+                            <span id="modal-id" class="fw-bold"></span>
+                            <input type="hidden" id="id" name="id" />
+                        </div>
+
+
+                        <div class="row g-2 mb-2 px-2 py-1 border-bottom rounded">
+                            <div class="col-md-3">
+                                <label for="credencial" class="form-label fw-bold mb-2">Credencial</label>
+                                <input type="number" id="credencial_modal" name="credencial"
+                                    class="form-control form-control-sm" readonly />
+                            </div>
+                            <div class="col-md-5">
+                                <label for="nombre" class="form-label fw-bold mb-2">Nombre del trabajador</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control form-control-sm"
+                                    readonly />
+                                <div id="listaNombresMain" style="z-index: 10;"></div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="modulo" class="form-label fw-bold mb-2">Modulo</label>
+                                <input type="text" id="modulo" name="modulo" readonly
+                                    class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="puesto" class="form-label fw-bold mb-2">Puesto</label>
+                                <input type="text" id="puesto" name="puesto" readonly
+                                    class="form-control form-control-sm" />
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-2 px-2 py-1 border-bottom rounded">
+                            <div class="col-md-3">
+                                <label for="fecha" class="form-label fw-bold mb-2"><i class="far fa-clock"></i> Fecha
+                                    *</label>
+                                <input type="date" id="fecha" name="fecha" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="hora" class="form-label fw-bold mb-2">Hora *</label>
+                                <input type="time" id="hora" name="hora" class="form-control form-control-sm reloj" />
+                            </div>
+
+                            <div class="col-12 col-md-3">
+                                <label for="economico" class="form-label fw-bold text-nowrap">Econ&oacute;mico *</label>
+                                <select id="economico" name="economico" class="form-select" required>
+                                    <option value="">-- Selecciona un econ&oacute;mico --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="planta" class="form-label fw-bold mb-2">Planta</label>
+                                <input type="text" id="planta" name="planta" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-2 px-2 py-1 border-bottom rounded">
+                            <div class="col-md-4">
+                                <label for="postura" class="form-label fw-bold mb-2">Postura</label>
+                                <input type="text" id="postura" name="postura" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="ruta" class="form-label fw-bold text-nowrap">Ruta</label>
+                                <select id="ruta" name="ruta" class="form-select" required>
+                                    <option value="">-- Selecciona una ruta --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mt-0">
+                            <div class="col-4">
+                                <label for="anomalia_clave"
+                                    class="form-label fw-bold text-nowrap">Anomal&iacute;as</label>
+                                <select id="anomalia_clave" name="anomalia_clave" class="form-control">
+                                    <option value="">--Seleccione una opci&oacute;n--</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2 px-2 py-1 rounded">
+                                <label for="anomalia" class="form-label fw-bold mb-2">Anomalia detectada en:</label>
+                                <input type="text" id="anomalia" name="anomalia" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-6 mb-2 px-2 py-1 rounded">
+                                <label for="descripcion" class="form-label fw-bold mb-2">Descripcion de anomalia</label>
+                                <textarea id="descripcion" name="descripcion" class="form-control form-control-sm"
+                                    style="resize: none; height: 200px; width: 1000px;"></textarea>
+                            </div>
+
+
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <label for="articulo" class="form-label fw-bold text-nowrap">RTP
+                                        Art&iacute;culo:*</label>
+                                    <input type="text" id="articulo" name="articulo" class="form-control"
+                                        placeholder="Num Art&iacute;culo" />
+                                </div>
+
+                                <div class="col-2">
+                                    <label for="art_inciso" class="form-label fw-bold text-nowrap">RTP Inciso:*</label>
+                                    <input type="text" id="art_inciso" name="art_inciso" class="form-control"
+                                        placeholder="Inciso" />
+                                </div>
+
+                            </div>
+
+                            <!-- fila MB Artículo e Inciso -->
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <label for="mb_articulo" class="form-label fw-bold text-nowrap">MB
+                                        Artículo:*</label>
+                                    <input type="text" id="mb_articulo" name="mb_articulo" class="form-control"
+                                        placeholder="Num Artículo" />
+                                </div>
+                                <div class="col-2">
+                                    <label for="mb_inciso" class="form-label fw-bold text-nowrap">MB Inciso:*</label>
+                                    <input type="text" id="mb_inciso" name="mb_inciso" class="form-control"
+                                        placeholder="Inciso" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+
+                    <!-- Pie del modal -->
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-warning" id="enviar_modulo" data-bs-dismiss="modal">Enviar
+                            a modulo</button> -->
+                        <button type="submit" form="miFormulario" id="btn_formulario" class="btn btn-primary"
+                            data-bs-target="#formModal">Guardar cambios</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- cierra modal -->
+
+
+
+        <main class="container my-3">
+            <div class="card shadow-lg rounded-3 p-4">
+                <div class="card-header text-white" style="background-color: #383a38">
+                    <h3 class="text-center mt-2">Consulta de Reportes</h3>
+                </div>
+                <div class="card-body d-flex flex-column align-items-center">
+                    <form style="width:100%;" id="form_filtros">
+
+                        <div class="row p-2">
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" class="btn btn-success btn-sm" id="btn_consulta">
+                                    <i class="bi bi-question-circle"></i> Ayuda
+                                </button>
+                                <style>
+                                    #btnAyuda {
+                                        animation: parpadeo 1s infinite;
+                                    }
+
+                                    @keyframes parpadeo {
+
+                                        0%,
+                                        100% {
+                                            opacity: 1;
+                                        }
+
+                                        50% {
+                                            opacity: 0.3;
+                                        }
+                                    }
+                                </style>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row g-3 justify-content-center w-100">
+                            <div class="col-4 d-flex justify-content-center">
+                                <label for="select_modulo"
+                                    class="form-label fw-bold me-2 mb-0 align-self-center">Modulo</label>
+                                <select id="select_modulo" name="select_modulo"
+                                    class="form-select form-select-sm w-auto" style="min-width: 120px;">
+                                    <option value="" disabled selected>Selecciona un modulo</option>
+                                </select>
+                            </div>
+
+                            <!-- Mes -->
+                            <div class="col-auto d-flex justify-content-center">
+                                <label for="select_mes" class="form-label fw-bold me-2 mb-0 align-self-center">
+                                    Mes
+                                </label>
+                                <select id="select_mes" name="select_mes" class="form-select form-select-sm w-auto"
+                                    style="min-width: 120px;">
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- boton de filtrar y limpiar -->
+
+                        <div class="row g-3 justify-content-center mt-3">
+                            <div class="col-md-3 d-grid">
+                                <button type="button" id="btn-filtrar" class="btn btn-primary ">Filtrar</button>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button type="reset" id="btn-limpiar" class="btn btn-secondary ">Limpiar</button>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </form>
+
+
+                </div>
+
+                <div class="card-body m-0">
+                    <div class="container-fluid animation" id="btn-acciones" style="display: none;">
+                        <div class="row justify-content-end mb-2">
+                            <div class="col-auto">
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-primary btn-sm" id="btn-pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </button>
+                                    <button class="btn btn-success btn-sm" id="btn-excel">
+                                        <i class="fas fa-file-excel"></i> Excel
+                                    </button>
+                                    <button class="btn btn-info btn-sm" id="btn-copiar">
+                                        <i class="far fa-copy"></i> Copiar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-center" id="sin_datos" style="display: none;"></h3>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-5 mb-4 border-0 shadow-sm" style="background: #f8f9fa; border-radius: 12px;">
+                <div class="table-responsive p-3">
+                    <table id="tabla_incidencias"
+                        class="table table-hover table-striped table-bordered align-middle text-center w-100"
+                        style="background: #fff; border-radius: 12px; overflow: hidden; ">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="px-3 py-2">ID</th>
+                                <th class="px-3 py-2">Modulo</th>
+                                <th class="px-3 py-2">Nombre Completo</th>
+                                <th class="px-3 py-2">Credencial</th>
+                                <th class="px-3 py-2">Fecha de Reporte</th>
+                                <th class="px-3 py-2">Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- DataTable llenará esto automáticamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </main>
+
+
+
+
+
+        <!-- PIE -->
+        <? include "./components/pie.html"; ?>
+
+
+
+
+
+
+
+
+        <script type="module" src="/app-swap/incidencias/scripts/prueba.js"></script>
+        <script type="module" src="/app-swap/includes/utils/obtenerModulos.js"></script>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <!-- DataTables Buttons -->
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+
+    </body>
+
+</html>

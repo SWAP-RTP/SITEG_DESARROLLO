@@ -6,5 +6,5 @@ setcookie("access_token", "", [
     'samesite' => 'Lax'
 ]);
 
-header("Location: http://localhost:8086/login.html?message=sesion_cerrada");
+header("Location: /login.html?message=sesion_cerrada");
 exit();

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta inventario</title>
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
+    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light">z
+    <?php include './components/encabezado.html'; ?>
+    <?php include './components/menu.html'; ?>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-12">
+                <div class="card modern-form shadow">
+                    <!-- HEADER -->
+                    <div class="card-header modern-form-header text-white p-4" style="background-color: #003366;">
+                        <h2 class="mb-0 fw-bold text-center">
+                            <i class="bi bi-box-seam me-2"></i>INVENTARIO DE MATERIALES
+                        </h2>
+                    </div>
+                    <div class="card-body modern-form-body p-5">
+                        <form id="form-inventario-material" autocomplete="off" novalidate>
+                            <div class="row g-3">
+                                <!-- FOLIO -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Código</label>
+                                    <input type="text" class="form-control" id="folio_inventario" name="folio"
+                                        oninput="this.value = this.value.toUpperCase()" maxlength="11"
+                                        pattern="^MA-[0-9]{8}$" placeholder="Ej: MA-00000001">
+                                    <div id="estado-material-inventario" class="mt-1"
+                                        style="min-height: 25px; font-size: 0.85rem;">
+                                    </div>
+                                </div>
+                                <!-- DESCRIPCION -->
+                                <div class="col-md-9">
+                                    <label class="form-label fw-bold">Descripción del Material</label>
+                                    <div class="input-group align-items-center">
+                                        <input type="text" class="form-control" id="descripcion_inventario"
+                                            name="descripcion" oninput="this.value = this.value.toUpperCase()">
+                                        <button class="btn btn-primary" type="button" id="btn-modal-inventario">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- SELECTS -->
+                                <!-- <div class="col-md-3">
+                                    <label class="form-label fw-bold">Unidad de Medida</label>
+                                    <select class="form-select" id="unidad_inventario" name="unidad">
+                                        <option value="">Selecciona...</option>
+                                    </select>
+                                </div> -->
+                                <!-- <div class="col-md-3">
+                                    <label class="form-label fw-bold">Estado Físico Material</label>
+                                    <select class="form-select" id="estado_inventario" name="estado">
+                                        <option value="">Selecciona...</option>
+                                    </select>
+                                </div> -->
+                                <!-- <div class="col-md-4">
+                                    <label class="form-label fw-bold">Categoría</label>
+                                    <select class="form-select" id="categoria_inventario" name="id_categoria">
+                                        <option value="">Selecciona...</option>
+                                    </select>
+                                </div> -->
+                                <!-- STOCK -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold text-uppercase">Stock Actual</label>
+                                    <input type="number" class="form-control text-center bg-light"
+                                        id="stock_actual_inventario" readonly value="0">
+                                </div>
+                                <!-- ADSCRIPCION -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Adscripción</label>
+                                    <input type="text" class="form-control" id="adscripcion_inventario"
+                                        name="adscripcion_modulo" placeholder="Ej: ALMACEN CENTRAL o MODULO 4">
+                                </div>
+                            </div>
+                            <!-- BOTONES -->
+                            <div class="col-12 text-center mt-4">
+                                <button type="button" class="btn btn-outline-info" id="btn-consultar-inventario">
+                                    <i class="bi bi-search me-2"></i>Consultar Inventario
+                                </button>
+                                   <button type="button" class="btn btn-outline-secondary px-4 shadow-sm"
+                                        id="btn-limpiar-inventario">
+                                        <i class="bi bi-eraser me-2"></i> Limpiar
+                                    </button>
+                            
+
+                            </div>
+                            <style></style>
+                            <!-- DASHBOARD -->
+                            <div class="container mt-5 dashboard-dark" id="dashboard-inventario" style="display: none;">
+                                <h3 class="mb-4 fw-bold text-center" style="color:#161716;">
+                                    <i class="bi bi-graph-up-arrow me-2"></i>Dashboard de Inventario
+                                </h3>
+                                <!-- KPIs -->
+                                <div class="row g-4">
+                                    <div class="col-12 col-md-3">
+                                        <div class="card card-dark text-center">
+                                            <div class="card-body">
+                                                <i class="bi bi-box-seam fs-1" style="color:#4f8cff;"></i>
+                                                <div class="kpi-label mt-2">Total Materiales</div>
+                                                <div class="kpi-value" id="total_materiales">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="card card-dark text-center">
+                                            <div class="card-body">
+                                                <i class="bi bi-stack fs-1" style="color:#26633f;"></i>
+                                                <div class="kpi-label mt-2">Stock Total</div>
+                                                <div class="kpi-value" id="stock_total">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="card card-dark text-center" id="kpi-card-bajo">
+                                            <div class="card-body kpis-completo-rojo">
+                                                <i class="bi bi-exclamation-triangle-fill fs-1"
+                                                    style="color: #721c24;"></i>
+                                                <div class="kpi-label mt-2">Stock Bajo</div>
+                                                <div class="kpi-value" id="stock_bajo">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="card card-dark text-center">
+                                            <div class="card-body">
+                                                <i class="bi bi-clock-history fs-1" style="color:#4055da;"></i>
+                                                <div class="kpi-label mt-2">Movimientos Hoy</div>
+                                                <div class="kpi-value" id="movimientos_hoy">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tabla -->
+                                <div class="card card-dark mt-5 card-stock-bajo">
+                                    <div class="card-header bg-warning fw-bold d-flex justify-content-between"
+                                        style="color:#181c37;">
+                                        <span>
+                                            <i class="bi bi-exclamation-circle me-2"></i>
+                                            Materiales con bajo stock
+                                        </span>
+                                        <span class="badge bg-dark">Atención</span>
+                                    </div>
+                                    <div class="card-body table-responsive">
+                                        <table class="table table-hover text-center table-dark-custom">
+                                            <thead>
+                                                <tr>
+                                                    <th>Folio</th>
+                                                    <th>Descripción</th>
+                                                    <th>Stock</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla_stock_bajo"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL -->
+    <div class="modal fade" id="modalMaterialInventario" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-search me-2"></i>Buscar Material
+                    </h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control mb-3" id="buscar-material-modal-inventario"
+                        placeholder="Buscar por folio o descripción..." oninput="this.value = this.value.toUpperCase()">
+                    <div id="contenedor-materiales-modal-inventario"></div>
+                    <nav id="nav-paginacion-materiales-inventario" class="mt-3" style="display:none;">
+                        <ul class="pagination justify-content-end" id="ul-paginacion-materiales-inventario"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <?php include './components/pie.html'; ?>
+    <script src="../public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <script src="../public/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="../includes/utils/menu.js"></script>
+    <script src="/app-swap/Materiales/scripts/inventario.js" type="module"></script>
+</body>
+
+</html>

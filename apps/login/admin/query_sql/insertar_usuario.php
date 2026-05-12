@@ -1,37 +1,49 @@
 <?php
-require_once __DIR__ . '/../../conf/conexion.php';
-// Recibe datos por POST
-$nombre = $_POST['nombre'] ?? '';
-$correo = $_POST['correo'] ?? '';
-$contrasena = $_POST['contrasena'] ?? '';
-$credencial = $_POST['credencial'] ?? '';
-$modulo = $_POST['modulo'] ?? '';
+require_once "../../conf/conexion.php";
+$guardar_imagen = "../../includes/img/";
 
-// Valida datos mínimos
-if (!$nombre || !$correo || !$contrasena) {
-    http_response_code(400);
-    echo json_encode(["error" => "Faltan datos obligatorios"]);
-    exit;
-}
-
-// Hashea la contraseña
-$contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
-
-$conexion = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
+$conexion = Database::conectar();
 if (!$conexion) {
     http_response_code(500);
     echo json_encode(["error" => "Error de conexión a la base de datos"]);
     exit;
 }
+// print_r($_POST);
 
-$sql = "INSERT INTO usuarios (nombre, correo, contrasena, credencial, modulo) VALUES ($1, $2, $3, $4, $5)";
-$resultado = pg_query_params($conexion, $sql, [$nombre, $correo, $contrasena_hash, $credencial, $modulo]);
+$credencial = $_POST['creden_user'];
+$nombre = $_POST['nombre_user'];
+$correo = $_POST['correo_user'];
+$contraseña = $_POST['contra_user'];
 
-if ($resultado) {
-    echo json_encode(["success" => true]);
-} else {
-    http_response_code(500);
-    echo json_encode(["error" => "Error al insertar usuario"]);
+$sql_select = "SELECT id_usuario FROM usuarios_final WHERE id_usuario = $credencial;";
+$qry_select = @pg_query($conexion, $sql_select);
+$res_select = @pg_num_rows($qry_select);
+
+if($res_select >= 1){
+    echo json_encode([
+        "respuesta" => 1,
+        "mensaje" => "El usuario con credencial ".$credencial." ya esta registrado."
+    ]);
+    exit;
+}else{
+    // Generas el hash usando el algoritmo BCRYPT (el más recomendado)
+    $contraseña_encriptada = password_hash($contraseña, PASSWORD_BCRYPT);
+    
+    $sql_insert = "INSERT INTO usuarios_final (id_usuario, nombre, correo, contrasena)
+                   VALUES ($credencial, '$nombre', '$correo', '$contraseña_encriptada');";
+    $qry_insert = @pg_query($conexion, $sql_insert);
+    
+    if (!$qry_insert) {
+        echo json_encode([
+            "respuesta" => false,
+            "mensaje" => "Error al insertar en la base de datos: " . pg_last_error($conexion)
+        ]);
+        exit;
+    
+    } else {
+        echo json_encode([
+            "respuesta" => true,
+            "mensaje" => "Usuario registrado correctamente."
+        ]);
+    }
 }
-
-pg_close($conexion);

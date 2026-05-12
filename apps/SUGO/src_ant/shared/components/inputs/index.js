@@ -1,5 +1,0 @@
-export * from './InputMask'
-export * from './InputSelect'
-export * from './InputMultiSelect'
-export * from './InputText'
-export * from './InputsReloj'

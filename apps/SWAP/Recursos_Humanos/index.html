@@ -1,3 +1,7 @@
+<?php
+require_once '/var/www/login_shared/middleware.php';
+$usuario = validarAcceso(); 
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -15,8 +19,6 @@
   <link rel="stylesheet" type="text/css" href="../public/fontawesome/css/all.css" />
   <!-- CSS del Menu  -->
   <link rel="stylesheet" href="../includes/css/custom_css.css" />
-  <!-- <link rel="stylesheet" href="../includes/css/custom_rtp.css" /> -->
-  <!-- data table  -->
 
 </head>
 

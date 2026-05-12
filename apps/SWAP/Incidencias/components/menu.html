@@ -1,0 +1,169 @@
+<div class="flex-shrink-0 p-3" style="width: 350px; min-height: 100vh; background-color: #009688">
+  <ul class="list-unstyled ps-0">
+    <li class="mb-1">
+      <a id="captura_reportes" class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        href="/app-swap/incidencias/reportes_gs.html">
+        <i class="fa-regular fa-address-card"></i>Registro de Reportes
+      </a>
+    </li>
+
+    <li class="border-top my-2"></li>
+    <li class="mb-1">
+      <a id="consulta_reportes" class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        href="/app-swap/incidencias/consulta.html">
+        <i class="bi bi-search"></i>Consulta de Reportes
+      </a>
+    </li>
+    <li class="border-top my-2"></li>
+
+
+
+    <li class="mb-1">
+      <a id="consulta_dashboard_btn" class="btn btn-toggle align-items-center rounded collapsed w-100 text-light p-3"
+        data-bs-toggle="collapse" href="#consulta_dashboard" role="button" aria-expanded="false"
+        aria-controls="consulta_dashboard">
+        <i class="fa-solid fa-chart-column"></i> Dashboard
+        <i class="fas fa-chevron-down ms-9 dropdown"></i>
+      </a>
+
+      <div class="collapse" id="consulta_dashboard">
+        <ul class="btn-toggle-nav list-unstyled fw-semibold pb-1 small">
+
+          <!-- SUBMENU 1: RTP -->
+          <li class="pe-2">
+            <a class="link-light d-flex align-items-center gap-2 py-2" data-bs-toggle="collapse" href="#submenu_rtp"
+              aria-expanded="false" aria-controls="submenu_rtp">
+              <i class="fa-solid fa-bus"></i> RTP
+              <i class="fas fa-chevron-down ms-auto"></i>
+            </a>
+
+            <div class="collapse ps-4" id="submenu_rtp">
+              <ul class="list-unstyled">
+
+                <li class="pe-2">
+                  <a class="link-light d-flex align-items-center gap-2 py-2" data-bs-toggle="collapse"
+                    href="#submenu_base_rtp" aria-expanded="false" aria-controls="submenu_base_rtp">
+                    <i class="fa-solid fa-people-group"></i> Trabajadores de Base
+                    <i class="fas fa-chevron-down ms-auto"></i>
+                  </a>
+
+                  <div class="collapse ps-4" id="submenu_base_rtp">
+                    <ul class="list-unstyled">
+                      <li>
+                        <a href="/Incidencias/Dashboard/RTP/TBase/Inasistencias/inasistencias.html"
+                          class="d-flex align-items-center gap-2 text-light py-2">
+                          <i class="fa-solid fa-user-xmark"></i> Inasistencias + Anomal&iacute;as
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Incidencias/Dashboard/RTP/TBase/ReportesEmpleado/reporte_empleado.html"
+                          class="d-flex align-items-center gap-2 text-light py-2">
+                          <i class="fa-solid fa-triangle-exclamation"></i> Reportes por empleado
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+
+                <li class="pe-2">
+                  <a class="link-light d-flex align-items-center gap-2 py-2" data-bs-toggle="collapse"
+                    href="#submenu_confianza_rtp" aria-expanded="false" aria-controls="submenu_confianza_rtp">
+                    <i class="fa-solid fa-user-shield"></i> Trabajadores de Confianza
+                    <i class="fas fa-chevron-down ms-auto"></i>
+                  </a>
+
+                  <div class="collapse ps-4" id="submenu_confianza_rtp">
+                    <ul class="list-unstyled">
+                      <li>
+                        <a href="/Incidencias/Dashboard/RTP/TConfianza/Inasistencias/inasistencias.html"
+                          class="d-flex align-items-center gap-2 text-light py-2">
+                          <i class="fa-solid fa-user-xmark"></i> Inasistencias + Anomal&iacute;as
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Incidencias/Dashboard/RTP/TConfianza/ReportesEmpleado/reporte_empleado.html"
+                          class="d-flex align-items-center gap-2 text-light py-2">
+                          <i class="fa-solid fa-triangle-exclamation"></i> Reportes por empleado
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+
+                <li class="pe-2">
+                  <a href="/Incidencias/Dashboard/RTP/RSupervisor/rsupervisor.html"
+                    class="d-flex align-items-center gap-2 text-light py-2">
+                    <i class="fa-solid fa-user-tie"></i> Reportes por Supervisor
+                  </a>
+                </li>
+
+                <li class="pe-2">
+                  <a href="/Incidencias/Dashboard/RTP/GAnomalias/GAnomalias.html"
+                    class="d-flex align-items-center gap-2 text-light py-2">
+                    <i class="fa-solid fa-chart-column"></i> Grafica de Anomal&iacute;as
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <!-- SUBMENU 2: MB -->
+          <li class="pe-2">
+            <!-- BOTÓN MB (solo colapsa, no es link) -->
+            <a class="link-light d-flex align-items-center gap-2 py-2" data-bs-toggle="collapse" href="#submenu_mb"
+              aria-expanded="false" aria-controls="submenu_mb">
+              <i class="fa-solid fa-train-subway"></i> MB
+              <i class="fas fa-chevron-down ms-auto"></i>
+            </a>
+
+            <!-- SUBMENÚ MB -->
+            <div class="collapse ps-4" id="submenu_mb">
+              <ul class="list-unstyled">
+
+                <li>
+                  <a href="/Incidencias/Dashboard/MB/Inasistencias/inasistencias.html"
+                    class="d-flex align-items-center gap-2 text-light py-2">
+                    <i class="fa-solid fa-user-xmark"></i>
+                    Inasistencias + Anomal&iacute;as
+                  </a>
+                </li>
+
+                <li>
+                  <a href="/Incidencias/Dashboard/MB/ReportesEmpleado/reporte_empleado.html"
+                    class="d-flex align-items-center gap-2 text-light py-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Reportes por empleado
+                  </a>
+                </li>
+                <li class="pe-2">
+                  <a href="/Incidencias/Dashboard/MB/RSupervisor/rsupervisor.html"
+                    class="d-flex align-items-center gap-2 text-light py-2">
+                    <i class="fa-solid fa-user-tie"></i> Reportes por Supervisor
+                  </a>
+                </li>
+                <li class="pe-2">
+                  <a href="/Incidencias/Dashboard/MB/GAnomalias/GAnomalias.html"
+                    class="d-flex align-items-center gap-2 text-light py-2">
+                    <i class="fa-solid fa-chart-column"></i> Grafica de Anomal&iacute;as
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </li>
+
+    <li class="border-top my-2"></li>
+
+    <li class="mb-1">
+      <a class="btn btn-toggle align-items-center rounded collapsed w-100 text-light justify-content-between p-3"
+        href="/app-swap/index.html"">
+        <div class=" d-flex align-items-center gap-2">
+        <i class="fas fa-undo-alt"></i> Regresar Men&uacute; Principal
+</div>
+</a>
+</li>
+</ul>
+
+</div>

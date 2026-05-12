@@ -1,0 +1,130 @@
+<?php
+session_start();
+
+if (!isset($_SESSION[usuario])){
+    session_destroy();
+    header("Location: /");
+}
+
+$moduloActual = explode('/',substr(dirname($_SERVER[REQUEST_URI]),1));
+$Modulo = $moduloActual[0];
+$modulos=$_SESSION[modulos];
+for ($i=0; $i < count ($modulos[$Modulo]); $i++)
+    $permiso[]=$modulos[$Modulo][$i];
+
+// if(empty($permiso)){
+//     header("Location: /$Modulo");
+// }
+//include $url . "tabla.html"; 
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- TÍTULO DE LA PÁGINA -->
+  <title>Sistema de Gesti&oacute;n de Incidencias Operativas</title>
+
+  <!-- Fuente -->
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900"/> -->
+
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/includes/components/css/almacen.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="/public/assets/fontawesome/css/all.min.css" />
+
+  <!-- BOOTSTRAP CSS -->
+  <link href="/Almacen/public/bootstrap-5.3.2-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+    type="text/css" />
+
+  <!-- JS -->
+  <script type="text/javascript" src="/public/assets/fontawesome/js/all.min.js"></script>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+  <!-- CSS del Menu  -->
+  <link rel="stylesheet" type="text/css" href="/public/assets/css/custom_rtp.css" />
+
+  <!-- CSS -->
+  <!-- <link rel="stylesheet" type="text/css" href="/Incidencias/Dashboard/Inasistencias/css/style.css" /> -->
+</head>
+
+<body class="">
+  <? 
+        include $url. "../../../../encabezado.html"  
+    ?>
+
+  <? 
+        include $url. "../../../../menu.html"  
+    ?>
+
+</body>
+
+<main class="container my-3">
+
+  <div class="card mb-3">
+  <div class="card-body d-flex align-items-center gap-3 flex-wrap">
+
+    <div class="d-flex align-items-center gap-2">
+      <label class="mb-0"><b>M&oacute;dulo:</b></label>
+      <select id="selModulo" class="form-select form-select-sm" style="max-width: 220px;">
+        <option value="all">Todos</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="mb-3">Trabajadores base: Reportes por empleado </h5>
+      <div style="height: 420px;">
+        <canvas id="chartBase"></canvas>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+
+<!-- PIE -->
+<? 
+ include $url."../../../../pie.html"; 
+?>
+
+<!-- jquery -->
+<script type="text/javascript" src="/public/assets/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+
+<!-- DataTables -->
+<script type="text/javascript" src="/public/assets/JSZip-3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="/public/assets/DataTables-2.0.1/js/dataTables.min.js"></script>
+<script type="text/javascript" src="/public/assets/DataTables-2.0.1/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/buttons.bootstrap5.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/buttons.html5.min.js"></script>
+
+<!-- BOOTSTRAP JS  -->
+<script type="text/javascript" src="/public/assets/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- alertas -->
+<script type="text/javascript" src="/public/assets/sweetalert2.all.min.js"></script>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script src="/Incidencias/Dashboard/RTP/TBase/ReportesEmpleado/reporte_empleado.js" charset="UTF-8"></script>
+
+
+
+</body>
+
+</html>

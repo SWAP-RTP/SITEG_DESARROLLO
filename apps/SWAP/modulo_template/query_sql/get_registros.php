@@ -1,10 +1,8 @@
 <?php
 session_start();
-// $path_url = $_SESSION[rootApp]; 
-// require($path_url.'conexion.html');
+
 require(__DIR__ . '../../../conexion.php');
-//usamos la conexion y la sesion para entrar al servidor
-// if(conecta($conexion,$_SESSION[servidor])){ 
+
 if (conecta($conexion, 'db_swap')) { 
 
 

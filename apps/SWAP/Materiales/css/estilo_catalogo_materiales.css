@@ -1,166 +1,180 @@
-/* Fade in/out para la tabla de materiales */
-.fade-table {
-  opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
-  pointer-events: none;
-}
-.fade-table.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-:root {
-  --verde-oscuro: #145a32;
-  --verde-medio: #229954;
-  --verde-claro: #d4efdf;
-  --verde-acento: #27ae60;
-  --blanco: #fff;
-  --gris-suave: #f5f6f7;
-  --sombra: 0 8px 40px #145a3240;
+/* Card y Encabezado */
+.card.modern-form {
+    border-radius: 2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: none;
+    overflow: hidden;
 }
 
-/* Fondo general con gradiente */
-body {
-  background: linear-gradient(135deg, var(--gris-suave) 60%, var(--verde-claro) 100%);
-  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-  color: var(--verde-oscuro);
-  margin: 0;
-  padding: 0;
+.card-header.modern-form-header {
+    border-radius: 2rem 2rem 0 0 !important;
+    background-color: #00332b !important;
+    /* Verde RTP */
+    padding: 1.5rem;
 }
 
-/* Main destacado */
-main {
-  background: var(--blanco);
-  border-radius: 22px;
-  box-shadow: var(--sombra);
-  max-width: 900px;
-  margin: 2.5rem auto 0 auto;
-  padding: 2.8rem 2.2rem 2.2rem 2.2rem;
-  border: 3px solid var(--verde-medio);
-  position: relative;
-  overflow: hidden;
+.card-body.modern-form-body {
+    padding: 2.5rem;
 }
 
-/* Título principal llamativo */
-.titulo1 {
-  font-size: 2.7rem;
-  letter-spacing: 2px;
-  color: var(--verde-oscuro);
-  text-shadow: 0 4px 16px #22995455, 0 1px 0 #fff;
-  margin-top: 2rem;
-  margin-bottom: 1.2rem;
-  background: none;
-  -webkit-background-clip: unset;
-  -webkit-text-fill-color: unset;
-  background-clip: unset;
-  text-fill-color: unset;
-  border-bottom: 4px solid var(--verde-acento);
-  display: inline-block;
-  padding-bottom: 0.2em;
-  transition: border-color 0.3s;
-  font-weight: bold;
-}
-.titulo1:hover {
-  border-color: var(--verde-oscuro);
+/* Tipografía y Etiquetas */
+.label-bold {
+    font-weight: 600;
+    margin-left: 0.5rem;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
-/* Título secundario */
-.titulo2 {
-  font-size: 1.3rem;
-  color: var(--verde-medio);
-  margin-bottom: 2rem;
-  font-weight: 500;
+.ancho-busqueda{
+    width: 180px;
+    max-width: 180px  !important;
+}
+/*oculta las tablas*/
+.oculto {
+    display: none;
+}
+/* Esto quita los redondeados internos donde se juntan el input y el botón */
+.modern-form .input-group {
+    border-radius: 1.5rem !important;
+    overflow: hidden;
 }
 
-/* Imagen */
-.logo_rtp {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.logo_rtp img {
-  max-width: 100%;
-  height: auto;
-  filter: drop-shadow(0 6px 24px #22995444);
-  border-radius: 22px;
-  background: var(--blanco);
-  padding: 1.7rem;
-  transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
-  border: 3px solid var(--verde-claro);
-}
-.logo_rtp img:hover {
-  transform: scale(1.06) rotate(-2deg);
-  box-shadow: 0 12px 40px #22995455;
-  border: 3px solid var(--verde-acento);
+.modern-form .input-group .form-control {
+    border-radius: 1.5rem 0 0 1.5rem !important;
+    border-right: none !important;
 }
 
-/* Tabla de catálogo llamativa */
-.tabla-materiales {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 2.5rem 0;
-  background: var(--verde-claro);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 18px #145a3240;
-  font-size: 1.08rem;
-}
-.tabla-materiales th {
-  background: linear-gradient(90deg, var(--verde-oscuro) 70%, var(--verde-medio) 100%);
-  color: var(--blanco);
-  font-weight: bold;
-  padding: 1.1rem;
-  text-align: center;
-  font-size: 1.15rem;
-  border-bottom: 4px solid var(--verde-acento);
-  letter-spacing: 1px;
-  text-shadow: 0 2px 8px #22995455;
-}
-.tabla-materiales td {
-  padding: 0.9rem 1.1rem;
-  text-align: center;
-  color: var(--verde-oscuro);
-  background: var(--blanco);
-  border-bottom: 2px solid var(--verde-claro);
-  transition: background 0.2s, color 0.2s;
-}
-.tabla-materiales tr:hover td {
-  background: var(--verde-acento);
-  color: var(--blanco);
+.modern-form .btn-search-modern {
+    border-radius: 0 1.5rem 1.5rem 0 !important;
+    border-left: 1px solid rgba(34, 31, 31, 0.196) !important;
 }
 
-/* Botón RTP llamativo usando Bootstrap */
-.btn-success, .btn-success:focus, .btn-success:active {
-  background: linear-gradient(90deg, var(--verde-medio) 60%, var(--verde-oscuro) 100%) !important;
-  border: none !important;
-  color: #fff !important;
-  font-weight: bold;
-  letter-spacing: 1px;
-  box-shadow: 0 2px 12px #22995444;
-  transition: background 0.2s, transform 0.2s;
-}
-.btn-success:hover {
-  background: linear-gradient(90deg, var(--verde-oscuro) 60%, var(--verde-medio) 100%) !important;
-  transform: scale(1.04);
-  color: #fff !important;
+/* Estilo para inputs que van SOLOS (Cantidad, Fecha, etc.) */
+.modern-form .form-control:not(.input-group .form-control),
+.modern-form .form-select {
+    border-radius: 1.5rem !important;
+    padding-left: 1.2rem;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .titulo1 {
-    font-size: 1.5rem;
-  }
-  .logo_rtp img {
-    width: 90vw;
-    padding: 0.5rem;
-  }
-  main {
-    padding: 1rem 0.5rem;
-  }
-  .tabla-materiales th, .tabla-materiales td {
+/* Botones de acción inferiores */
+.rounded-pill-custom {
+    border-radius: 50px !important;
+    padding: 0.6rem 2.5rem;
+}
+
+.section-divider {
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    color: #00332b;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Fuerza la visualización en mayúsculas en los inputs */
+#codigo_material,
+#descripcion {
+    text-transform: uppercase;
+}
+
+/* Fila de material */
+.fila-material {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.fila-material:hover {
+    background-color: #e9ecef;
+}
+
+.table-active {
+    background-color: #b2d8b2 !important;
+}
+
+/* Listas de catálogos con scroll visible */
+.catalogo-scroll {
+    height: 12.5rem;
+    padding-left: 0.65rem;
+    padding-right: 0.45rem;
+    overflow-y: auto;
+    border: 1px solid #cfd7df;
+    background: linear-gradient(180deg, #fbfcfd 0%, #f5f8fb 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #7d95a8 #edf2f7;
+}
+
+.catalogo-scroll.catalogo-scroll-cerrado {
+    height: calc(2.25rem + 2px);
+    overflow-y: hidden;
+    background: #ffffff;
+}
+
+.catalogo-scroll.catalogo-scroll-abierto {
+    height: 12.5rem;
+    overflow-y: auto;
+    border-color: #7aa7d9;
+    box-shadow: 0 0 0 3px rgba(47, 127, 222, 0.12);
+}
+
+.catalogo-scroll option {
+    padding: 0.4rem 0.45rem;
+    border-radius: 0.45rem;
     font-size: 0.95rem;
-    padding: 0.5rem;
-  }
+    line-height: 1.2;
 }
+
+.catalogo-scroll option:checked {
+    background: linear-gradient(180deg, #1f8fd6 0%, #1578bb 100%);
+    color: #ffffff;
+}
+
+.catalogo-scroll:focus {
+    border-color: #2f7fde;
+    box-shadow: 0 0 0 3px rgba(47, 127, 222, 0.18);
+    outline: none;
+}
+
+/* WebKit (Chrome/Edge) */
+.catalogo-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+.catalogo-scroll::-webkit-scrollbar-track {
+    background: #edf2f7;
+    border-radius: 999px;
+}
+
+.catalogo-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #9ab0c2 0%, #6d879b 100%);
+    border-radius: 999px;
+    border: 2px solid #edf2f7;
+}
+
+.catalogo-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #7f9bae 0%, #5e798e 100%);
+}
+
+
+/* Tarjetas KPI */
+.icono-azul {color: #4f8cff;}
+.icono-verde {color: #26633f;}
+.icono-rojo {color: #e74c3c;}
+.icono-purpura {color: #4055da;}
+
+
+/*tarjeta completa roja*/
+.tarjeta-roja {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+}
+

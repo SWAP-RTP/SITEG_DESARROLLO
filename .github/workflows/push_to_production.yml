@@ -1,0 +1,52 @@
+name: Filtro de Calidad PHP y Sincronizacion
+
+on:
+  push:
+    branches:
+      - main
+      - Gerardo
+      - mau
+      - "**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validar-php:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar codigo
+        uses: actions/checkout@v4
+
+      - name: Preparar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2" # Ajusta a la versión que usen en los servidores del RTP
+          extensions: mbstring, intl, pdo_pgsql # Extensiones comunes para PostgreSQL
+
+      - name: Instalar Dependencias (Composer)
+        # Ajustamos a la carpeta donde está el composer.json según tu imagen
+        working-directory: ./apps/SWAP
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Revisar Sintaxis (Linting)
+        run: |
+          # Este comando busca errores de dedo o sintaxis en TODOS los archivos .php
+          # Evita que subas un archivo con un punto y coma faltante que tire el sitio.
+          find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+
+  enviar-a-produccion:
+    needs: validar-php
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar con Llave Maestra
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.MI_LLAVE_MAESTRA }}
+
+      - name: Push al Repo de Produccion
+        run: |
+          git remote add prod https://github.com/SWAP-RTP/SITEG_PRODUCCION.git
+          git push prod main --force
