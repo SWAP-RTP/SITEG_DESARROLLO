@@ -53,13 +53,24 @@ $(document).on("click", ".btn-sistema", function () {
 
   // SI EL SISTEMA ES INTERNO
   if (tip_sistem == "I") {
-    // esto es igual a http://localhost:8086/app-swap/
     url = `${window.location.origin}/app-${sistema}/`;
 
     // SI EL SISTEMA ES EXTERNO
   } else if (tip_sistem == "E") {
-    // esto es igual a http://10.10.30.27:5173
     url = `http://${host}:${puerto}/`;
+
+    // Si es SUGO DEV, pasamos el token como parámetro
+    if (sistema.includes("sugo dev")) {
+      const token = sessionStorage.getItem("token");
+      console.log("🔍 Token obtenido:", token); // Debug
+
+      if (token) {
+        url += `?token=${encodeURIComponent(token)}`;
+        console.log("✓ Token agregado. URL completa:", url);
+      } else {
+        console.warn("⚠️ No hay token en sessionStorage");
+      }
+    }
   }
   window.open(url, "_blank");
 });

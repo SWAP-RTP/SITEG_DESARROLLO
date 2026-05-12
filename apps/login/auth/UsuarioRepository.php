@@ -23,7 +23,8 @@ class UsuarioRepository
                 u.id_usuario,  
                 u.nombre, 
                 u.correo, 
-                u.contrasena, 
+                u.contrasena,
+                u.modulo, 
                 mp.cve_permiso, 
                 msd.modulo_sistem_descrip,
                 ads.dir_nombre
