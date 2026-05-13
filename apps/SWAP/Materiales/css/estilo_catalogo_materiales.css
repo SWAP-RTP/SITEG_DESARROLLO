@@ -32,7 +32,7 @@
 }
 /*oculta las tablas*/
 .oculto {
-    display: none;
+    display: none !important;
 }
 /* Esto quita los redondeados internos donde se juntan el input y el botón */
 .modern-form .input-group {
@@ -138,6 +138,31 @@
     border-color: #2f7fde;
     box-shadow: 0 0 0 3px rgba(47, 127, 222, 0.18);
     outline: none;
+}
+
+/*filtra y busca en mayusculas*/
+.busqueda-modal {
+    text-transform: uppercase;
+}
+
+.busqueda-consultas {
+    text-transform: uppercase;
+}
+/* Color personalizado para la página activa */
+.page-item.active .page-link {
+    background-color: #0d6efd; /* El azul de Bootstrap */
+    border-color: #0d6efd;
+    color: white;
+}
+
+/* Color para los botones normales */
+.page-link {
+    color: #0d6efd;
+}
+
+/* Efecto al pasar el mouse */
+.page-link:hover {
+    background-color: #e9ecef;
 }
 
 /* WebKit (Chrome/Edge) */

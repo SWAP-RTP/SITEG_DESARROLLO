@@ -95,7 +95,7 @@
                     <span class="input-group-text bg-white">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input type="text" id="busqueda-entrada" class="form-control form-control-sm"
+                    <input type="text" id="busqueda-entrada" class="form-control form-control-sm busqueda-consultas"
                         placeholder="Buscar por folio o descripción...">
                 </div>
             </div>
@@ -116,15 +116,15 @@
                     <tbody id="tabla-registros"></tbody>
                 </table>
                 <!--PAGINACION PARA CONSULTA-->
-                <nav aria-label="Paginación" class="my-3">
-                    <ul class="pagination justify-content-center" id="paginacion"></ul>
+                <nav aria-label="Paginación de registros" class="mt-4">
+                    <ul class="pagination justify-content-center" id="contenedor-paginacion">
+                    </ul>
                 </nav>
-
             </div>
         </div>
     </main>
     <!-- MODAL REGISTRO DE ENTRADAS -->
-    <div class="modal fade" id="exampleModalCenter">
+    <div class="modal fade" id="modalMaterialEntrada">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
@@ -132,7 +132,7 @@
                     <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="buscar-material-modal-entrada" class="form-control mb-3"
+                    <input type="text" id="buscar-material-modal-entrada" class="form-control mb-3 busqueda-modal"
                         placeholder="Buscar por código o descripción..." autocomplete="off">
                     <div id="contenedor-materiales-modal"></div>
                 </div>
