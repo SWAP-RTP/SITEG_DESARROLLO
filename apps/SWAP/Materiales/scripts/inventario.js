@@ -5,200 +5,517 @@ import { MaterialesService } from './core/materialesService.js';
 // ** VARIABLE DE CONTROL **
 let timeoutBusqueda = null;
 
-// ** AUTCOMPLETA EL FORMULARIO CON LOS DATOS DEL MATERIAL **
-function actualizarUIInventario(datos, bloquear = false) {
-    const descripcion = document.getElementById('descripcion_inventario');
-    const adscripcion = document.getElementById('adscripcion_inventario');
-    const stock = document.getElementById('stock_actual_inventario');
-
-    if (descripcion) descripcion.value = datos?.descripcion_material ?? '';
-    if (stock) stock.value = datos?.stock_actual ?? 0;
-    if (adscripcion) adscripcion.value = datos?.adscripcion_modulo ?? '';
-
-    [descripcion, adscripcion, stock].forEach(elemento => {
-        if (elemento) {
-            elemento.readOnly = bloquear;
-            if (bloquear) elemento.classList.add('bg-light'); 
-            else elemento.classList.remove('bg-light'); 
-        }
-    });
+//!!---------------------------------------------------------------------------------
+// --- UTILIDADES ---
+function obtenerElemento(id) {
+    return document.getElementById(id);
 }
 
-//** RENDERIZAR RESULTADOS MODAL INVENTARIO */ 
+function actualizarCampo(elemento, valor = '', bloquear = false) {
+    if (!elemento) return;
+
+    elemento.value = valor;
+    elemento.readOnly = bloquear;
+
+    elemento.classList.toggle('bg-light', bloquear);
+}
+
+function formatearFolio(valor = '') {
+    valor = valor.toUpperCase();
+
+    if (!valor.startsWith('MA-')) {
+        return 'MA-' + valor.replace(/[^0-9]/g, '');
+    }
+
+    return 'MA-' + valor.slice(3).replace(/[^0-9]/g, '');
+}
+
+//!!---------------------------------------------------------------------------------
+// ** AUTOCOMPLETA EL FORMULARIO CON LOS DATOS DEL MATERIAL **
+function actualizarUIInventario(datos, bloquear = false) {
+    try {
+
+        actualizarCampo(
+            obtenerElemento('descripcion_inventario'),
+            datos?.descripcion_material ?? '',
+            bloquear
+        );
+
+        actualizarCampo(
+            obtenerElemento('adscripcion_inventario'),
+            datos?.adscripcion_modulo ?? '',
+            bloquear
+        );
+
+        actualizarCampo(
+            obtenerElemento('stock_actual_inventario'),
+            datos?.stock_actual ?? 0,
+            bloquear
+        );
+
+    } catch (error) {
+        console.error('Error al actualizar UI de inventario:', error);
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+//** RENDERIZAR RESULTADOS MODAL INVENTARIO */
 function renderizarResultadosEnModalInventario(materiales, contenedor) {
-    if (!contenedor) return;
-    if (materiales.length === 0) {
-        contenedor.innerHTML = '<div class="alert alert-secondary text-center">No se encontraron coincidencias</div>';
+
+    try {
+
+        if (!contenedor) return;
+
+        if (!materiales.length) {
+
+            contenedor.innerHTML = `
+                <div class="alert alert-secondary text-center">
+                    No se encontraron coincidencias
+                </div>
+            `;
+
+            return;
+        }
+
+        let html = `
+            <table class="table table-sm table-hover align-middle mt-2">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Folio</th>
+                        <th>Descripción</th>
+                        <th class="text-center">Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+        `;
+
+        materiales.forEach(mat => {
+
+            html += `
+                <tr>
+
+                    <td class="fw-bold">
+                        ${mat.folio_material}
+                    </td>
+
+                    <td class="small">
+                        ${mat.descripcion_material}
+                    </td>
+
+                    <td class="text-center">
+                        <button
+                            class="btn btn-primary btn-sm btn-seleccionar-inventario"
+                            data-folio="${mat.folio_material}"
+                        >
+                            Seleccionar
+                        </button>
+                    </td>
+
+                </tr>
+            `;
+        });
+
+        html += `</tbody></table>`;
+
+        contenedor.innerHTML = html;
+
+        configurarEventosSeleccionModal(contenedor);
+
+    } catch (error) {
+
+        console.error(
+            "Error en renderizarResultadosEnModalInventario:",
+            error
+        );
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarEventosSeleccionModal(contenedor) {
+
+    contenedor.querySelectorAll('.btn-seleccionar-inventario')
+        .forEach(btn => {
+
+            btn.addEventListener('click', (e) => {
+
+                try {
+
+                    const folio = e.currentTarget.getAttribute('data-folio');
+
+                    const folioInput = obtenerElemento('folio_inventario');
+
+                    if (folioInput) {
+
+                        folioInput.value = folio;
+
+                        folioInput.dispatchEvent(
+                            new Event('input', { bubbles: true })
+                        );
+                    }
+
+                    const modal = bootstrap.Modal.getInstance(
+                        obtenerElemento('modalMaterialInventario')
+                    );
+
+                    if (modal) modal.hide();
+
+                } catch (error) {
+
+                    console.error(
+                        "Error al seleccionar material en modal:",
+                        error
+                    );
+                }
+            });
+        });
+}
+
+//!!---------------------------------------------------------------------------------
+//** FUNCIÓN DEL DASHBOARD **/
+async function cargarDashboard() {
+
+    try {
+
+        const res = await fetch('query_sql/dashboard.php');
+
+        const data = await res.json();
+
+        const cantidadBajo = parseInt(data.stock_bajo) || 0;
+
+        obtenerElemento('total_materiales').textContent =
+            data.total_materiales || 0;
+
+        obtenerElemento('stock_total').textContent =
+            data.stock_total || 0;
+
+        obtenerElemento('stock_bajo').textContent =
+            cantidadBajo;
+
+        obtenerElemento('movimientos_hoy').textContent =
+            data.movimientos_hoy || 0;
+
+        actualizarKPIStockBajo(cantidadBajo);
+
+        renderizarTablaStockBajo(data.materiales_bajo || []);
+
+        obtenerElemento('dashboard-inventario').style.display = 'block';
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+function actualizarKPIStockBajo(cantidadBajo = 0) {
+
+    const kpiCard = obtenerElemento('kpi-card-bajo');
+
+    if (!kpiCard) return;
+
+    const icono = kpiCard.querySelector('i');
+
+    if (cantidadBajo > 0) {
+
+        kpiCard.classList.add('bg-danger', 'text-white');
+
+        icono?.style.setProperty(
+            'color',
+            '#ffffff',
+            'important'
+        );
+
+    } else {
+
+        kpiCard.classList.remove('bg-danger', 'text-white');
+
+        icono?.style.setProperty(
+            'color',
+            '#e74c3c',
+            'important'
+        );
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+function renderizarTablaStockBajo(materiales = []) {
+
+    const tbody = obtenerElemento('tabla_stock_bajo');
+
+    if (!tbody) return;
+
+    if (!materiales.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="3" class="text-center">
+                    No hay stock bajo
+                </td>
+            </tr>
+        `;
+
         return;
     }
 
-    let html = `<table class="table table-sm table-hover align-middle mt-2">
-        <thead class="table-dark">
-            <tr><th>Folio</th><th>Descripción</th><th class="text-center">Acción</th></tr>
-        </thead>
-        <tbody>`;
+    tbody.innerHTML = materiales.map(m => `
+        <tr>
 
-    materiales.forEach(mat => {
-        html += `
-            <tr>
-                <td class="fw-bold">${mat.folio_material}</td>
-                <td class="small">${mat.descripcion_material}</td>
-                <td class="text-center">
-                    <button class="btn btn-primary btn-sm btn-seleccionar-inventario" data-folio="${mat.folio_material}">
-                        Seleccionar
-                    </button>
-                </td>
-            </tr>`;
-    });
+            <td>${m.folio_material}</td>
 
-    html += `</tbody></table>`;
-    contenedor.innerHTML = html;
+            <td>${m.descripcion_material}</td>
 
-    contenedor.querySelectorAll('.btn-seleccionar-inventario').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const folio = e.currentTarget.getAttribute('data-folio');
-            document.getElementById('folio_inventario').value = folio;
-            
-            const inputEvent = new Event('input', { bubbles: true });
-            document.getElementById('folio_inventario').dispatchEvent(inputEvent);
+            <td>
+                <span class="badge bg-danger">
+                    ${m.stock_actual}
+                </span>
+            </td>
 
-            const instance = bootstrap.Modal.getInstance(document.getElementById('modalMaterialInventario'));
-            if (instance) instance.hide();
-        });
-    });
+        </tr>
+    `).join('');
 }
 
-//** FUNCIÓN DEL DASHBOARD (CAMBIO AQUÍ: Alerta visual dinámica) **
-async function cargarDashboard() {
-    try {
-        const res = await fetch('query_sql/dashboard.php');
-        const data = await res.json();
-        
-        const cantidadBajo = parseInt(data.stock_bajo) || 0;
-
-        document.getElementById('total_materiales').textContent = data.total_materiales || 0;
-        document.getElementById('stock_total').textContent = data.stock_total || 0;
-        document.getElementById('stock_bajo').textContent = cantidadBajo;
-        document.getElementById('movimientos_hoy').textContent = data.movimientos_hoy || 0;
-
-        // --- LÓGICA PARA VOLVER EL KPI COMPLETAMENTE ROJO ---
-        const kpiCardBajo = document.getElementById('kpi-card-bajo');
-        const kpiIcono = kpiCardBajo.querySelector('i');
-
-        if (cantidadBajo > 0) {
-            kpiCardBajo.classList.add('bg-danger', 'text-white');
-            kpiIcono.style.setProperty('color', '#ffffff', 'important'); // Icono blanco para contraste
-        } else {
-            kpiCardBajo.classList.remove('bg-danger', 'text-white');
-            kpiIcono.style.setProperty('color', '#e74c3c', 'important'); // Icono rojo original
-        }
-        // ----------------------------------------------------
-
-        const tbody = document.getElementById('tabla_stock_bajo');
-        tbody.innerHTML = (data.materiales_bajo || []).map(m => `
-            <tr>
-                <td>${m.folio_material}</td>
-                <td>${m.descripcion_material}</td>
-                <td><span class="badge bg-danger">${m.stock_actual}</span></td>
-            </tr>
-        `).join('') || '<tr><td colspan="3" class="text-center">No hay stock bajo</td></tr>';
-        
-        document.getElementById('dashboard-inventario').style.display = 'block';
-    } catch (e) { console.error(e); }
-}
-
+//!!---------------------------------------------------------------------------------
 // ** CONFIGURACIÓN DE EVENTOS **
 function configurarEventosInventario() {
-    const folioInput = document.getElementById('folio_inventario');
 
-    // ** Detectar cuando se escribe con el teclado **
+    configurarEventoFolio();
+    configurarBusquedaModal();
+    configurarBotonModal();
+    configurarConsultar();
+    configurarLimpiar();
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarEventoFolio() {
+
+    const folioInput = obtenerElemento('folio_inventario');
+
     folioInput?.addEventListener('input', (e) => {
-        let valor = e.target.value.toUpperCase();
 
-        if (!valor.startsWith('MA-')) valor = 'MA-' + valor.replace(/[^0-9]/g, '');
-        else valor = 'MA-' + valor.slice(3).replace(/[^0-9]/g, '');
-        e.target.value = valor;
+        try {
 
-        clearTimeout(timeoutBusqueda); 
+            const valor = formatearFolio(e.target.value);
 
-        if (valor.length === 11) {
-            timeoutBusqueda = setTimeout(async () => {
-                const result = await MaterialesService.buscarPorFolio(valor);
-                if (result.status === 'ok' && result.datos) {
-                    actualizarUIInventario(result.datos, true);
-                } else {
-                    actualizarUIInventario(null, false);
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Material no encontrado',
-                        text: 'El folio ingresado no existe en el inventario.',
-                        confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                        folioInput.value = '';
-                        folioInput.focus();
-                    });
-                }
-            }, 500);
-        } else {
-            actualizarUIInventario(null, false);
-        }
-    });
+            e.target.value = valor;
 
-    // ** EVENTO DEL MODAL **
-    const inputModalBusqueda = document.getElementById('buscar-material-modal-inventario');
-    const contenedorResultados = document.getElementById('contenedor-materiales-modal-inventario');
+            clearTimeout(timeoutBusqueda);
 
-    // Configurar el listener del input una sola vez, fuera del click
-    if (inputModalBusqueda) {
-        inputModalBusqueda.addEventListener('input', async (e) => {
-            const texto = e.target.value.trim();
-            const materiales = await MaterialesService.buscarDinamico(texto);
-            renderizarResultadosEnModalInventario(materiales, contenedorResultados);
-        });
-    }
+            if (valor.length === 11) {
 
-    document.getElementById('btn-modal-inventario')?.addEventListener('click', () => {
-        // Al abrir el modal, simplemente cargamos los datos iniciales y lo mostramos
-        if (inputModalBusqueda) inputModalBusqueda.value = '';
-        MaterialesService.buscarDinamico('').then(materiales => {
-            renderizarResultadosEnModalInventario(materiales, contenedorResultados);
-        });
+                timeoutBusqueda = setTimeout(async () => {
 
-        ModalService.abrir({
-            modalId: 'modalMaterialInventario',
-            contenedorId: 'contenedor-materiales-modal-inventario',
-            callback: async (folio) => {
-                folioInput.value = folio;
-                const result = await MaterialesService.buscarPorFolio(folio);
-                if (result.status === 'ok' && result.datos) {
-                    actualizarUIInventario(result.datos, true); 
-                }
+                    try {
+
+                        const result =
+                            await MaterialesService.buscarPorFolio(valor);
+
+                        if (
+                            result.status === 'ok' &&
+                            result.datos
+                        ) {
+
+                            actualizarUIInventario(
+                                result.datos,
+                                true
+                            );
+
+                        } else {
+
+                            actualizarUIInventario(null, false);
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Material no encontrado',
+                                text: 'El folio ingresado no existe en el inventario.',
+                                confirmButtonText: 'Aceptar'
+                            }).then(() => {
+
+                                folioInput.value = '';
+
+                                folioInput.focus();
+                            });
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Error en búsqueda por folio:",
+                            error
+                        );
+                    }
+
+                }, 500);
+
+            } else {
+
+                actualizarUIInventario(null, false);
             }
-        });
-    });
 
-    // ** EVENTO CONSULTAR **
-    document.getElementById('btn-consultar-inventario')?.addEventListener('click', cargarDashboard);
+        } catch (error) {
 
-    // ** EVENTO LIMPIAR (CAMBIO AQUÍ: Se restablece el estilo original del KPI) **
-    document.getElementById('btn-limpiar-inventario')?.addEventListener('click', () => {
-        document.getElementById('form-inventario-material').reset();
-        actualizarUIInventario(null, false);
-        const dash = document.getElementById('dashboard-inventario');
-        if (dash) dash.style.display = 'none';
-
-        // Restablecer el KPI de Stock Bajo a su estado base oscuro
-        const kpiCardBajo = document.getElementById('kpi-card-bajo');
-        if (kpiCardBajo) {
-            kpiCardBajo.classList.remove('bg-danger', 'text-white');
-            const kpiIcono = kpiCardBajo.querySelector('i');
-            if (kpiIcono) kpiIcono.style.setProperty('color', '#e74c3c', 'important');
+            console.error(
+                "Error en input folio_inventario:",
+                error
+            );
         }
     });
 }
 
+//!!---------------------------------------------------------------------------------
+function configurarBusquedaModal() {
+
+    const inputBusqueda =
+        obtenerElemento('buscar-material-modal-inventario');
+
+    const contenedor =
+        obtenerElemento('contenedor-materiales-modal-inventario');
+
+    if (!inputBusqueda) return;
+
+    inputBusqueda.addEventListener('input', async (e) => {
+
+        try {
+
+            const texto = e.target.value.trim();
+
+            const materiales =
+                await MaterialesService.buscarDinamico(texto);
+
+            renderizarResultadosEnModalInventario(
+                materiales,
+                contenedor
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Error en búsqueda modal inventario:",
+                error
+            );
+        }
+    });
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarBotonModal() {
+
+    obtenerElemento('btn-modal-inventario')
+        ?.addEventListener('click', async () => {
+
+            try {
+
+                const inputBusqueda =
+                    obtenerElemento('buscar-material-modal-inventario');
+
+                const contenedor =
+                    obtenerElemento('contenedor-materiales-modal-inventario');
+
+                if (inputBusqueda) {
+                    inputBusqueda.value = '';
+                }
+
+                const materiales =
+                    await MaterialesService.buscarDinamico('');
+
+                renderizarResultadosEnModalInventario(
+                    materiales,
+                    contenedor
+                );
+
+                ModalService.abrir({
+                    modalId: 'modalMaterialInventario',
+                    contenedorId: 'contenedor-materiales-modal-inventario',
+
+                    callback: async (folio) => {
+
+                        try {
+
+                            obtenerElemento('folio_inventario').value = folio;
+
+                            const result =
+                                await MaterialesService.buscarPorFolio(folio);
+
+                            if (
+                                result.status === 'ok' &&
+                                result.datos
+                            ) {
+
+                                actualizarUIInventario(
+                                    result.datos,
+                                    true
+                                );
+                            }
+
+                        } catch (error) {
+
+                            console.error(
+                                "Error callback modal inventario:",
+                                error
+                            );
+                        }
+                    }
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "Error al abrir modal inventario:",
+                    error
+                );
+            }
+        });
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarConsultar() {
+
+    obtenerElemento('btn-consultar-inventario')
+        ?.addEventListener('click', cargarDashboard);
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarLimpiar() {
+
+    obtenerElemento('btn-limpiar-inventario')
+        ?.addEventListener('click', () => {
+
+            try {
+
+                const form =
+                    obtenerElemento('form-inventario-material');
+
+                form?.reset();
+
+                actualizarUIInventario(null, false);
+
+                const dashboard =
+                    obtenerElemento('dashboard-inventario');
+
+                if (dashboard) {
+                    dashboard.style.display = 'none';
+                }
+
+                actualizarKPIStockBajo(0);
+
+                obtenerElemento('folio_inventario')?.focus();
+
+            } catch (error) {
+
+                console.error(
+                    "Error al limpiar inventario:",
+                    error
+                );
+            }
+        });
+}
+
+//!!---------------------------------------------------------------------------------
 // ** ARRANCAR TODO AL CARGAR LA PÁGINA **
 document.addEventListener('DOMContentLoaded', async () => {
+
     await cargarCatalogos();
+
     configurarEventosInventario();
 });

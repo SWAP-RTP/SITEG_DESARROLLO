@@ -4,300 +4,686 @@ import { MaterialesService } from './core/materialesService.js';
 
 // ** VARIABLES DE CONTROL GLOBAL **
 let timeoutBusqueda = null;
-let registrosCompletos = []; 
-let paginaActual = 1;        
-const registrosPorPagina = 5; 
+let registrosCompletos = [];
+let paginaActual = 1;
+const registrosPorPagina = 5;
 
-// --- FUNCIONES DE TABLA PRINCIPAL ---
+//**VARIABLES DE CONTROL PARA PAGINACION DEL MODAL**
+let materialesFiltradosModal = [];
+let paginaActualModal = 1;
+const registrosPorPaginaModal = 5;
 
-function procesarYMostrarTabla() {
-    const inputFiltro = document.getElementById('busqueda-salida');
-    const termino = inputFiltro ? inputFiltro.value.toLowerCase() : '';
+//!!---------------------------------------------------------------------------------
+// --- UTILIDADES ---
+const IDS_FORMULARIO = [
+    'descripcion_salida',
+    'unidad_salida',
+    'estado_salida',
+    'categoria_salida',
+    'adscripcion_salida'
+];
 
-    const filtrados = registrosCompletos.filter(reg => {
-        const folio = (reg.folio_material || '').toLowerCase();
-        const desc = (reg.descripcion_material_salida || reg.descripcion_material_entrada || '').toLowerCase();
-        return folio.includes(termino) || desc.includes(termino);
-    });
-
-    const inicio = (paginaActual - 1) * registrosPorPagina;
-    const fin = inicio + registrosPorPagina;
-    const datosParaVer = filtrados.slice(inicio, fin);
-
-    renderizarTabla(datosParaVer);
-    actualizarPaginacion(filtrados);
+function obtenerElemento(id) {
+    return document.getElementById(id);
 }
 
-function renderizarTabla(datos) {
-    const tbody = document.getElementById('tabla-salidas');
-    if (!tbody) return;
+function habilitarCampos(ids, estado = true) {
+    ids.forEach(id => {
+        const el = obtenerElemento(id);
+        if (el) el.disabled = estado;
+    });
+}
 
-    if (datos.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-muted p-3 text-center">No se encontraron registros</td></tr>`;
-        return;
+function limpiarCampos(ids) {
+    ids.forEach(id => {
+        const el = obtenerElemento(id);
+        if (el) {
+            el.value = '';
+            el.disabled = false;
+        }
+    });
+}
+
+function obtenerClaseEstado(estado = '') {
+    estado = estado.toUpperCase();
+
+    if (estado.includes('BUENO')) return 'bg-success text-white';
+    if (estado.includes('REGULAR')) return 'bg-warning text-dark';
+    if (estado.includes('MALO')) return 'bg-danger text-white';
+
+    return 'bg-info text-dark';
+}
+
+function formatearFolio(valor = '') {
+    valor = valor.toUpperCase();
+
+    if (!valor.startsWith('MA-') && valor.length > 0) {
+        return 'MA-' + valor.replace(/[^0-9]/g, '');
     }
 
-    tbody.innerHTML = datos.map(reg => {
-        let claseColor = 'bg-info text-dark';
-        const estado = (reg.estado || '').toUpperCase();
-        if (estado.includes('BUENO')) claseColor = 'bg-success text-white';
-        else if (estado.includes('REGULAR')) claseColor = 'bg-warning text-dark';
-        else if (estado.includes('MALO')) claseColor = 'bg-danger text-white';
+    return 'MA-' + valor.substring(3).replace(/[^0-9]/g, '');
+}
 
-        return `
+function paginarDatos(datos = [], pagina = 1, limite = 5) {
+    const inicio = (pagina - 1) * limite;
+    return datos.slice(inicio, inicio + limite);
+}
+
+//!!---------------------------------------------------------------------------------
+// --- FUNCIONES DE TABLA PRINCIPAL ---
+function procesarYMostrarTabla() {
+    try {
+        const inputFiltro = obtenerElemento('busqueda-salida');
+        const termino = inputFiltro?.value.toLowerCase() || '';
+
+        const filtrados = registrosCompletos.filter(reg => {
+            const folio = (reg.folio_material || '').toLowerCase();
+
+            const descripcion = (
+                reg.descripcion_material_salida ||
+                reg.descripcion_material_entrada ||
+                ''
+            ).toLowerCase();
+
+            return (
+                folio.includes(termino) ||
+                descripcion.includes(termino)
+            );
+        });
+
+        renderizarTabla(
+            paginarDatos(
+                filtrados,
+                paginaActual,
+                registrosPorPagina
+            )
+        );
+
+        actualizarPaginacion(filtrados);
+
+    } catch (error) {
+        console.error("Error en procesarYMostrarTabla:", error);
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+function renderizarTabla(datos) {
+    try {
+        const tbody = obtenerElemento('tabla-salidas');
+        if (!tbody) return;
+
+        if (!datos.length) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-muted p-3 text-center">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = datos.map(reg => `
             <tr>
                 <td class="fw-bold">${reg.folio_material}</td>
-                <td class="text-start">${reg.descripcion_material_salida || reg.descripcion_material_entrada}</td>
+
+                <td class="text-start">
+                    ${reg.descripcion_material_salida || reg.descripcion_material_entrada}
+                </td>
+
                 <td>${reg.unidad}</td>
-                <td><span class="badge ${claseColor}">${reg.estado}</span></td>
+
+                <td>
+                    <span class="badge ${obtenerClaseEstado(reg.estado)}">
+                        ${reg.estado}
+                    </span>
+                </td>
+
                 <td>${reg.cantidad}</td>
+
                 <td class="small">${reg.fecha_registro}</td>
-            </tr>`;
-    }).join('');
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error("Error en renderizarTabla:", error);
+    }
 }
 
+//!!---------------------------------------------------------------------------------
 function actualizarPaginacion(datosFiltrados) {
-    const navPaginacion = document.getElementById('paginacion-salidas');
-    if (!navPaginacion) return;
+    try {
+        const navPaginacion = obtenerElemento('paginacion-salidas');
+        if (!navPaginacion) return;
 
-    const totalPaginas = Math.ceil(datosFiltrados.length / registrosPorPagina);
-    let html = '';
+        const totalPaginas = Math.ceil(
+            datosFiltrados.length / registrosPorPagina
+        );
 
-    if (totalPaginas <= 1) {
-        navPaginacion.innerHTML = '';
-        navPaginacion.closest('nav').classList.add('oculto');
-        return;
-    }
+        if (totalPaginas <= 1) {
+            navPaginacion.innerHTML = '';
+            navPaginacion.closest('nav')?.classList.add('oculto');
+            return;
+        }
 
-    navPaginacion.closest('nav').classList.remove('oculto');
+        navPaginacion.closest('nav')?.classList.remove('oculto');
 
-    html += `<li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" data-pagina="${paginaActual - 1}">Anterior</a>
-             </li>`;
+        let html = `
+            <li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-pagina="${paginaActual - 1}">
+                    Anterior
+                </a>
+            </li>
+        `;
 
-    for (let i = 1; i <= totalPaginas; i++) {
-        html += `<li class="page-item ${i === paginaActual ? 'active' : ''}">
-                    <a class="page-link" href="#" data-pagina="${i}">${i}</a>
-                 </li>`;
-    }
+        for (let i = 1; i <= totalPaginas; i++) {
+            html += `
+                <li class="page-item ${i === paginaActual ? 'active' : ''}">
+                    <a class="page-link" href="#" data-pagina="${i}">
+                        ${i}
+                    </a>
+                </li>
+            `;
+        }
 
-    html += `<li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}">
-                <a class="page-link" href="#" data-pagina="${paginaActual + 1}">Siguiente</a>
-             </li>`;
+        html += `
+            <li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-pagina="${paginaActual + 1}">
+                    Siguiente
+                </a>
+            </li>
+        `;
 
-    navPaginacion.innerHTML = html;
+        navPaginacion.innerHTML = html;
 
-    navPaginacion.querySelectorAll('.page-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const nuevaPagina = parseInt(e.target.getAttribute('data-pagina'));
-            if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
-                paginaActual = nuevaPagina;
-                procesarYMostrarTabla();
-            }
-        });
-    });
-}
-
-// --- LOGICA DE NEGOCIO ---
-
-async function cargarRegistros() {
-    const data = await MaterialesService.consultarSalidas(); 
-    if (data.status === 'ok') {
-        registrosCompletos = data.datos; 
-        paginaActual = 1; 
-        procesarYMostrarTabla(); 
-        document.getElementById('contenedor-tabla-salidas').classList.remove('oculto');
-    }
-}
-
-async function cargarMaterial(folio) {
-    const resultado = await MaterialesService.buscarPorFolio(folio);
-    const inputFolio = document.getElementById('folio_salida');
-
-    if (resultado.status === 'ok' && resultado.datos) {
-        inputFolio.classList.remove('is-invalid');
-        const material = resultado.datos;
-        
-        document.getElementById('descripcion_salida').value = material.descripcion_material ?? '';
-        document.getElementById('unidad_salida').value = material.id_unidad_material ?? '';
-        document.getElementById('estado_salida').value = material.id_estado_material ?? '';
-        document.getElementById('categoria_salida').value = material.id_categoria_material ?? '';
-        document.getElementById('adscripcion_salida').value = material.adscripcion_modulo ?? '';
-
-        ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.disabled = true;
+        navPaginacion.querySelectorAll('.page-link').forEach(link => {
+            link.addEventListener('click', cambiarPagina);
         });
 
-        document.getElementById('cantidad_salida').focus();
-    } else {
-        Swal.fire({
-            title: 'Atención',
-            text: 'El folio no existe en el catálogo.',
-            icon: 'warning',
-            confirmButtonText: 'Entendido'
-        }).then(() => {
-            // Reset manual para limpiar errores
-            inputFolio.value = ''; 
-            inputFolio.focus(); 
-        });
+    } catch (error) {
+        console.error("Error en actualizarPaginacion:", error);
     }
 }
 
-async function guardarSalida(e) {
+function cambiarPagina(e) {
     e.preventDefault();
-    const form = e.target;
-    const inputFolio = document.getElementById('folio_salida');
-    const camposABloquear = ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'];
 
-    camposABloquear.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.disabled = false;
-    });
+    const nuevaPagina = parseInt(
+        e.target.getAttribute('data-pagina')
+    );
 
-    const data = Object.fromEntries(new FormData(form).entries());
-    const res = await MaterialesService.guardarSalida(data);
+    const totalPaginas = Math.ceil(
+        registrosCompletos.length / registrosPorPagina
+    );
 
-    if (res.status === 'ok') {
-        Swal.fire('Éxito', res.message, 'success');
-        //cargarRegistros();
-
-        // --- SOLUCIÓN PARA EVITAR DISPARO AL GUARDAR ---
-        form.reset();
-        // Disparamos un evento 'input' manual indicando que debe ignorar la búsqueda
-        const eventoSilencioso = new CustomEvent('input', { detail: { skipSearch: true } });
-        inputFolio.dispatchEvent(eventoSilencioso);
-
-        camposABloquear.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.disabled = false;
-        });
-        
-        inputFolio.focus();
-    } else {
-        camposABloquear.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.disabled = true;
-        });
-        Swal.fire('Error', res.message, 'error');
+    if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
+        paginaActual = nuevaPagina;
+        procesarYMostrarTabla();
     }
 }
 
-// --- LOGICA DEL MODAL ---
+//!!---------------------------------------------------------------------------------
+// --- LOGICA DE NEGOCIO ---
+async function cargarRegistros() {
+    try {
+        const contenedor = obtenerElemento('contenedor-tabla-salidas');
+        if (!contenedor) return;
 
-function renderizarResultadosEnModal(materiales, contenedor) {
-    if (materiales.length === 0) {
-        contenedor.innerHTML = '<div class="text-center p-3 text-muted">No se encontraron materiales</div>';
-        return;
+        if (!contenedor.classList.contains('oculto')) {
+            contenedor.classList.add('oculto');
+            return;
+        }
+
+        const data = await MaterialesService.consultarSalidas();
+
+        if (data.status === 'ok') {
+            registrosCompletos = data.datos;
+            paginaActual = 1;
+
+            procesarYMostrarTabla();
+
+            contenedor.classList.remove('oculto');
+        }
+
+    } catch (error) {
+        console.error("Error en cargarRegistros:", error);
     }
+}
 
-    // Encabezado sin "table-dark"
-    let html = `<table class="table table-sm table-hover align-middle mt-2">
-                    <thead>
-                        <tr>
-                            <th class="border-bottom-0">Folio</th>
-                            <th class="border-bottom-0">Descripción</th>
-                            <th class="border-bottom-0 text-center">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+//!!---------------------------------------------------------------------------------
+async function cargarMaterial(folio) {
+    try {
+        const resultado = await MaterialesService.buscarPorFolio(folio);
+        const inputFolio = obtenerElemento('folio_salida');
 
-    materiales.forEach(mat => {
-        html += `<tr>
+        if (resultado.status === 'ok' && resultado.datos) {
+
+            inputFolio?.classList.remove('is-invalid');
+
+            const material = resultado.datos;
+
+            obtenerElemento('descripcion_salida').value = material.descripcion_material ?? '';
+            obtenerElemento('unidad_salida').value = material.id_unidad_material ?? '';
+            obtenerElemento('estado_salida').value = material.id_estado_material ?? '';
+            obtenerElemento('categoria_salida').value = material.id_categoria_material ?? '';
+            obtenerElemento('adscripcion_salida').value = material.adscripcion_modulo ?? '';
+
+            habilitarCampos(IDS_FORMULARIO, true);
+
+            obtenerElemento('cantidad_salida')?.focus();
+
+        } else {
+
+            Swal.fire({
+                title: 'Atención',
+                text: 'El folio no existe en el catálogo.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                if (inputFolio) {
+                    inputFolio.value = '';
+                    inputFolio.focus();
+                }
+            });
+        }
+
+    } catch (error) {
+        console.error("Error en cargarMaterial:", error);
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+async function guardarSalida(e) {
+    try {
+        e.preventDefault();
+
+        const form = e.target;
+        const inputFolio = obtenerElemento('folio_salida');
+
+        habilitarCampos(IDS_FORMULARIO, false);
+
+        const data = Object.fromEntries(
+            new FormData(form).entries()
+        );
+
+        const res = await MaterialesService.guardarSalida(data);
+
+        if (res.status === 'ok') {
+
+            Swal.fire('Éxito', res.message, 'success');
+
+            form.reset();
+
+            const eventoSilencioso = new CustomEvent('input', {
+                detail: { skipSearch: true }
+            });
+
+            inputFolio?.dispatchEvent(eventoSilencioso);
+
+            habilitarCampos(IDS_FORMULARIO, false);
+
+            inputFolio?.focus();
+
+        } else {
+
+            habilitarCampos(IDS_FORMULARIO, true);
+
+            Swal.fire('Error', res.message, 'error');
+        }
+
+    } catch (error) {
+        console.error("Error en guardarSalida:", error);
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+// --- LOGICA DEL MODAL ---
+export function renderizarResultadosEnModal(materiales, contenedor) {
+    try {
+        if (!contenedor) return;
+
+        materialesFiltradosModal = materiales;
+
+        if (!materialesFiltradosModal.length) {
+            contenedor.innerHTML = `
+                <div class="text-center p-3 text-muted">
+                    No se encontraron materiales
+                </div>
+            `;
+            return;
+        }
+
+        const datosParaVer = paginarDatos(
+            materialesFiltradosModal,
+            paginaActualModal,
+            registrosPorPaginaModal
+        );
+
+        let html = `
+            <table class="table table-sm table-hover align-middle mt-2">
+                <thead>
+                    <tr>
+                        <th class="border-bottom-0">Folio</th>
+                        <th class="border-bottom-0">Descripción</th>
+                        <th class="border-bottom-0 text-center">Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+        `;
+
+        datosParaVer.forEach(mat => {
+            html += `
+                <tr>
                     <td class="fw-bold">${mat.folio_material}</td>
-                    <td class="text-start small">${mat.descripcion_material}</td>
+
+                    <td class="text-start small">
+                        ${mat.descripcion_material}
+                    </td>
+
                     <td class="text-center">
-                        <button class="btn btn-primary btn-sm btn-seleccionar-modal" data-folio="${mat.folio_material}">
+                        <button
+                            class="btn btn-primary btn-sm btn-seleccionar-modal"
+                            data-folio="${mat.folio_material}"
+                        >
                             Seleccionar
                         </button>
                     </td>
-                 </tr>`;
-    });
+                </tr>
+            `;
+        });
 
-    html += `</tbody></table>`;
-    contenedor.innerHTML = html;
+        html += `</tbody></table>`;
+
+        const totalPaginas = Math.ceil(
+            materialesFiltradosModal.length / registrosPorPaginaModal
+        );
+
+        if (totalPaginas > 1) {
+
+            html += `
+                <nav aria-label="Paginación modal" class="mt-3">
+                    <ul class="pagination pagination-sm justify-content-center" id="paginacion-modal">
+
+                        <li class="page-item ${paginaActualModal === 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="#" data-pagina-modal="${paginaActualModal - 1}">
+                                Anterior
+                            </a>
+                        </li>
+            `;
+
+            for (let i = 1; i <= totalPaginas; i++) {
+                html += `
+                    <li class="page-item ${i === paginaActualModal ? 'active' : ''}">
+                        <a class="page-link" href="#" data-pagina-modal="${i}">
+                            ${i}
+                        </a>
+                    </li>
+                `;
+            }
+
+            html += `
+                        <li class="page-item ${paginaActualModal === totalPaginas ? 'disabled' : ''}">
+                            <a class="page-link" href="#" data-pagina-modal="${paginaActualModal + 1}">
+                                Siguiente
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            `;
+        }
+
+        contenedor.innerHTML = html;
+
+        configurarEventosModal(contenedor, totalPaginas);
+
+    } catch (error) {
+        console.error("Error en renderizarResultadosEnModal:", error);
+    }
+}
+
+function configurarEventosModal(contenedor, totalPaginas) {
 
     contenedor.querySelectorAll('.btn-seleccionar-modal').forEach(btn => {
+
         btn.addEventListener('click', (e) => {
+
             const folio = e.currentTarget.getAttribute('data-folio');
-            document.getElementById('folio_salida').value = folio;
+
+            obtenerElemento('folio_salida').value = folio;
+
             cargarMaterial(folio);
-            const modalEl = document.getElementById('modalMaterialSalida');
+
+            const modalEl = obtenerElemento('modalMaterialSalida');
+
             const instance = bootstrap.Modal.getInstance(modalEl);
+
             if (instance) instance.hide();
+        });
+    });
+
+    const navPaginacion = contenedor.querySelector('#paginacion-modal');
+
+    if (!navPaginacion) return;
+
+    navPaginacion.querySelectorAll('.page-link').forEach(link => {
+
+        link.addEventListener('click', (e) => {
+
+            e.preventDefault();
+
+            const nuevaPagina = parseInt(
+                e.target.getAttribute('data-pagina-modal')
+            );
+
+            if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
+
+                paginaActualModal = nuevaPagina;
+
+                renderizarResultadosEnModal(
+                    materialesFiltradosModal,
+                    contenedor
+                );
+            }
         });
     });
 }
 
+//!!---------------------------------------------------------------------------------
+// --- CONFIGURACION DE EVENTOS ---
 function configurarEventos() {
-    const folioInput = document.getElementById('folio_salida');
-    if (folioInput) {
-        folioInput.addEventListener('input', (e) => {
-            // SI EL EVENTO ES MARCADO COMO "skipSearch", NO HACE NADA
-            if (e.detail && e.detail.skipSearch) return;
 
-            let valor = e.target.value.toUpperCase();
-            if (!valor.startsWith('MA-') && valor.length > 0) {
-                valor = 'MA-' + valor.replace(/[^0-9]/g, '');
-            } else {
-                valor = 'MA-' + valor.substring(3).replace(/[^0-9]/g, '');
-            }
+    configurarEventoFolio();
+    configurarBusquedaModal();
+    configurarModal();
+    configurarFiltroTabla();
+
+    obtenerElemento('btn-consultar-salidas')
+        ?.addEventListener('click', cargarRegistros);
+
+    obtenerElemento('form-salida-material')
+        ?.addEventListener('submit', guardarSalida);
+
+    obtenerElemento('btn-limpiar-salida')
+        ?.addEventListener('click', limpiarFormulario);
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarEventoFolio() {
+
+    const folioInput = obtenerElemento('folio_salida');
+
+    if (!folioInput) return;
+
+    folioInput.addEventListener('input', (e) => {
+
+        try {
+
+            if (e.detail?.skipSearch) return;
+
+            const valor = formatearFolio(e.target.value);
+
             e.target.value = valor;
 
             clearTimeout(timeoutBusqueda);
 
-            // Solo dispara si la longitud es 11 (y no es un evento de salto)
             if (valor.length === 11) {
-                timeoutBusqueda = setTimeout(() => cargarMaterial(valor), 400);
+
+                timeoutBusqueda = setTimeout(() => {
+                    cargarMaterial(valor);
+                }, 400);
+
             } else if (valor.length <= 3) {
-                // Comportamiento igual a Entrada: limpiar campos al borrar folio
-                ['descripcion_salida', 'unidad_salida', 'estado_salida', 'categoria_salida', 'adscripcion_salida'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) { el.value = ''; el.disabled = false; }
-                });
+
+                limpiarCampos(IDS_FORMULARIO);
             }
-        });
-    }
 
-    const inputModal = document.getElementById('buscar-material-modal-salida');
-    const contenedorModal = document.getElementById('contenedor-materiales-modal-salida');
-    if (inputModal) {
-        inputModal.addEventListener('input', async (e) => {
-            const texto = e.target.value.trim();
-            const materiales = await MaterialesService.buscarDinamico(texto);
-            renderizarResultadosEnModal(materiales, contenedorModal);
-        });
-    }
-
-    document.getElementById('btn-modal-salida')?.addEventListener('click', async () => {
-        const modalEl = document.getElementById('modalMaterialSalida');
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-        if (inputModal) inputModal.value = '';
-        contenedorModal.innerHTML = '<div class="text-center p-4"><div class="spinner-border spinner-border-sm text-primary"></div></div>';
-        const iniciales = await MaterialesService.buscarDinamico('');
-        renderizarResultadosEnModal(iniciales, contenedorModal);
-    });
-
-    document.getElementById('busqueda-salida')?.addEventListener('input', () => {
-        paginaActual = 1;
-        procesarYMostrarTabla();
-    });
-
-    document.getElementById('btn-consultar-salidas')?.addEventListener('click', cargarRegistros);
-    document.getElementById('form-salida-material')?.addEventListener('submit', guardarSalida);
-    
-    document.getElementById('btn-limpiar-salida')?.addEventListener('click', () => {
-        const form = document.getElementById('form-salida-material');
-        form.reset();
-        document.getElementById('contenedor-tabla-salidas').classList.add('oculto');
-        form.querySelectorAll('input, select').forEach(el => el.disabled = false);
-        document.getElementById('folio_salida')?.focus();
+        } catch (error) {
+            console.error(
+                "Error en evento input de folio_salida:",
+                error
+            );
+        }
     });
 }
 
+//!!---------------------------------------------------------------------------------
+function configurarBusquedaModal() {
+
+    const inputModal = obtenerElemento('buscar-material-modal-salida');
+    const contenedorModal = obtenerElemento('contenedor-materiales-modal-salida');
+
+    if (!inputModal) return;
+
+    inputModal.addEventListener('input', async (e) => {
+
+        try {
+
+            const texto = e.target.value.trim();
+
+            const materiales = await MaterialesService.buscarDinamico(texto);
+
+            renderizarResultadosEnModal(
+                materiales,
+                contenedorModal
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Error en entrada del buscador del modal:",
+                error
+            );
+        }
+    });
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarModal() {
+
+    obtenerElemento('btn-modal-salida')
+        ?.addEventListener('click', async () => {
+
+            try {
+
+                const modalEl = obtenerElemento('modalMaterialSalida');
+
+                if (!modalEl) return;
+
+                const modal = new bootstrap.Modal(modalEl);
+
+                modal.show();
+
+                const inputModal = obtenerElemento('buscar-material-modal-salida');
+                const contenedorModal = obtenerElemento('contenedor-materiales-modal-salida');
+
+                if (inputModal) {
+                    inputModal.value = '';
+                }
+
+                if (contenedorModal) {
+                    contenedorModal.innerHTML = `
+                        <div class="text-center p-4">
+                            <div class="spinner-border spinner-border-sm text-primary"></div>
+                        </div>
+                    `;
+                }
+
+                const iniciales = await MaterialesService.buscarDinamico('');
+
+                renderizarResultadosEnModal(
+                    iniciales,
+                    contenedorModal
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Error al desplegar el modal de salidas:",
+                    error
+                );
+            }
+        });
+}
+
+//!!---------------------------------------------------------------------------------
+function configurarFiltroTabla() {
+
+    obtenerElemento('busqueda-salida')
+        ?.addEventListener('input', () => {
+
+            try {
+
+                paginaActual = 1;
+
+                procesarYMostrarTabla();
+
+            } catch (error) {
+
+                console.error(
+                    "Error en el filtro de búsqueda:",
+                    error
+                );
+            }
+        });
+}
+
+//!!---------------------------------------------------------------------------------
+function limpiarFormulario() {
+
+    try {
+
+        const form = obtenerElemento('form-salida-material');
+
+        if (form) {
+
+            form.reset();
+
+            form.querySelectorAll('input, select')
+                .forEach(el => el.disabled = false);
+        }
+
+        obtenerElemento('contenedor-tabla-salidas')
+            ?.classList.add('oculto');
+
+        obtenerElemento('folio_salida')
+            ?.focus();
+
+    } catch (error) {
+
+        console.error(
+            "Error al limpiar el formulario:",
+            error
+        );
+    }
+}
+
+//!!---------------------------------------------------------------------------------
+//INICIO DE LA APLICACIÓN
 document.addEventListener('DOMContentLoaded', async () => {
+
     await cargarCatalogos();
+
     configurarEventos();
 });

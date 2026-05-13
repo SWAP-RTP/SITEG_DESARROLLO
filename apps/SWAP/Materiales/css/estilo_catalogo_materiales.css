@@ -32,7 +32,7 @@
 }
 /*oculta las tablas*/
 .oculto {
-    display: none;
+    display: none !important;
 }
 /* Esto quita los redondeados internos donde se juntan el input y el botón */
 .modern-form .input-group {
