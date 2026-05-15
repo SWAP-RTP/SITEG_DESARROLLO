@@ -114,7 +114,7 @@ async function guardarSalida(e) {
     form.querySelectorAll('input, select').forEach(c => { c.disabled = false; c.readOnly = false; });
     
     const data = Object.fromEntries(new FormData(form));
-    if (!data.folio_salida || !data.cantidad_salida) return Swal.fire('Error', 'Debes completar folio y cantidad', 'error');
+    if (!data.folio || !data.cantidad) return Swal.fire('Error', 'Debes completar folio y cantidad', 'error');
 
     const res = await MaterialesService.guardarSalida(data);
     if (res.status === 'ok') {
@@ -194,6 +194,11 @@ function configurarEventos() {
             procesarYMostrarTabla(); 
             c?.classList.remove('oculto'); 
         }
+    });
+
+    obtenerEl('busqueda-salida')?.addEventListener('input', () => {
+        paginaActual = 1;
+        procesarYMostrarTabla();
     });
 
     obtenerEl('form-salida-material')?.addEventListener('submit', guardarSalida);
