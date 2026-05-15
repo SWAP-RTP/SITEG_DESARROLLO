@@ -118,7 +118,7 @@ async function guardarEntrada(e) {
     try {
         const res = await MaterialesService.guardarEntrada(data);
         if (res.status === 'ok') {
-            const r = await Swal.fire({title: 'Guardado', text: '¿Otro?', icon: 'success', showCancelButton: true});
+            const r = await Swal.fire({title: 'Guardado', text: '¿Desea registrar otro material?', icon: 'success', showCancelButton: true});
             if (r.isConfirmed) {
                 form.reset(); document.getElementById('folio')?.focus();
                 form.querySelectorAll('input, select').forEach(c => { c.disabled = false; c.readOnly = false; });

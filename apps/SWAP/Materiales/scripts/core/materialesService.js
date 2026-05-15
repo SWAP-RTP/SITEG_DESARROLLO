@@ -53,7 +53,7 @@ export const MaterialesService = {
                 descripcion_material_salida: datos.descripcion,
                 id_estado_material_salida: datos.estado,
                 cantidad_material_salida: datos.cantidad,
-                adscripcion_modulo: datos.adscripcion
+                adscripcion_modulo: datos.adscripcion_modulo
             };
 
             const respuesta = await fetch('query_sql/materiales_salida_guardados.php', {
