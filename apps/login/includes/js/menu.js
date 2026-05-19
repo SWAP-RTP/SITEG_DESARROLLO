@@ -40,6 +40,8 @@ function sistemas_acceso() {
   });
 }
 
+
+
 // CLICK DINÁMICO
 $(document).on("click", ".btn-sistema", function () {
   let card = $(this).closest(".card");
@@ -62,13 +64,13 @@ $(document).on("click", ".btn-sistema", function () {
     // Si es SUGO DEV, pasamos el token como parámetro
     if (sistema.includes("sugo dev")) {
       const token = sessionStorage.getItem("token");
-      console.log("🔍 Token obtenido:", token); // Debug
+      console.log("Token obtenido:", token); 
 
       if (token) {
         url += `?token=${encodeURIComponent(token)}`;
         console.log("✓ Token agregado. URL completa:", url);
       } else {
-        console.warn("⚠️ No hay token en sessionStorage");
+        console.warn("No hay token en sessionStorage");
       }
     }
   }
