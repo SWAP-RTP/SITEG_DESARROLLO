@@ -17,8 +17,11 @@ class AuthController
             $repo = new UsuarioRepository($db);
             $authService = new AuthService();
 
-            $usuario_input = $_POST['ingresaUsuario'] ?? '';
-            $pass_input = $_POST['ingresaPassword'] ?? '';
+            // Decodificar el cuerpo de la solicitud JSON
+            $input_data = json_decode(file_get_contents('php://input'), true);
+
+            $usuario_input = $input_data['ingresaUsuario'] ?? '';
+            $pass_input = $input_data['ingresaPassword'] ?? '';
 
             //VALIDAMOS QUE LOS CAMPOS NO ESTEN VACIOS
             if (empty($usuario_input) || empty($pass_input)) {
@@ -46,7 +49,8 @@ class AuthController
                 $user_info = [
                     'id' => $id_usuario,
                     'name' => $user_rows[0]['nombre'],
-                    'correo' => $user_rows[0]['correo']
+                    'correo' => $user_rows[0]['correo'],
+                    'modulo' => $user_rows[0]['modulo']
                 ];
 
                 $permisos = [];

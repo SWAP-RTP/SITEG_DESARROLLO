@@ -8,29 +8,39 @@ function auth() {
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const formData = new FormData(loginForm);
-    if (!formData.get('ingresaUsuario') || !formData.get('ingresaPassword')) {
+    const formData = {
+      ingresaUsuario: document.getElementById("ingresaUsuario").value,
+      ingresaPassword: document.getElementById("ingresaPassword").value,
+    };
+
+    if (!formData.ingresaUsuario || !formData.ingresaPassword) {
       ToastBootstrap.warning("Usuario y Contraseña son requeridos");
-      return
+      return;
     }
 
     $.ajax({
       url: "auth/auth.php",
       type: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
+      data: JSON.stringify(formData), // Enviar datos como JSON
+      contentType: "application/json", // Establecer el encabezado correcto
       dataType: "json",
       success: function (res) {
-
         if (res.status === "success") {
           ToastBootstrap.success("Bienvenido(a) " + (res.usuario.name || ""));
 
-          $(".contenedor_carga").removeAttr('hidden');
-          $("#card_login").attr('hidden');
+          $(".contenedor_carga").removeAttr("hidden");
+          $("#card_login").attr("hidden");
 
-          sessionStorage.setItem('permisos_usuario', JSON.stringify(res.permisos));
-          sessionStorage.setItem('datos_usuario', JSON.stringify(res.usuario));
+          sessionStorage.setItem(
+            "permisos_usuario",
+            JSON.stringify(res.permisos),
+          );
+          sessionStorage.setItem("datos_usuario", JSON.stringify(res.usuario));
+
+          // ← AGREGAMOS ESTO: Guardar el token en sessionStorage
+          if (res.token) {
+            sessionStorage.setItem("token", res.token);
+          }
 
           setTimeout(() => {
             window.location.href = "index.html";
@@ -41,8 +51,8 @@ function auth() {
       },
       error: function (xhr) {
         console.log(xhr.responseText); // para ver qué respondió el servidor
-        ToastBootstrap.error(xhr.message,);
-      }
+        ToastBootstrap.error(xhr.message);
+      },
     });
   });
 }
@@ -77,14 +87,16 @@ window.addEventListener("pageshow", function (event) {
 //Alertas para indicarle al usuario que su sesion caduco o que alguien ingreso con su usuario en otro lado
 const urlParams = new URLSearchParams(window.location.search);
 const errorType = urlParams.get("error");
-const sesionCerrada = urlParams.get("message")
+const sesionCerrada = urlParams.get("message");
 if (errorType || sesionCerrada) {
   if (errorType === "sesion_duplicada") {
-    ToastBootstrap.error("Acceso detectado en un nuevo equipo, hemos cerrado tu sesion.");
+    ToastBootstrap.error(
+      "Acceso detectado en un nuevo equipo, hemos cerrado tu sesion.",
+    );
   } else if (errorType === "sesion_invalida") {
     ToastBootstrap.info("La sesión ha expirado. Por favor, ingresa de nuevo.");
   } else if (sesionCerrada === "sesion_cerrada") {
-    ToastBootstrap.success('Sesion cerrada correctamente');
+    ToastBootstrap.success("Sesion cerrada correctamente");
   }
   // Limpia la URL para que no se repita el mensaje al recargar
   window.history.replaceState({}, document.title, window.location.pathname);
@@ -94,4 +106,3 @@ if (errorType || sesionCerrada) {
 document.addEventListener("DOMContentLoaded", () => {
   auth();
 });
-

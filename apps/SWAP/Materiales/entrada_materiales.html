@@ -5,111 +5,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Entrada de Materiales - RTP</title>
-
-    <link rel="stylesheet" type="text/css" href="/app-swap/public/fontawesome/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/app-swap/includes/css/custom_rtp.css" />
+    <link rel="stylesheet" href="/app-swap/public/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="/app-swap/public/Bootstrap-5-5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/app-swap/includes/css/custom_rtp.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
-
+    <link rel="stylesheet" href="/app-swap/Materiales/css/estilo_catalogo_materiales.css" />
 </head>
 
 <body>
 
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
-
     <?php include './components/encabezado.html'; ?>
     <?php include './components/menu.html'; ?>
-
-
+    <!--CONTENEDOR PRINCIPAL-->
     <main class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-lg-12">
+            <div class="col-12">
                 <div class="card modern-form shadow">
-                    <div class="card-header modern-form-header text-white p-4" style="background-color: #003366;">
+                    <div class="card-header modern-form-header text-white p-4">
                         <h2 class="mb-0 fw-bold text-center">
                             <i class="bi bi-box-arrow-in-down me-2"></i>REGISTRO DE ENTRADA DE MATERIALES
                         </h2>
                     </div>
 
+
+                    <!-- FORMULARIO ENTRADA DE MATERIALES -->
                     <div class="card-body modern-form-body p-5">
                         <form id="form-entrada-material" autocomplete="off" novalidate>
-                            <input type="hidden" id="modulo" name="modulo" value="4">
-
                             <div class="row g-3">
-                                <div class="col-md-3">
+                                <div class="col-md-3" id="folio-oculto">
                                     <label class="form-label fw-bold">Código</label>
-                                    <input type="text" class="form-control" id="codigo" name="codigo"
-                                        oninput="this.value = this.value.toUpperCase()" required
-                                        placeholder="Ej: MAT-001">
-                                    <div id="estado-material" class="mt-1"
-                                        style="min-height: 25px; font-size: 0.85rem;"></div>
+                                    <input type="text" class="form-control" id="folio" name="folio" maxlength="11"
+                                        pattern="^MA-[0-9]{8}$" placeholder="Ej: MA-00000001">
+                                    <div id="estado-material" class="mt-1"></div>
                                 </div>
-
                                 <div class="col-md-9">
-                                    <label class="form-label fw-bold">Descripción del Material</label>
+                                    <label class="form-label fw-bold">Descripción</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="descripcion" name="descripcion"
-                                            oninput="this.value = this.value.toUpperCase()" required>
-                                        <button class="btn btn-primary" type="button" id="modal" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModalCenter">
+                                        <input type="text" class="form-control" id="descripcion" name="descripcion">
+                                        <button class="btn btn-primary" type="button" id="modal-material-entrada">
                                             <i class="bi bi-search"></i>
                                         </button>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3">
-                                    <label class="form-label fw-bold">Cantidad</label>
-                                    <input type="number" class="form-control" id="cantidad" name="cantidad" min="1"
-                                        required>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Unidad de Medida</label>
-                                    <select class="form-select" id="unidad" name="unidad" required>
-                                        <option value="">Cargando...</option>
-                                    </select>
+                                    <label class="form-label fw-bold">Unidad</label>
+                                    <select class="form-select" id="unidad" name="unidad"></select>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label fw-bold">Estado Físico Material</label>
-                                    <select class="form-select" id="estado" name="estado" required>
-                                        <option value="">Cargando...</option>
-                                    </select>
+                                    <label class="form-label fw-bold">Estado</label>
+                                    <select class="form-select" id="estado" name="estado"></select>
                                 </div>
-
-
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Adscripcion</label>
-                                    <input type="text" class="form-control bg-light" name="modulo" value="MODULO 4"
-                                        readonly>
-                                </div>
-
-
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold">Categoría</label>
-                                    <select class="form-select" id="id_categoria" name="id_categoria" required>
-                                        <option value="">Cargando...</option>
-                                    </select>
+                                    <select class="form-select" id="id_categoria" name="id_categoria"></select>
                                 </div>
-
-                                <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Adscripción</label>
+                                    <input type="text" class="form-control" id="adscripcion" name="adscripcion" required
+                                        placeholder="Ej: ALMACEN CENTRAL o MODULO 4">
                                 </div>
-
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidad" name="cantidad" min="1">
+                                </div>
                                 <div class="col-12 text-center mt-4">
-                                    <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm me-2"
-                                        id="btn-guardar-entrada">
-                                        <i class="bi bi-save me-2"></i>Registrar Entrada
-                                    </button>
-                                    <button type="button" class="btn btn-info btn-lg px-4 shadow-sm"
-                                        id="btn-consultar-entradas">
-                                        <i class="bi bi-search me-2"></i>Consultar Registros
+                                    <button type="submit" class="btn btn-outline-success" id="btn-guardar-entrada">
+                                        <i class="bi bi-save me-2"></i>Guardar Registro
                                     </button>
 
-                                    <button type="button" class="btn btn-outline-secondary btn-lg px-4 shadow-sm"
+                                    <button type="button" class="btn btn-outline-info" id="btn-consultar-entradas">
+                                        <i class="bi bi-search me-2"></i>Consultar Entradas
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary px-4 shadow-sm"
                                         id="btn-limpiar-entrada">
-                                        <i class="bi bi-eraser me-2"></i>Limpiar
+                                        <i class="bi bi-eraser me-2"></i> Limpiar
                                     </button>
-
                                 </div>
                             </div>
                         </form>
@@ -117,82 +87,65 @@
                 </div>
             </div>
         </div>
-        <!--tabla para consultar registros de entrada-->
-        <div class="card mt-4 shadow" id="contenedor-tabla-registros" style="display: none;">
-            <div class="card-body">
-                <h4 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Últimos Registros Entrada</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle tabla-observaciones">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Folio</th>
-                                <th>Código</th>
-                                <th>Descripción</th>
-                                <th>Cantidad</th>
-                                <th>Fecha Registro</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-registros">
-                            <!--aqui se insertarán los registros-->
-                        </tbody>
-                    </table>
+        <!-- TABLA DE CONSULTA ENTRADAS -->
+        <div class="card mt-3 shadow-lg oculto" id="contenedor-tabla-registros">
+            <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">Últimos Registros de Entradas</h3>
+                <div class="input-group input-group-sm ancho-busqueda">
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="busqueda-entrada" class="form-control form-control-sm busqueda-consultas"
+                        placeholder="Buscar por folio o descripción...">
                 </div>
             </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Folio</th>
+                            <th>Descripción</th>
+                            <th>Unidad</th>
+                            <th>Estado</th>
+                            <th>Cantidad</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-registros"></tbody>
+                </table>
+                <!--PAGINACION PARA CONSULTA-->
+                <nav aria-label="Paginación de registros" class="mt-4">
+                    <ul class="pagination justify-content-center" id="contenedor-paginacion">
+                    </ul>
+                </nav>
+            </div>
         </div>
-
     </main>
-
-
-
-
-    <!-- Modal Bootstrap-5 de materiales -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <!-- MODAL REGISTRO DE ENTRADAS -->
+    <div class="modal fade" id="modalMaterialEntrada">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                        <i class="bi bi-search me-2"></i>Resultados de búsqueda de materiales
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Cerrar"></button>
+                    <h5>Buscar Material</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="buscar-material-modal-entrada" placeholder="Buscar por código o descripción...">
-                            </div>
-                                        <div id="contenedor-materiales-modal">
-                                                <p class="text-center text-muted">Escriba en descripción para filtrar o presione buscar...</p>
-                                        </div>
-                                        <!-- PAGINACIÓN FUNCIONAL -->
-                                        <nav aria-label="Page navigation" class="mt-3" id="nav-paginacion-materiales" style="display: none;">
-                                            <ul class="pagination justify-content-end" id="ul-paginacion-materiales">
-                                                <!-- Se generará dinámicamente -->
-                                            </ul>
-                                        </nav>
+                    <input type="text" id="buscar-material-modal-entrada" class="form-control mb-3 busqueda-modal"
+                        placeholder="Buscar por código o descripción..." autocomplete="off">
+                    <div id="contenedor-materiales-modal"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-2"></i>Cerrar
-                    </button>
-                </div>
-
             </div>
         </div>
+    </div>
+    <?php include './components/pie.html'; ?>
+    <script src="../public/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <script src="../public/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="../includes/utils/menu.js"></script>
+    <script src="/app-swap/Materiales/scripts/entradas.js" type="module"></script>
 
-
-
-
-
-
-        <?php include './components/pie.html'; ?>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script type="text/javascript" src="/app-swap/public/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script type="text/javascript" src="../includes/utils/menu.js"></script>
-<script type="text/javascript" src="scripts/helpers/funciones_auxiliares.js"></script>
-<script type="text/javascript" src="scripts/entrada_material.js"></script>
-<script type="text/javascript" src="scripts/consulta_registro.js"></script>
 </body>
 
 </html>

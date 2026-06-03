@@ -2,131 +2,87 @@
 header('Content-Type: application/json; charset=utf-8');
 require '/var/www/login_shared/conf/conexion.php';
 
-try {
-    $conexion = Database::conectar();
-    if (!$conexion) {
-        throw new Exception("Conexión fallida a la BD");
-    }
+$conexion = Database::conectar();
 
-    // obtener tipo de modal
-    $tipo = sanitizeInput($_GET['tipo'] ?? '');
-    
-    if (empty($tipo)) {
-        throw new Exception("Parámetro 'tipo' requerido (trabajadores|materiales)");
-    }
+$tipo = $_GET['tipo'] ?? '';
 
-    // parámetros comunes
-    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
-    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-    $search = trim($_GET['search'] ?? '');
-    $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+switch ($tipo) {
 
-    if ($pagina < 1) $pagina = 1;
-    if ($limit < 1) $limit = 10;
-    
-    $offset = ($pagina - 1) * $limit;
-
-    $sql = '';
-    $countSql = '';
-    $params = [];
-    $result = null;
-    $total = 0;
-
-    // lógica por tipo
-    if ($tipo === 'trabajadores') {
-        $baseSql = "FROM trabajadores_materiales";
-        $selectSql = "SELECT credencial, nombre $baseSql";
-        $countSql = "SELECT COUNT(*) as total $baseSql";
+    //  INVENTARIO (USAR EN MODAL)
+    case 'material':
+        $limite = 10;
+        $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 0;
         
-        if (!empty($search)) {
-            $baseSql .= " WHERE nombre ILIKE $1 OR credencial::text ILIKE $1";
-            $selectSql = "SELECT credencial, nombre $baseSql";
-            $countSql = "SELECT COUNT(*) as total $baseSql";
-            $params[] = "%$search%";
+        $sqlBase = "
+            SELECT 
+                c.folio_material,
+                UPPER(c.descripcion_material) AS descripcion_material,
+                COALESCE(e.total_entrada, 0) - COALESCE(s.total_salida, 0) AS stock_actual
+            FROM control_materiales c
+            LEFT JOIN (
+                SELECT folio_material, SUM(cantidad_material_entrada) AS total_entrada
+                FROM entradas_materiales
+                GROUP BY folio_material
+            ) e ON c.folio_material = e.folio_material
+            LEFT JOIN (
+                SELECT folio_material, SUM(cantidad_material_salida) AS total_salida
+                FROM salidas_materiales
+                GROUP BY folio_material
+            ) s ON c.folio_material = s.folio_material
+        ";
+
+        if ($pagina > 0) {
+            $resCount = pg_query($conexion, "SELECT COUNT(*) FROM control_materiales");
+            $totalItems = (int)pg_fetch_result($resCount, 0, 0);
+            $totalPaginas = ceil($totalItems / $limite);
+            $offset = ($pagina - 1) * $limite;
+            $sql = $sqlBase . " ORDER BY c.folio_material LIMIT $limite OFFSET $offset;";
+        } else {
+            $sql = $sqlBase . " ORDER BY c.folio_material;";
         }
-        
-        // Obtener total
-        $countResult = empty($params)
-            ? pg_query($conexion, $countSql)
-            : pg_query_params($conexion, $countSql, $params);
-        
-        if ($countResult) {
-            $countRow = pg_fetch_assoc($countResult);
-            $total = (int)$countRow['total'];
-        }
+        break;
 
-        // Construir query con paginación
-        $sqlParams = $params;
-        $selectSql .= " ORDER BY nombre ASC, credencial ASC LIMIT $limit OFFSET $offset";
-        
-        $result = empty($sqlParams)
-            ? pg_query($conexion, $selectSql)
-            : pg_query_params($conexion, $selectSql, $sqlParams);
+    //  HISTORIAL (NO PARA MODAL)
+    case 'movimientos':
+        $sql = "
+            SELECT 
+                folio_material,
+                UPPER(descripcion_material_entrada) AS descripcion_material_entrada
+            FROM entradas_materiales
+            ORDER BY fecha_registro_entrada DESC
+            LIMIT 100
+        ";
+        break;
 
-    } elseif ($tipo === 'materiales') {
-        $baseSql = "FROM control_materiales";
-        $selectSql = "SELECT codigo_material, descripcion_material $baseSql";
-        $countSql = "SELECT COUNT(*) as total $baseSql";
-        
-        if (!empty($search)) {
-            $baseSql .= " WHERE descripcion_material ILIKE $1 OR codigo_material ILIKE $1";
-            $selectSql = "SELECT codigo_material, descripcion_material $baseSql";
-            $countSql = "SELECT COUNT(*) as total $baseSql";
-            $params[] = "%$search%";
-        }
-        
-        // Obtener total
-        $countResult = empty($params)
-            ? pg_query($conexion, $countSql)
-            : pg_query_params($conexion, $countSql, $params);
-        
-        if ($countResult) {
-            $countRow = pg_fetch_assoc($countResult);
-            $total = (int)$countRow['total'];
-        }
+    default:
+        echo json_encode([
+            "status" => "error",
+            "message" => "Tipo no válido"
+        ]);
+        exit;
+}
+$res = pg_query($conexion, $sql);
 
-        // Construir query con paginación
-        $sqlParams = $params;
-        $selectSql .= " ORDER BY codigo_material ASC, descripcion_material ASC LIMIT $limit OFFSET $offset";
-        
-        $result = empty($sqlParams)
-            ? pg_query($conexion, $selectSql)
-            : pg_query_params($conexion, $selectSql, $sqlParams);
-
-    } else {
-        throw new Exception("Tipo de modal no válido: $tipo. Use 'trabajadores' o 'materiales'");
-    }
-
-    if (!$result) {
-        throw new Exception("Error en la consulta: " . pg_last_error($conexion));
-    }
-
-    $datos = pg_fetch_all($result);
-    
-    // Calcular páginas totales
-    $totalPaginas = ceil($total / $limit);
-
+if (!$res) {
     echo json_encode([
-        'datos' => $datos ? $datos : [],
-        'total' => $total,
-        'pagina' => $pagina,
-        'limite' => $limit,
-        'totalPaginas' => $totalPaginas,
-        'offset' => $offset
+        "status" => "error",
+        "message" => pg_last_error($conexion)
     ]);
-
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        "error" => true,
-        "mensaje" => $e->getMessage()
-    ]);
-    error_log($e->getMessage());
+    exit;
 }
 
-// función auxiliar para limpiar entrada
-function sanitizeInput($input) {
-    return trim(preg_replace('/[^a-z_-]/i', '', $input));
+$datos = pg_fetch_all($res) ?: [];
+
+$respuesta = [
+    "status" => "ok",
+    "datos" => $datos
+];
+
+if (isset($totalPaginas)) {
+    $respuesta["totalPaginas"] = $totalPaginas;
+    $respuesta["paginaActual"] = $pagina;
 }
 
-exit();
+echo json_encode($respuesta);
+
+pg_close($conexion);

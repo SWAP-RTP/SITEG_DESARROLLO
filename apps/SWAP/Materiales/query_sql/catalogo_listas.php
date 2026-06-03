@@ -11,7 +11,7 @@ try {
     $catalogos = [];
 
     // 1. Obtener Categorías
-    $sqlCategoria = "SELECT id_categoria_material, nombre_categoria_material FROM categorias_materiales ORDER BY id_categoria_material ASC";
+    $sqlCategoria = "SELECT id_categoria_material, descripcion_categoria_material FROM categorias_materiales ORDER BY id_categoria_material ASC";
     $resCategoria = pg_query($conexion, $sqlCategoria);
     if ($resCategoria === false) {
         throw new Exception('Error al obtener categorias: ' . pg_last_error($conexion));
@@ -27,7 +27,7 @@ try {
     $catalogos['estados'] = pg_fetch_all($resEstados) ?: [];
 
     // 3. Obtener Unidades
-    $sqlUnidades = "SELECT id_unidad, descripcion_unidad FROM unidades_materiales ORDER BY descripcion_unidad ASC";
+    $sqlUnidades = "SELECT id_unidad_material, descripcion_unidad_material FROM unidades_materiales ORDER BY descripcion_unidad_material ASC";
     $resUnidades = pg_query($conexion, $sqlUnidades);
     if ($resUnidades === false) {
         throw new Exception('Error al obtener unidades: ' . pg_last_error($conexion));

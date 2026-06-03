@@ -7,7 +7,10 @@ Ten en cuenta que deberas tener instalado docker desktop para poder levantar est
 Ademas de tener conocimientos en Git y Github
 
 ---
+
 ## 1. Despliegue con Docker
+
+Repositorio de github: `https://github.com/SWAP-RTP/SITEG_DESARROLLO.git`
 
 Una vez clonado el repositorio, construye y levanta los contenedores:
 
@@ -56,6 +59,14 @@ Si necesitas enviar tus cambios a producción después de trabajar en tu rama:
    git push produccion main
    ```
 
+# !! OJO: GitHub Actions: Automatización de Despliegue
+
+Se ha integrado la automatización para sincronizar los cambios con el servidor de SITEG.
+
+Si trabajas en una rama local (ej. Gerardo) y subes tus cambios, deberás integrarlos a main para que el resto del equipo pueda verlos. Esta acción ahora está automatizada:
+
+Al realizar un Pull Request o un Merge hacia la rama main (ya sea desde la terminal o GitHub.com), el sistema detectará el nuevo cambio y lo enviará automáticamente al servidor de Producción.
+
 ---
 
 ## Notas Adicionales
@@ -67,56 +78,4 @@ Si necesitas enviar tus cambios a producción después de trabajar en tu rama:
 ## Mapa de estructuracion de SITEG !!
 
 --- Esta sera la esctructura que se seguira para tener un mayor control en cuanto a la estructura del codigo.
-
-SITEG/
-├── Apps/
-│ ├── LOGIN/
-│ │ ├── admin/
-│ │ │ ├── query_sql
-│ │ │ └── scripts
-│ │ ├── auth
-│ │ ├── conf
-│ │ ├── includes/
-│ │ │ ├── components
-│ │ │ ├── utils
-│ │ │ ├── query_sql
-│ │ │ └── img
-│ │ ├── js
-│ │ ├── login.html
-│ │ ├── menu.html
-│ │ ├── middleware.php
-│ │ ├── nginx.conf
-│ │ ├── sinteg.conf
-
-│ │ ├── SUGO
-
-│ │ ├── SWAP/
-│ │ │ ├── config
-│ │ │ ├── includes
-│ │ │ ├── Nombre_modulo/
-│ │ │ │ ├── components
-│ │ │ │ ├── scripts
-│ │ │ │ ├── query_sql
-│ │ │ │ └── css
-│ │ │ ├── Nombre_modulo/
-│ │ │ │ ├── components
-│ │ │ │ ├── scripts
-│ │ │ │ ├── query_sql
-│ │ │ │ └── css
-
-│ │ │ ├── public/
-│ │ │ │ └─
-─ librerias_locales de css
-│ │ │ ├── vendor
-│ │ │ ├── composer.json
-│ │ │ ├── composer.lock
-│ │ │ ├── login.html
-│ │ │ ├── menu.html
-│ │ │ ├── middleware.php
-│ │ │ └── index.html
-
-│ │ └── Tain
-│ └── README.md
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
+<img width="267" height="845" alt="image" src="https://github.com/user-attachments/assets/c2cb1da2-6fc9-4047-9d0b-fa4af903edbc" />

@@ -1,5 +1,5 @@
 <?php
-require_once "../../conf/conexion.php";
+require_once '/var/www/login_shared/conf/conexion.php';
 function getModulos_sistema()
 {
     $conexion = Database::conectar();
@@ -8,7 +8,7 @@ function getModulos_sistema()
         echo json_encode(["error" => "Error de conexión a la base de datos"]);
         exit;
     }
-    $sql = "SELECT * FROM modulo_sistem";
+    $sql = "SELECT * FROM modulo";
     $resultado = @pg_query($conexion, $sql);
 
 

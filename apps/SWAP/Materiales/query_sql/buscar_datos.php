@@ -1,82 +1,70 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
+require '/var/www/login_shared/conf/conexion.php';
 
-function respuesta(int $statusCode, array $payload): array {
-    return ['statusCode' => $statusCode, 'payload' => $payload];
+function respuesta($code, $data) {
+    http_response_code($code);
+    echo json_encode($data);
+    exit;
 }
-
-function buscarMaterial($conexion, string $codigo): array {
-    if ($codigo === '') {
-        return respuesta(400, ['error' => 'Codigo vacio']);
-    }
-
-    $sql = "SELECT codigo_material,
-                   descripcion_material,
-                   id_unidad,
-                   id_estado_material,
-                   id_categoria_material,
-                   stock_actual,
-                   stock_minimo
-            FROM control_materiales
-            WHERE codigo_material = $1";
-
-    $qry = pg_query_params($conexion, $sql, [$codigo]);
-    if (!$qry) {
-        throw new Exception('Error en la consulta de material: ' . pg_last_error($conexion));
-    }
-
-    $res = pg_fetch_assoc($qry);
-    return respuesta(200, $res ? $res : ['error' => 'No encontrado']);
-}
-
-function buscarTrabajador($conexion, string $credencial): array {
-    if ($credencial === '') {
-        return respuesta(200, ['nombre' => '']);
-    }
-
-    $query = 'SELECT nombre FROM trabajadores_materiales WHERE credencial = $1';
-    $result = pg_query_params($conexion, $query, [$credencial]);
-    if (!$result) {
-        throw new Exception('Error en la consulta de trabajador: ' . pg_last_error($conexion));
-    }
-
-    $row = pg_fetch_assoc($result);
-    return respuesta(200, $row ? ['nombre' => trim($row['nombre'])] : ['nombre' => '']);
-}
-
-$conexion = null;
-$resultado = respuesta(500, ['error' => 'Excepcion PHP', 'detalle' => 'Error no controlado']);
 
 try {
-    require '/var/www/login_shared/conf/conexion.php';
-
-    if (!class_exists('Database')) {
-        throw new Exception('Clase Database no encontrada');
-    }
-
     $conexion = Database::conectar();
+
     if (!$conexion) {
-        throw new Exception('Error de conexion a la base de datos');
+        respuesta(500, ['error' => 'Error de conexión']);
     }
 
-    $tipo = strtolower(trim($_GET['tipo'] ?? ''));
+    $folio = strtoupper(trim($_GET['folio_material'] ?? ''));
 
-    if ($tipo === 'material') {
-        $codigo = isset($_GET['codigo']) ? strtoupper(trim($_GET['codigo'])) : '';
-        $resultado = buscarMaterial($conexion, $codigo);
-    } elseif ($tipo === 'trabajador') {
-        $credencial = trim($_GET['credencial'] ?? '');
-        $resultado = buscarTrabajador($conexion, $credencial);
-    } else {
-        $resultado = respuesta(400, ['error' => 'Tipo invalido. Use tipo=material o tipo=trabajador']);
+    if (!$folio) {
+        respuesta(400, ['error' => 'Folio vacío']);
     }
+
+    $sql = "SELECT 
+        c.folio_material,
+        c.descripcion_material,
+        c.id_unidad_material,
+        c.id_categoria_material,
+        c.adscripcion_modulo,
+        c.stock_actual,
+
+        COALESCE(ult_salida.estado, ult_entrada.estado) AS id_estado_material
+
+    FROM control_materiales c
+
+    LEFT JOIN LATERAL (
+        SELECT id_estado_material_entrada AS estado
+        FROM entradas_materiales
+        WHERE folio_material = c.folio_material
+        ORDER BY fecha_registro_entrada DESC
+        LIMIT 1
+    ) ult_entrada ON true
+
+    LEFT JOIN LATERAL (
+        SELECT id_estado_material_salida AS estado
+        FROM salidas_materiales
+        WHERE folio_material = c.folio_material
+        ORDER BY fecha_registro_salida DESC
+        LIMIT 1
+    ) ult_salida ON true
+
+    WHERE c.folio_material = $1";
+
+    $res = pg_query_params($conexion, $sql, [$folio]);
+
+    if (!$res) {
+        respuesta(500, ['error' => pg_last_error($conexion)]);
+    }
+
+    $data = pg_fetch_assoc($res);
+
+    if (!$data) {
+        respuesta(404, ['error' => 'Material no encontrado']);
+    }
+
+    respuesta(200, $data);
+
 } catch (Exception $e) {
-    $resultado = respuesta(500, ['error' => 'Excepcion PHP', 'detalle' => $e->getMessage()]);
+    respuesta(500, ['error' => $e->getMessage()]);
 }
-
-if ($conexion) {
-    pg_close($conexion);
-}
-
-http_response_code($resultado['statusCode']);
-echo json_encode($resultado['payload']);

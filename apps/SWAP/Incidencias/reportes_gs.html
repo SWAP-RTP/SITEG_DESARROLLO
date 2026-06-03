@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- TÍTULO DE LA PÁGINA -->
+  <title>Sistema de Gesti&oacute;n de Incidencias</title>
+
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" type="text/css" href="../public/fontawesome/css/all.min.css" />
+  <!-- BOOTSTRAP CSS -->
+  <link rel="stylesheet" type="text/css" href="../public/Bootstrap-5-5.3.0/css/bootstrap.min.css">
+  <!-- CSS del Menu  -->
+  <link rel="stylesheet" type="text/css" href="../includes/css/custom_rtp.css" />
+</head>
+
+<body class="">
+  <? include "./components/encabezado.html" ; ?>
+  <? include "./components/menu.html"; ?>
+
+</body>
+<main class="container my-3">
+  <!-- Formulario -->
+  <div class="card shadow-lg rounded-3 p-4">
+    <div class="card-header text-white" style="background-color: #383a38">
+      <h3 class="text-center mt-2">Registro de Incidencias</h3>
+    </div>
+    <div class="card-body">
+      <form id="formIncidencias">
+
+        <!---Folio--->
+        <div class="col-12 col-md-2 ms-md-auto">
+          <label for="folio" class="form-label fw-bold text-nowrap">Folio</label>
+          <input type="text" id="folio" name="folio" class="form-control" value="<?= $folioActual ?>" readonly />
+        </div>
+
+        <!-- Credencial -->
+        <div class="row g-2">
+          <div class="col-12 col-md-1">
+            <label for="credencial" class="form-label fw-bold text-nowrap">Credencial *</label>
+            <input type="number" id="credencial" name="credencial" class="form-control" placeholder="1234" min="1"
+              step="1" required />
+          </div>
+
+          <div class="col-12 col-md-5">
+            <label for="nombre" class="form-label fw-bold text-nowrap">Nombre del trabajador *</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre Completo" required />
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-10">
+                <div id="listaNombresMain" style="z-index: 10;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-1">
+            <label for="modulo" class="form-label fw-bold text-nowrap">M&oacute;dulo</label>
+            <input type="text" id="modulo" name="modulo" class="form-control" readonly placeholder="0" />
+          </div>
+
+          <div class="col-12 col-md-5">
+            <label for="puesto" class="form-label fw-bold text-nowrap">Puesto</label>
+            <input type="text" id="puesto" name="puesto" class="form-control" readonly placeholder="Operador" />
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label for="fecha" class="form-label fw-bold text-nowrap">
+              <i class="far fa-clock"></i> Fecha y hora del reporte *
+            </label>
+            <div class="input-group">
+              <input type="date" id="fecha" name="fecha" class="form-control" required />
+              <input type="time" id="hora" name="hora" class="form-control reloj" required />
+            </div>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label for="economico" class="form-label fw-bold text-nowrap">Econ&oacute;mico *</label>
+            <select id="economico" name="economico" class="form-select">
+              <option value="">-- Selecciona un econ&oacute;mico --</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-1">
+            <label for="planta" class="form-label fw-bold text-nowrap">Planta </label>
+            <input type="text" id="planta" name="planta" class="form-control" placeholder="x12" />
+          </div>
+
+          <div class="col-12 col-md-1">
+            <label for="postura" class="form-label fw-bold text-nowrap">Postura</label>
+            <input type="text" id="postura" name="postura" class="form-control" placeholder="x12" />
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label for="ruta" class="form-label fw-bold text-nowrap">Ruta * </label>
+            <select id="ruta" name="ruta" class="form-select" required>
+              <option value="">-- Selecciona una ruta --</option>
+            </select>
+          </div>
+        </div>
+
+        <!--Anomalia detectada---->
+        <div class="row g-2 mt-1">
+          <div class="col-12">
+            <label for="anomalia" class="form-label fw-bold text-nowrap">Anomal&iacute;a detectada en: *</label>
+            <input type="text" id="anomalia" name="anomalia" class="form-control" required
+              placeholder="Reforma e intersecciones" />
+          </div>
+        </div>
+
+        <!--Anomalias-->
+        <div class="row g-2 mt-1">
+          <div class="col-4">
+            <label for="anomalia_clave" class="form-label fw-bold text-nowrap">Anomal&iacute;as *</label>
+            <select id="anomalia_clave" name="anomalia_clave" class="form-control" required>
+              <option value="">--Seleccione una opci&oacute;n--</option>
+            </select>
+          </div>
+
+          <div class="col-8">
+            <label for="descripcion" class="form-label fw-bold text-nowrap">Descripci&oacute;n de anomal&iacute;a
+              *</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" rows="3" style="resize: none;" required
+              placeholder="Indique el detalle o causa de la anomal&iacute;a"></textarea>
+          </div>
+        </div>
+
+
+        <!--Articulo-->
+        <div class="row g-2 mt-1">
+          <div class="col-2">
+            <label for="articulo" class="form-label fw-bold text-nowrap">Art&iacute;culo(s):*</label>
+            <input type="text" id="articulo" name="articulo" class="form-control" placeholder="Ej: 14,25,30" />
+            <small class="text-muted">Separar por coma o espacio</small>
+          </div>
+
+          <!----Inciso----->
+          <div class="col-2">
+            <label for="art_inciso" class="form-label fw-bold text-nowrap">Inciso(s):*</label>
+            <input type="text" id="art_inciso" name="art_inciso" class="form-control" placeholder="Ej: b,1 n" />
+            <small class="text-muted">Separar por coma o espacio</small>
+          </div>
+        </div>
+        <br />
+
+        <!--Articulo mb-->
+        <div class="row g-2 mt-1">
+          <div class="col-2">
+            <label for="articulo" class="form-label fw-bold text-nowrap">MB Art&iacute;culo(s):*</label>
+            <input type="text" id="mb_articulo" name="mb_articulo" class="form-control" placeholder="Ej: 14,25,30" />
+            <small class="text-muted">Separar por coma o espacio</small>
+          </div>
+
+          <!----Inciso mb----->
+          <div class="col-2">
+            <label for="art_inciso" class="form-label fw-bold text-nowrap"> MB Inciso(s):*</label>
+            <input type="text" id="mb_inciso" name="mb_inciso" class="form-control" placeholder="Ej: b,1 n" />
+            <small class="text-muted">Separar por coma o espacio</small>
+          </div>
+        </div>
+
+        <br>
+
+        <!-- Registro Consecutivo -->
+        <div class="row g-2 mt-1 align-items-center">
+          <div class="row mb-4">
+            <div class="col-12">
+              <label class="form-label fw-bold text-nowrap" for="registro_id">Registro Consecutivo *</label>
+            </div>
+
+            <div class="row gx-2">
+              <div class="col-md-1">
+                <input type="text" class="form-control form-control-sm" name="registro_id" id="registro_id"
+                  value="<?= $usr ?>" readonly />
+              </div>
+              <div class="col-md-5">
+                <input type="text" class="form-control form-control-sm" name="registro_nombre" id="registro_nombre"
+                  value="<?= $us2r ?>" style="min-width: 150px; max-width: 100%;" readonly>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-10">
+                <div id="listaNombresregistro" style="z-index: 10;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supervisor -->
+        <div class="row g-2 mt-1 align-items-center">
+          <div class="row mb-4">
+            <div class="col-12">
+              <label class="form-label fw-bold text-nowrap" for="supervisor_id">Supervisor que Reporta*</label>
+            </div>
+            <div class="row gx-2">
+              <div class="col-md-1">
+                <input type="text" class="form-control form-control-sm auto-credencial" name="supervisor_id"
+                  id="supervisor_id" placeholder="Credencial" required />
+              </div>
+              <div class="col-md-5">
+                <input type="text" class="form-control form-control-sm input-nombre" name="supervisor_nombre"
+                  id="supervisor_nombre" placeholder="Nombre" style="min-width: 150px; max-width: 100%;" required />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-10">
+                <div id="listaNombresSupervisor" style="z-index: 10;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jefatura -->
+        <div class="row g-2 mt-1 align-items-center">
+          <div class="row mb-4">
+            <div class="col-12">
+              <label class="form-label fw-bold text-nowrap" for="jefatura_id">Jefatura de Gesti&oacute;n de
+                Servicio *</label>
+            </div>
+            <div class="row gx-2">
+              <div class="col-md-1">
+                <input type="text" class="form-control form-control-sm" name="jefatura_id" id="jefatura_id"
+                  placeholder="Credencial" value="7881" readonly />
+              </div>
+              <div class="col-md-5">
+                <input type="text" class="form-control form-control-sm" name="jefatura_nombre" id="jefatura_nombre"
+                  value="MARTIN ROGELIO GOMEZ ARIAS" style="min-width: 150px; max-width: 100%;" readonly />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-10">
+                <div id="listaNombresJefatura" style="z-index: 10;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Jefe o Gerente-->
+        <div class="row g-2 mt-1 align-items-center">
+          <div class="row mb-4">
+            <div class="col-12">
+              <label class="form-label fw-bold text-nowrap" for="gerente_id">
+                Gerente o Encargado de Unidad Departamental de Adscripci&oacute;n del trabajador *
+              </label>
+            </div>
+            <div class="row gx-2">
+              <div class="col-md-2">
+                <select class="form-select form-select-sm" name="tipo_jefe" id="tipo_jefe" required>
+                  <option value="">Seleccionar</option>
+                  <option value="1">Gerente</option>
+                  <option value="2">Encargado</option>
+                </select>
+              </div>
+              <div class="col-md-1">
+                <input type="text" class="form-control form-control-sm auto-credencial" name="gerente_id"
+                  id="gerente_id" placeholder="Credencial" required />
+              </div>
+              <div class="col-md-5">
+                <input type="text" class="form-control form-control-sm input-nombre" name="gerente_nombre"
+                  id="gerente_nombre" placeholder="Nombre" style="min-width: 150px; max-width: 100%;" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-10">
+                <div id="listaNombresGerente" style="z-index: 10;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <!---Boton guardar/cancelar--->
+        <div class="row mt-4">
+          <div class="col-12 d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-success px-4" id="btn">Guardar</button>
+            <button type="reset" class="btn btn-secondary px-4">Cancelar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+
+
+  <!-- Modal: Nueva Anomalía -->
+  <div class=" modal fade" id="modalNuevaAnomalia" tabindex="-1" aria-labelledby="tituloNuevaAnomalia"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header" style="background:#383a38; color:#fff;">
+          <h5 class="modal-title" id="tituloNuevaAnomalia">Registrar nueva anomal&iacute;a</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formNuevaAnomalia">
+            <div class="mb-3">
+              <label for="nuevo_anomalia_clave" class="form-label fw-bold">Anomal&iacute;a clave *</label>
+              <input type="text" id="nuevo_anomalia_clave" name="anomalia_clave" class="form-control" maxlength="100"
+                required>
+            </div>
+            <div class="mb-3">
+              <label for="nueva_descripcion_anomalia" class="form-label fw-bold">Descripci&oacute;n *</label>
+              <textarea id="nueva_descripcion_anomalia" name="descripcion" class="form-control" rows="3" required
+                style="resize:none;"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="btnCancelarNuevaAnomalia" type="button" class="btn btn-secondary"
+            data-bs-dismiss="modal">Cancelar</button>
+          <button id="btnGuardarNuevaAnomalia" type="button" class="btn btn-success">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</main>
+
+
+<!-- PIE -->
+<? include "./components/pie.html"; ?>
+
+<!-- jquery -->
+<script type="text/javascript" src="/public/assets/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+
+<!-- DataTables -->
+<script type="text/javascript" src="/public/assets/JSZip-3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="/public/assets/DataTables-2.0.1/js/dataTables.min.js"></script>
+<script type="text/javascript" src="/public/assets/DataTables-2.0.1/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/buttons.bootstrap5.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="/public/assets/Buttons-3.0.0/js/buttons.html5.min.js"></script>
+
+<!-- BOOTSTRAP JS  -->
+<script type="text/javascript" src="/public/assets/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- alertas -->
+<script type="text/javascript" src="/public/assets/sweetalert2.all.min.js"></script>
+
+
+
+<script type="module" src="/Incidencias/scripts/reportes_gs.js" charset="utf-8"></script>
+
+
+
+</body>
+
+</html>
