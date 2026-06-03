@@ -1,37 +1,37 @@
 function opciones_menu() {
-    const opciones = [
-        { 
-            nombre: "Inicio", 
-            icono: "fa-house-chimney", 
-            link: "/index.html" 
-        },
-        { 
-            nombre: "Administrador", 
-            icono: "fa-user-gear", 
-            link: "/admin/index.html" 
-        },
-        { 
-            nombre: "Salir", 
-            icono: "fa-person-walking-dashed-line-arrow-right", 
-            link: "/auth/logout.php",
-            clase: "nav-link" 
-        }
-    ];
+  const opciones = [
+    {
+      nombre: "Inicio",
+      icono: "fa-house-chimney",
+      link: "/index.html",
+    },
+    {
+      nombre: "Administrador",
+      icono: "fa-user-gear",
+      link: "/admin/index.html",
+    },
+    {
+      nombre: "Salir",
+      icono: "fa-person-walking-dashed-line-arrow-right",
+      link: "/auth/logout.php",
+      clase: "nav-link",
+    },
+  ];
 
-    const $container = $('#menu-dinamico');
-    $container.empty(); // Limpiamos el contenedor antes de pintar
+  const $container = $("#menu-dinamico");
+  $container.empty(); // Limpiamos el contenedor antes de pintar
 
-    opciones.forEach((mod, index) => {
-        let itemMenu = `
+  opciones.forEach((mod, index) => {
+    let itemMenu = `
             <li class="menu-item-animado" style="animation-delay: ${index * 0.1}s">
-                <a class="${mod.clase || ''}" href="${mod.link}">
+                <a class="${mod.clase || ""}" href="${mod.link}">
                     <i class="fa-solid ${mod.icono}"></i>
                     <span>${mod.nombre}</span>
                 </a>
             </li>
         `;
-        $container.append(itemMenu);
-    });
+    $container.append(itemMenu);
+  });
 }
 
 function sistemas_acceso() {
@@ -76,8 +76,6 @@ function sistemas_acceso() {
   });
 }
 
-
-
 // CLICK DINÁMICO
 $(document).on("click", ".btn-sistema", function () {
   let card = $(this).closest(".card");
@@ -97,10 +95,10 @@ $(document).on("click", ".btn-sistema", function () {
   } else if (tip_sistem == "E") {
     url = `http://${host}:${puerto}/`;
 
-    // Si es SUGO DEV, pasamos el token como parámetro
-    if (sistema.includes("sugo dev")) {
+    // Si es SUGO (localhost o producción), pasamos el token como parámetro
+    if (sistema.toLowerCase().includes("sugo")) {
       const token = sessionStorage.getItem("token");
-      console.log("Token obtenido:", token); 
+      console.log("Token obtenido:", token);
 
       if (token) {
         url += `?token=${encodeURIComponent(token)}`;
@@ -122,3 +120,5 @@ $(document).on("click", ".hamburger", function () {
 document.addEventListener("DOMContentLoaded", function () {
   sistemas_acceso();
 });
+
+console.log(mostrarNombreUsuario());

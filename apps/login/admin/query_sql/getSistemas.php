@@ -24,5 +24,6 @@ function getSistemas_sinteg()
     return $sistemas ?: [];
 
 }
+header('Content-Type: application/json; charset=utf-8');
 echo json_encode(getSistemas_sinteg());
 Database::desconectar();
