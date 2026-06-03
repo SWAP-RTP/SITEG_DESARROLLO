@@ -1,3 +1,5 @@
+
+
 function sistemas_acceso() {
   $.ajax({
     url: "/includes/query_sql/sistemas_sinteg.php",
@@ -40,8 +42,6 @@ function sistemas_acceso() {
   });
 }
 
-
-
 // CLICK DINÁMICO
 $(document).on("click", ".btn-sistema", function () {
   let card = $(this).closest(".card");
@@ -61,10 +61,10 @@ $(document).on("click", ".btn-sistema", function () {
   } else if (tip_sistem == "E") {
     url = `http://${host}:${puerto}/`;
 
-    // Si es SUGO DEV, pasamos el token como parámetro
-    if (sistema.includes("sugo dev")) {
+    // Si es SUGO (localhost o producción), pasamos el token como parámetro
+    if (sistema.toLowerCase().includes("sugo")) {
       const token = sessionStorage.getItem("token");
-      console.log("Token obtenido:", token); 
+      console.log("Token obtenido:", token);
 
       if (token) {
         url += `?token=${encodeURIComponent(token)}`;
@@ -86,3 +86,5 @@ $(document).on("click", ".hamburger", function () {
 document.addEventListener("DOMContentLoaded", function () {
   sistemas_acceso();
 });
+
+console.log(mostrarNombreUsuario());
