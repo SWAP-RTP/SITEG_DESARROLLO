@@ -1,0 +1,464 @@
+body {
+    margin: 0;
+    background: #0e1a2b;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.container-main {
+    padding: 40px;
+}
+
+.top-row-seg h3 {
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-group .btn.active {
+    background-color: #0f2239;
+    color: #fff;
+}
+
+/* ==========================
+   FILTROS
+   ========================== */
+.filtros-accidentes {
+    background: #132c46;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #0006;
+    margin-bottom: 25px;
+}
+.filtros-accidentes label {
+    font-size: 13px;
+}
+
+/* ==========================
+   TARJETAS INDICADORES
+   ========================== */
+.card-indicador {
+    background: #132c46;
+    border-radius: 12px;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 0 15px #0006;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-indicador h4 {
+    color: #90c8ff;
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+.card-indicador .indicador-valor {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.card-indicador small {
+    font-size: 11px;
+    color: #b3d4ff;
+}
+
+.ind-variacion { border-left: 6px solid #4ade80; }
+.ind-modulo    { border-left: 6px solid #60a5fa; }
+.ind-ruta      { border-left: 6px solid #f97316; }
+
+.card-indicador:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px #0009;
+}
+
+/* ==========================
+   TARJETAS GRÁFICAS / MAPA
+   ========================== */
+.card-graph {
+    background: #132c46;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 15px #0006;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-graph:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px #0009;
+}
+.card-graph canvas {
+    height: 400px !important;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* Contenedor del mapa de calor */
+#mapaCalor {
+    width: 100%;
+    height: 400px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Imagen adaptada al contenedor */
+#mapaCalor .img-mapa-calor {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    display: block;
+}
+
+
+/* ==========================
+   TABLA
+   ========================== */
+.table-container {
+    background: #132c46;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #0006;
+    margin-top: 25px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.table-container.resaltar {
+    box-shadow: 0 0 25px #1f6feb;
+    transform: translateY(-2px);
+}
+
+table thead {
+    background: #0f2239;
+    color: #90c8ff;
+}
+tbody tr {
+    background: #183454;
+    border-bottom: 1px solid #0f2239;
+}
+tbody tr:hover {
+    background: #1f4a70;
+}
+th input {
+    width: 100%;
+    font-size: 12px;
+    margin-top: 5px;
+    background: #0f2239;
+    color: white;
+    border: 1px solid #1a3858;
+    padding: 2px 4px;
+}
+
+/* Paginación */
+.pagination-container {
+    margin-top: 15px;
+    text-align: right;
+}
+.pagination-container .btn {
+    font-size: 12px;
+}
+
+/* Animación genérica */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.resaltar, .card-indicador, .card-graph {
+    animation: fadeUp 0.6s ease forwards;
+}
+
+/* ==========================
+   RESPONSIVE
+   ========================== */
+@media (max-width: 991px) {
+    .container-main {
+        padding: 90px 15px 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .container-main {
+        padding: 90px 10px 15px;
+    }
+    .card-indicador .indicador-valor {
+        font-size: 26px;
+    }
+    .card-graph canvas {
+        height: 220px !important;
+    }
+}
+
+footer {
+    margin-top: auto;
+}
+
+/* ==========================
+   PANEL RANKING POR MÓDULOS
+   ========================== */
+.panel-ranking-modulos {
+    background: #132c46;
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 0 18px #0007;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease,
+        max-height 0.4s ease;
+}
+
+/* estado visible */
+.panel-ranking-modulos.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 600px; /* suficiente para todas las filas */
+}
+
+.lista-modulos-ranking {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* cada fila del ranking */
+.item-mod-ranking {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #e5f0ff;
+}
+
+.item-mod-ranking .etiqueta-mod {
+    min-width: 120px;
+    font-weight: 600;
+}
+
+/* barra de porcentaje */
+.item-mod-ranking .barra-contenedor {
+    background: #0f2239;
+    border-radius: 999px;
+    overflow: hidden;
+    height: 14px;
+    box-shadow: inset 0 0 6px #0008;
+}
+
+.item-mod-ranking .barra-valor {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #4da3ff, #f97316);
+    transition: width 0.7s ease;
+}
+
+/* número */
+.item-mod-ranking .valor-num {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* responsive */
+@media (max-width: 576px) {
+    .item-mod-ranking {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+    }
+}
+
+/* ==========================
+   PANEL VARIACIÓN VS MES ANTERIOR
+   ========================== */
+.panel-ranking-variacion {
+    background: #132c46;
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 0 15px #0006;
+    margin-bottom: 25px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+.panel-ranking-variacion.mostrar {
+    max-height: 600px; /* suficiente para todos los módulos */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fila-variacion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #e5f0ff;
+    font-size: 13px;
+}
+
+.fila-variacion .indice {
+    width: 26px;
+    text-align: center;
+    font-weight: bold;
+    color: #cbd5f5;
+}
+
+.fila-variacion .nombre-mod {
+    min-width: 120px;
+    font-weight: 600;
+}
+
+.fila-variacion .contenedor-barra {
+    flex: 1;
+    background: #0f2239;
+    border-radius: 999px;
+    overflow: hidden;
+    height: 12px;
+    position: relative;
+}
+
+.fila-variacion .barra-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    transition: width 0.7s ease;
+}
+
+/* colores para subidas y bajadas */
+.barra-positiva {
+    background: linear-gradient(90deg, #f97316, #dc2626); /* aumento (peor) */
+}
+
+.barra-negativa {
+    background: linear-gradient(90deg, #22c55e, #16a34a); /* disminuye (mejora) */
+}
+
+.fila-variacion .valor-var {
+    min-width: 70px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+#panelVariacionMes p {
+    color: #ffffff !important;
+}
+
+
+
+/* ==========================
+   PANEL RUTAS TOP POR MÓDULO
+   ========================== */
+.panel-ranking-rutas {
+    background: #132c46;
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 0 15px #0006;
+    margin-bottom: 25px;
+    margin-top: 15px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+.panel-ranking-rutas.mostrar {
+    max-height: 600px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.lista-rutas-modulos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* fila */
+.fila-ruta-mod {
+    display: grid;
+    /* índice | texto (módulo/ruta) | barra grande | número */
+    grid-template-columns: auto minmax(150px, 230px) 1fr auto;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #e5f0ff;
+}
+
+.fila-ruta-mod .indice {
+    width: 26px;
+    text-align: center;
+    font-weight: bold;
+    color: #cbd5f5;
+}
+
+.cont-texto-ruta .nombre-modulo {
+    font-weight: 600;
+}
+
+.cont-texto-ruta .nombre-ruta {
+    font-size: 12px;
+    color: #9fb7ff;
+}
+
+/* barra */
+.contenedor-barra-ruta {
+    background: #0f2239;
+    border-radius: 999px;
+    overflow: hidden;
+    height: 12px;
+    box-shadow: inset 0 0 6px #0008;
+    width: 100%;      /* ✅ ocupa todo el espacio de su columna */
+}
+
+.barra-ruta {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f97316, #dc2626);
+    transition: width 0.7s ease;
+}
+
+/* valor al final */
+.valor-ruta {
+    min-width: 40px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* responsive */
+@media (max-width: 576px) {
+    .fila-ruta-mod {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+    }
+}
+
+.card-sefis {
+    background: #0b1d33;
+    border-radius: 12px;
+    color: #fff;
+}
+
+.card-sefis h2 {
+    color: #00eaff;
+}
+
+.card {
+    background: #102544 !important;
+    border: 1px solid #0a1a2b;
+    color: #fff;
+}
+
+.table-dark {
+    background: #0f1e33;
+}
+
+.badge {
+    font-size: 0.75rem;
+}

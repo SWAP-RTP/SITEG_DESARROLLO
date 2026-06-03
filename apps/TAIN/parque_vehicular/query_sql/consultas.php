@@ -1,8 +1,8 @@
 <?php
-require(__DIR__ . '/../../public/conexion2.php');
+require(__DIR__ . 'conf/conexion.php');
 header('Content-Type: application/json');
 
-$pdo_sugo = conexionSugo();
+$pdo_sugo = Database_sugo::conectar();
 
 try {
 

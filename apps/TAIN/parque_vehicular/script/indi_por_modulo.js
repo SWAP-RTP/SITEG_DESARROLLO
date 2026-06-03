@@ -1,9 +1,11 @@
+import { grafica_barras} from '../../includes/js/charts.js';
+
 // variable global
 let datosPVPorModulo = null;
 let triggerModalDetalle = null;
 
 export function cargarDistrubucionPV_modulo_con_filtro(opcion){
-    const Token = "#!!TOKEN_SUGO_123_POR_FILTRO$%";
+    // const Token = "#!!TOKEN_SUGO_123_POR_FILTRO$%";
     const filtro_por = $("#filtro_por").val();
     const filtro = document.getElementById("filtro_pv");
     const form = new FormData(filtro);
@@ -15,15 +17,37 @@ export function cargarDistrubucionPV_modulo_con_filtro(opcion){
         data: form,
         processData: false,
         contentType: false,
-        headers: {
-            // Se agrega el encabezado de autorización
-            'Authorization': 'Bearer ' + Token
-        },
         success: function (resp) {
-            // console.log(resp);
             // guardamos el resp en la variable global
             datosPVPorModulo = resp.data;
-            grafica_pastel_modulos(resp);
+            // ---------LE PASAMOS LA DATA A NUESTRA GRAFICA GENERICA--------------------
+            const data = {
+                labels: ['Módulo 1', 'Módulo 2', 'Módulo 3', 'Módulo 4', 'Módulo 5', 'Módulo 6', 'Módulo 7'],
+                datasets: [{
+                    label: 'Total de camiones',
+                    data: [
+                        resp.data.m1.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m2.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m3.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m4.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m5.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m6.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m7.reduce((a, b) => a + Number(b.total_camiones || 0), 0)
+                    ],
+                    backgroundColor: [
+                        '#439DF7',
+                        '#F75243',
+                        '#F79143',
+                        '#d3b239',
+                        '#2ba1a1',
+                        '#914DFA',
+                        '#A1A1A1'
+                    ],
+                    borderRadius: 0
+                }]
+            };
+            grafica_barras(data);
+            // ---------LE PASAMOS LA DATA A NUESTRA GRAFICA GENERICA--------------------
 
             let template = "";
 
@@ -35,12 +59,12 @@ export function cargarDistrubucionPV_modulo_con_filtro(opcion){
                 }, 0);
 
                 template += `
-                    <div class="card-info col" data-modulo="${moduloKey}">
-                        <div class="text-center p-2" id="modulo${moduloKey.replace('m', '')}">
-                            <h3>Módulo ${moduloKey.replace('m', '')}</h3>
-                            <p class="display-6" id="val_modulo1">${total_camiones}</p>
+                        <div class="card-number mb-1" id="modulo${moduloKey.replace('m', '')}" data-modulo="${moduloKey}">
+                            <div class="seccion">
+                                <h4 class="text-white">MODULO ${moduloKey.replace('m', '')}</h4>
+                                <div class="value">${total_camiones}</div>
+                            </div>
                         </div>
-                    </div>
                 `;
             });
 
@@ -79,10 +103,36 @@ export function cargarDistrubucionPV_modulo(){
         },
         data: {opcion: 2},
         success: function (resp) {
-            // console.log(resp);
             // guardamos el resp en la variable global
             datosPVPorModulo = resp.data;
-            grafica_pastel_modulos(resp);
+            // ---------LE PASAMOS LA DATA A NUESTRA GRAFICA GENERICA--------------------
+            const data = {
+                labels: ['Módulo 1', 'Módulo 2', 'Módulo 3', 'Módulo 4', 'Módulo 5', 'Módulo 6', 'Módulo 7'],
+                datasets: [{
+                    label: 'Total de camiones',
+                    data: [
+                        resp.data.m1.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m2.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m3.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m4.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m5.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m6.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
+                        resp.data.m7.reduce((a, b) => a + Number(b.total_camiones || 0), 0)
+                    ],
+                    backgroundColor: [
+                        '#439DF7',
+                        '#F75243',
+                        '#F79143',
+                        '#d3b239',
+                        '#2ba1a1',
+                        '#914DFA',
+                        '#A1A1A1'
+                    ],
+                    borderRadius: 0
+                }]
+            };
+            grafica_barras(data);
+            // ---------LE PASAMOS LA DATA A NUESTRA GRAFICA GENERICA--------------------
 
             let template = "";
 
@@ -94,12 +144,12 @@ export function cargarDistrubucionPV_modulo(){
                 }, 0);
 
                 template += `
-                    <div class="card-info col" data-modulo="${moduloKey}">
-                        <div class="text-center p-2" id="modulo${moduloKey.replace('m', '')}">
-                            <h3>Módulo ${moduloKey.replace('m', '')}</h3>
-                            <p class="display-6" id="val_modulo1">${total_camiones}</p>
+                        <div class="card-info card-number mb-1 modulo${moduloKey.replace('m', '')}" data-modulo="${moduloKey}">
+                            <div class="seccion">
+                                <h4 class="text-white">MODULO ${moduloKey.replace('m', '')}</h4>
+                                <div class="value">${total_camiones}</div>
+                            </div>
                         </div>
-                    </div>
                 `;
             });
 
@@ -117,80 +167,12 @@ export function cargarDistrubucionPV_modulo(){
     });
 }
 
-export function grafica_pastel_modulos(resp) {
-    // Calcula total por modulo
-    const totales = [
-        resp.data.m1.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
-        resp.data.m2.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
-        resp.data.m3.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
-        resp.data.m4.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
-        resp.data.m5.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
-        resp.data.m6.reduce((a, b) => a + Number(b.total_camiones || 0), 0),
-        resp.data.m7.reduce((a, b) => a + Number(b.total_camiones || 0), 0)
-    ];
-
-    const data = {
-        labels: ['Módulo 1', 'Módulo 2', 'Módulo 3', 'Módulo 4', 'Módulo 5', 'Módulo 6', 'Módulo 7'],
-        datasets: [{
-            label: 'Total de camiones',
-            data: totales,
-            backgroundColor: [
-                '#439DF7',
-                '#F75243',
-                '#F79143',
-                '#d3b239',
-                '#2ba1a1',
-                '#914DFA',
-                '#A1A1A1'
-            ],
-            borderRadius: 0
-        }]
-    };
-
-    const config = {
-        type: 'bar',
-        data: data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => ` ${ctx.raw} camiones`
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: { color: '#fff' },
-                    grid: { display: false }
-                },
-                y: {
-                    ticks: { color: '#fff' },
-                    grid: { color: 'rgba(255,255,255,.1)' }
-                }
-            }
-        }
-    };
-
-    const ctx = document.getElementById('barrasChart').getContext('2d');
-
-    // Evita duplicado
-    if (window.barrasChartInstance) {
-        window.barrasChartInstance.destroy();
-    }
-
-    window.barrasChartInstance = new Chart(ctx, config);
-}
-
 // MODAL DEL DETALLE DE LOS REGISTROS DE LOS MODULOS
 $(document).on("click", ".card-info", function() {
     const moduloKey = $(this).data("modulo"); 
     const registros = datosPVPorModulo[moduloKey];
 
-    $("#tituloModalModulo").text(`Detalle Módulo ${moduloKey.replace('m', '')}`);
+    $("#tituloModalModuloPV").text(`Detalle Módulo ${moduloKey.replace('m', '')}`);
     if (!registros) return;
 
     const categorias = {};
@@ -231,7 +213,7 @@ $(document).on("click", ".card-info", function() {
                                 : "Sin modalidad";
 
             templateDetalle += `
-                <li class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-25 text-white">
+                <li class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-25">
                     <span class="me-2" title="${nombreRuta}">${nombreRuta}</span>
                     <span class="fw-bold">${item.total_camiones}</span>
                 </li>`;
@@ -244,12 +226,12 @@ $(document).on("click", ".card-info", function() {
     });
 
     templateDetalle += `</div>`;
-    $("#contenedorDetallesModulo").html(templateDetalle);
-    $("#modalDetalleModulo").modal("show");
+    $("#contenedorDetallesModuloPV").html(templateDetalle);
+    $("#modalDetalleModuloPV").modal("show");
 });
 
 //Mover foco al cerrar el modal
-$('#modalDetalleModulo').on('hidden.bs.modal', function () {
+$('#modalDetalleModuloPV').on('hidden.bs.modal', function () {
     if (triggerModalDetalle) {
         triggerModalDetalle.focus();
     }

@@ -10,22 +10,12 @@ function construirListaModulos() {
             // console.log(data);
             const totalCard = document.createElement('total_rutas');
             totalCard.innerHTML = `
-                    <div class = "card3 text-center p-3">
+                    <div class = "card2 text-center mb-3 p-3">
                         <h3>Total Rutas</h3>
                         <h3>${data.total}</h3>
                     </div>
             `;
             contModulos.appendChild(totalCard);
-
-            const colores = {
-                1: 'mod-color-1',
-                2: 'mod-color-2',
-                3: 'mod-color-3',
-                4: 'mod-color-4',
-                5: 'mod-color-5',
-                6: 'mod-color-6',
-                7: 'mod-color-7'
-            };
 
             Object.keys(data).forEach(key => {
                 if (!key.startsWith('m')) return; // ignora "total"
@@ -34,14 +24,17 @@ function construirListaModulos() {
                 const totalRutas = data[key].length;
 
                 const card = document.createElement('div');
-                card.className = `mod-card btn-modulo ${colores[mod] || 'mod-color-default'}`;
                 card.dataset.modulo = mod;
                 card.setAttribute('role', 'button');
                 card.setAttribute('tabindex', '0');
 
                 card.innerHTML = `
-                    <div class="mod-card-title">Modulo ${mod}</div>
-                    <div class="mod-card-number">${totalRutas}</div>
+                        <div class="card-info card-number mb-3 modulo${mod}">
+                            <div class="seccion">
+                                <h4 class="text-white">Modulo ${mod}</h4>
+                                <div class="value">${totalRutas}</div>
+                            </div>
+                        </div>
                 `;
 
                 // PASAMOS data A LA FUNCION
@@ -57,31 +50,41 @@ function construirListaModulos() {
     });
 }
 
+
 function mostrarRutasDeModulo(modNum, data) {
-    const tbodyRutas = document.getElementById('tbodyRutasModulo');
+    if ($.fn.DataTable.isDataTable('.dataTable_generica')) {
+        $('.dataTable_generica').DataTable().destroy();
+    }
+    const thead = document.querySelector('.dataTable_generica thead tr');
+
+    // Limpiar por si ya tiene contenido
+    thead.innerHTML = '';
+
+    thead.innerHTML = `
+        <th>Ruta</th>
+        <th>Origen</th>
+        <th>Destino</th>
+    `;
 
     const key = 'm' + modNum;
     const rutas = data[key] || [];
 
-    tituloModuloSel.textContent = `Rutas del Modulo ${modNum}`;
-    tbodyRutas.innerHTML = '';
+    $('.tituloDataTable').html(`Rutas del Modulo ${modNum}`);
 
-    if (!rutas.length) {
-        mensajeSinDatos?.classList.remove('d-none');
-        return;
-    }
+    $('.dataTable_generica').DataTable({
+        data: rutas, 
+        responsive: true,
+        scrollX: true,
+        autoWidth: false,
 
-    mensajeSinDatos?.classList.add('d-none');
-
-    rutas.forEach((r, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${r.ruta}</td>
-            <td>${r.origen}</td>
-            <td>${r.destino}</td>
-        `;
-        tbodyRutas.appendChild(tr);
+        columns: [
+            { data: "ruta", className: "text-center", width: "8%" },
+            { data: "origen", className: "text-center", width: "20%" },
+            { data: "destino", className: "text-center", width: "20%" },
+        ],
+        language: {
+            url: "/lib/datatables.net-1.13.6/es-ES.json",
+        }
     });
 }
 

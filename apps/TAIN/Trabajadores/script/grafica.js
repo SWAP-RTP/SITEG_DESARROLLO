@@ -1,4 +1,27 @@
-export function grafica_trabajadores(datos) {
+export function graficaTrabajadores(datos) {
+
+    const main = document.querySelector('main');
+    const isLight = main ? main.classList.contains('light') : false;
+
+    const textColor = isLight ? '#333' : '#fff';
+    const gridColor = isLight ? '#ccc' : '#444';
+    const bgColor = isLight ? '#fff' : '#1b1b1b';
+
+    const canvas = document.getElementById('grafModulos');
+
+    // FONDO DINÁMICO
+    canvas.style.backgroundColor = bgColor;
+
+    // FORZAR REDIMENSIÓN (evita bug blanco)
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    const ctx = canvas.getContext('2d');
+
+    if (window.pastelChartInstance) {
+        window.pastelChartInstance.destroy();
+    }
+
     const labels = [
         'Modulo 1', 'Modulo 2', 'Modulo 3', 'Modulo 4', 'Modulo 5', 'Modulo 6', 'Modulo 7', 'O.Centrales'
     ];
@@ -25,68 +48,51 @@ export function grafica_trabajadores(datos) {
         datos.detalle["0"].totaltrabinact || 0
     ];
 
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Activos',
-                data: activos,
-                backgroundColor: '#77b824'
-            },
-            {
-                label: 'Inactivos',
-                data: inactivos,
-                backgroundColor: '#800020'
-            }
-        ]
-    };
-
-    const config = {
+    window.pastelChartInstance = new Chart(ctx, {
         type: 'bar',
-        data: data,
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Activos',
+                    data: activos,
+                    backgroundColor: '#77b824'
+                },
+                {
+                    label: 'Inactivos',
+                    data: inactivos,
+                    backgroundColor: '#800020'
+                }
+            ]
+        },
         options: {
-            responsive: true,
+            responsive: true,           // Hace que la gráfica se adapte al tamaño del contenedor
+            maintainAspectRatio: false,  // Permite que la gráfica tome el alto que definas en el CSS/HTML
             plugins: {
                 legend: {
-                    position: 'top',
-                    labels: {
-                        color: '#FFFFFF',
-                        boxWidth: 20
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return `${context.dataset.label}: ${context.raw}`;
-                        }
-                    }
+                    labels: { color: textColor }
                 }
             },
             scales: {
                 x: {
-                    ticks: {
-                        color: '#FFFFFF'
-                    }
+                    ticks: { color: textColor },
+                    grid: { color: gridColor }
                 },
                 y: {
-                    ticks: {
-                        color: '#FFFFFF'
-                    }
+                    ticks: { color: textColor },
+                    grid: { color: gridColor }
                 }
             }
         }
-    };
+    });
 
-    const canvas = document.getElementById('grafModulos');
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = canvas.offsetWidth * dpr;
-    canvas.height = canvas.offsetHeight * dpr;
+    // REGISTRO GLOBAL
+    window.graficasRegistradas = window.graficasRegistradas || [];
 
-    const ctx = document.getElementById('grafModulos').getContext('2d');
+    window.graficasRegistradas = window.graficasRegistradas.filter(g => g.id !== 'grafModulos');
 
-    if (window.pastelChartInstance) {
-        window.pastelChartInstance.destroy();
-    }
-
-    window.pastelChartInstance = new Chart(ctx, config);
+    window.graficasRegistradas.push({
+        id: 'grafModulos',
+        render: () => graficaTrabajadores(datos)
+    });
 }

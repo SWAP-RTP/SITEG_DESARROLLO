@@ -1,5 +1,5 @@
 import { cards_modulos } from './cards_modulos.js';
-import { grafica_trabajadores } from './grafica.js';
+import { graficaTrabajadores } from './grafica.js';
 /************************************************* * PANELES Y DESPLIEGUE
  *************************************************/
 const panels = {
@@ -95,7 +95,7 @@ async function fetchData() {
             });
         }
 
-        grafica_trabajadores(data);
+        graficaTrabajadores(data);
         // LANZAR ANIMACIÓN después de que el DOM tiene los números reales
         iniciarAnimacionContadores();
 

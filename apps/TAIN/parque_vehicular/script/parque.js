@@ -5,6 +5,25 @@ import { cargarDistrubucionPV_modulo_con_filtro, cargarDistrubucionPV_modulo} fr
 let hayFiltro = false;
 let intervalo = null;
 
+// Funcion animacion numeros
+function animarNumero(elemento, final, porcentaje = false) {
+    let inicio = 0;
+    let duracion = 1200;
+    let intervalo = 20;
+    let incremento = final / (duracion / intervalo);
+
+    let anim = setInterval(() => {
+        inicio += incremento;
+
+        if (inicio >= final) {
+            inicio = final;
+            clearInterval(anim);
+        }
+
+        elemento.textContent = porcentaje ? Math.round(inicio) + "%" : Math.round(inicio);
+    }, intervalo);
+}
+
 // función para decidir qué cargar
 function ejecutarCargaSegunEstado() {
     if (hayFiltro) {
@@ -19,29 +38,51 @@ function ejecutarCargaSegunEstado() {
 }
 
 function cargarTotalParque() {
+    const cards = document.querySelectorAll(".card3");
+    const div = document.getElementById("total_parque");
+
+    // Mostrar card con su animación
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add("show");
+        }, index * 200);
+    });
+
+    // Colocar el loader dentro del contenedor del total
+    div.style.minHeight = "40px";
+    div.innerHTML = `
+        <div class="d-flex justify-content-center align-items-center w-100">
+            <div class="loader2"></div>
+        </div>
+    `;
+
     $.ajax({
         url: 'query_sql/get_valores.php',
         method: 'GET',
         dataType: 'json',
         success: function (resp) {
             if (resp && resp.total !== undefined) {
-                const total = Number(resp.total).toLocaleString('es-MX');
-                // Indicadores generales
-                $("#total_parque").text(total);
-            }
-            // === NUEVA LÓGICA PARA LOS MÓDULOS ===
-            if (resp && resp.modulos) {
-                $("#val_modulo1").text(resp.modulos.m1);
-                $("#val_modulo2").text(resp.modulos.m2);
-                $("#val_modulo3").text(resp.modulos.m3);
-                $("#val_modulo4").text(resp.modulos.m4);
-                $("#val_modulo5").text(resp.modulos.m5);
-                $("#val_modulo6").text(resp.modulos.m6);
-                $("#val_modulo7").text(resp.modulos.m7);
+                const total = Number(resp.total);
+
+                setTimeout(() => {
+                    // quitamos loader y animamos el número
+                    div.innerHTML = ""; 
+                    animarNumero(div, total);
+                    
+                    if (resp.modulos) {
+                        $("#val_modulo1").text(resp.modulos.m1);
+                        $("#val_modulo2").text(resp.modulos.m2);
+                        $("#val_modulo3").text(resp.modulos.m3);
+                        $("#val_modulo4").text(resp.modulos.m4);
+                        $("#val_modulo5").text(resp.modulos.m5);
+                        $("#val_modulo6").text(resp.modulos.m6);
+                        $("#val_modulo7").text(resp.modulos.m7); 
+                    }
+                }, 500);
             }
         },
         error: function () {
-            console.error("Error al obtener el total del parque vehicular");
+            console.error("No se pudo conectar con get_valores.php");
         }
     });
 }

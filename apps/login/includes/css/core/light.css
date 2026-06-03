@@ -1,0 +1,107 @@
+/* ESTE ES EL BODY DEL LOGIN */
+:root{
+  --background-light: white;
+  --background2-light: #afafaf;
+  --color-hover: #dbdbdb;
+  --color2-hover: rgb(153, 0, 255);
+  --color-border: #9c9c9c;
+  --color-light: rgb(53, 53, 53);
+  --btn-prymary: #0d6efd;
+}
+body {
+  background:  var(--background-light);
+}
+/* ESTILO DEL CARD DEL LOGIN */
+#card_login .izquierdo {
+    background: color-mix(in srgb, var(--background-light), transparent 20%);
+    border-right: 1.5px solid var(--btn-prymary);
+    color: var(--color-light) !important;
+}
+#card_login section #ingresaUsuario, #card_login section #ingresaPassword{
+  background-color: var(--background-light) !important;
+}
+/* forzar color cuando el navegador autocompleta */
+#card_login input:-webkit-autofill,
+#card_login input:-webkit-autofill:hover,
+#card_login input:-webkit-autofill:focus,
+#card_login input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px var(--background-light) inset !important;
+  -webkit-text-fill-color: var(--color-light) !important;
+}
+
+/* TODOS LOS BOTONES QUE TENGAN ESTA CLASE SERAN DE ESTE COLOR */
+.btn-sistema {
+  background: var(--btn-prymary);
+  border-color: var(--btn-prymary);
+  color: #ffffff !important;
+}
+.btn-sistema:hover {
+  background: var(--color2-hover);
+  border-color: var(--color2-hover);
+  color: #ffffff !important;
+}
+/* color de la Animacion para el loader de carga  */
+.loader {
+  background-image: url("../../img/RTP_loading_darck.png");
+}
+/* Primer cuadrado */
+.loader::before {
+  background-color: var(--background-light);
+}
+/* Segundo cuadrado */
+.loader::after {
+  background-color: var(--background-light);
+}
+/* Texto de cargando */
+.loading-text {
+  color: var(--color-light);
+}
+.contenedor_carga {
+  background-color: var(--background-light);
+}
+
+/* estlo del header */
+header nav{
+  background: color-mix(in srgb, var(--background-light), transparent 10%) !important;
+  color: var(--color-light);
+}
+header nav .sun{
+  color: var(--color-light) !important;
+}
+
+footer {
+  color: var(--color-light);
+}
+/* SIDEBAR */
+.sidebar{
+    background: linear-gradient(to bottom, rgb(250, 250, 250), rgba(255, 255, 255, 0.699));
+    border-right: 1px solid var(--btn-prymary);
+}
+hr{
+    color: var(--color-light);
+}
+/* iconos */
+.menu i,
+.menu svg{
+  color: var(--color-light);
+  fill: var(--color-light);
+}
+/* texto oculto */
+.menu span{
+    color: var(--color-light);
+}
+/* Aplicar hover al contenedor <a> */
+.menu li a:hover {
+    background-color: var(--btn-prymary) !important; 
+}
+/* forzamos el hover en el icono y el span */
+.menu li a:hover i,
+.menu li a:hover svg,
+.menu li a:hover span {
+    color: var(--background-light) !important;
+}
+
+/* menu hamburguesa */
+.hamburger span{
+    background:var(--color-light);
+}
