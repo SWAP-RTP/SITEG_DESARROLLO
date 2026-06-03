@@ -1,8 +1,8 @@
 <?php
-require(__DIR__ . '/../../public/conexion2.php');
+require(__DIR__ . '/../../conf/conexion.php');
 header('Content-Type: application/json');
 
-$pdo_accidentes = conexionAccidentes();
+$conexion = Database_accidentes::conectar();
 
 try {
 
@@ -16,10 +16,8 @@ try {
             GROUP BY ta.descripcion
             ORDER BY total DESC
             LIMIT 1";
-
-    $stmt = $pdo_accidentes->prepare($sql);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = @pg_query($conexion, $sql);
+    $row = @pg_fetch_assoc($result);
 
     echo json_encode([
         'ok' => true,

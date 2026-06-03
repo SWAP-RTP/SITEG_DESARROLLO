@@ -1,0 +1,84 @@
+/*
+importamos componentes que es la configuración de la plantilla principal,
+que se encuentran en login/includes/css/core y son (componenetes.css, dark.css y light.css)
+esos son archivos generales y no se modifican 
+ */
+@import url("core/dark.css");
+
+/* ---------------ESTILO DE LOS CARD DE LOS SISTEMAS----------------- */
+.card {
+  background: linear-gradient(to bottom, #303030 60%, #0c0c0c);
+  color: rgba(255, 255, 255, 0.87);
+}
+.card .titulo-sistema{
+    color: var(--color-dark);
+}
+#container .fade-card:hover {
+  background: var(--color-hover);
+}
+#container .fade-card .btn-sistema {
+  background: var(--btn-success);
+  border-color: var(--btn-success);
+}
+.titulo{
+  color: var(--color-dark) !important;
+}
+
+/* ---------ESTILO DEL FOLDER DEL ADMIN -----------*/
+.card-folder .card-body {
+  background-color: var(--background2-dark) !important;
+  color: var(--color-dark);
+}
+/* Estilo para pestañas activas*/
+.nav-tabs .nav-link.active {
+  background-color: var(--background2-dark) !important;
+  color: var(--color-dark) !important;
+  border-color: var(--background2-dark);
+}
+/* Estilo para las pestañas inactivas*/
+.nav-tabs .nav-link {
+  background-color: var(--background-dark);
+  color: var(--color-dark);
+  border-color: var(--background-dark);
+}
+/* estilo de los input*/
+.form-control,
+.form-select {
+  background-color: var(--background2-dark) !important;
+  color: var(--color-dark) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 6px;
+}
+.componentes-tabla{
+  color: var(--color-dark);
+}
+/* Fondo de la tabla y ancho completo */
+table thead tr th{
+  background-color: var(--background-dark) !important;
+  color: var(--color-dark) !important;
+}
+/* color de las filas de la tabla */
+table tbody tr td{
+  background-color: var(--background3-dark)  !important;
+  border-right: 1px solid var(--color-border) !important;
+  color: var(--color-dark) !important;
+}
+/* Hover en las filas de la tabla */
+table tbody tr:hover td {
+  background-color: var(--color-hover) !important; 
+  color: var(--color-dark) !important;           
+}
+/* Estilos específicos para DataTables (buscadores, etiquetas y paginación) */
+.dataTables_wrapper .dataTables_length, 
+.dataTables_wrapper .dataTables_filter, 
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_processing, 
+.dataTables_wrapper .dataTables_paginate {
+    color: var(--color-dark) !important;
+}
+
+/* ---------ESTILO DE LOS MODALES -----------*/
+.modal-content, .modal-header, .modal-body, .modal-footer{
+  background-color: var(--background2-dark) !important;
+  color: var(--color-dark) !important;
+}

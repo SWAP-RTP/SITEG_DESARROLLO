@@ -1,0 +1,92 @@
+/*
+importamos componentes que es la configuración de la plantilla principal son (componenetes.css, dark.css y light.css)
+esos son archivos generales y no se modifican 
+ */
+@import url("./core/light.css");
+
+/* variables.css */
+:root {
+    --color-background-light: rgb(255, 255, 255);
+    --color-text-light: rgb(53, 53, 53);
+    --color-border: 1px solid rgba(53, 53, 53, 0.2);
+    --color-hover: rgb(223, 223, 223);
+    --color-table-thead: #e7e7e7;
+}
+
+/* card donde estan las graficas */
+.card-chart{
+    background: var(--color-background-light);
+    border: var(--color-border);
+    color: var(--color-text-light);
+}
+/* card donde estan los totales */
+.card-t{
+    background: var(--color-background-light);
+    border: var(--color-border);
+    color: var(--color-text-light);
+}
+/* todos los que tengan esta clase card van a tener este color */
+.card{
+    background: var(--color-background-light);
+    color: var(--color-text-light);
+    border: var(--color-border);
+}
+/* todos los card que tengan esta clase tendran este color de borde */
+.card2{ border: 1px solid var(--btn-prymary);}
+/* todos los card que tengan esta clase tendran este color y efecto de loader2 */
+.card3{ 
+    background: var(--color-background-light);
+    color: var(--color-text-light);
+    border: var(--color-border);
+    border-left: 6px solid var(--btn-prymary);
+    border-radius: 5px;
+}
+.loader2 {
+    background: 
+        radial-gradient(farthest-side,var(--btn-prymary) 94%,#0000) top/8px 8px no-repeat,
+        conic-gradient(#0000 30%,var(--btn-prymary));
+        -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+}
+/* todos los titulos que sean h3 seran blancos */
+h3, h4{ color: var(--color-text-light);}
+/* todos los select tendran este color */
+.form-select {
+    background-color: var(--color-background-light);
+    color: var(--color-text-light);
+    border: 1px solid rgba(53, 53, 53, 0.2);
+}
+/* todos los form-control tendran este color */
+.form-control{
+    background-color: var(--color-background-light);
+    color: var(--color-text-light);
+    border: 1px solid rgba(53, 53, 53, 0.2);
+}
+/* todos los modales tendran este color */
+.modal-content {
+    background-color: var(--color-background-light);
+    color: var(--color-text-light);
+}
+/* todos los iconos seran de este color */
+.icon-center {color: var(--color-text-light);}
+/* card segmento de la busqueda por modulo en pv*/
+.card-segmento {
+    background: var(--color-background-light);
+    border: 1px solid var(--btn-prymary);
+    color: var(--color-text-light);
+}
+/* todos los datatables tendran este color */
+table thead tr th{
+    background-color: var(--color-table-thead) !important;
+    color: var(--color-text-light) !important;
+    border-bottom: 1px solid var(--btn-prymary) !important;
+}
+/* color de las filas de la tabla */
+table tbody tr td{
+  background-color: var(--background-light) !important;
+  color: var(--color-light) !important;
+}
+/* Hover en las filas de la tabla */
+table tbody tr:hover td {
+  background-color: var(--color-hover) !important; 
+  color: var(--color-light) !important;           
+}

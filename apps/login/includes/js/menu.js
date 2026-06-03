@@ -1,4 +1,38 @@
+function opciones_menu() {
+  const opciones = [
+    {
+      nombre: "Inicio",
+      icono: "fa-house-chimney",
+      link: "/index.html",
+    },
+    {
+      nombre: "Administrador",
+      icono: "fa-user-gear",
+      link: "/admin/index.html",
+    },
+    {
+      nombre: "Salir",
+      icono: "fa-person-walking-dashed-line-arrow-right",
+      link: "/auth/logout.php",
+      clase: "nav-link",
+    },
+  ];
 
+  const $container = $("#menu-dinamico");
+  $container.empty(); // Limpiamos el contenedor antes de pintar
+
+  opciones.forEach((mod, index) => {
+    let itemMenu = `
+            <li class="menu-item-animado" style="animation-delay: ${index * 0.1}s">
+                <a class="${mod.clase || ""}" href="${mod.link}">
+                    <i class="fa-solid ${mod.icono}"></i>
+                    <span>${mod.nombre}</span>
+                </a>
+            </li>
+        `;
+    $container.append(itemMenu);
+  });
+}
 
 function sistemas_acceso() {
   $.ajax({

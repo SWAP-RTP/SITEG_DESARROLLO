@@ -1,0 +1,60 @@
+<div class="grid mt-3 mb-3">
+    <div class="card-number" id="card_trabajador" onclick="window.location='Trabajadores/trabajadores.html'">
+        <h3 class="text-white mb-3">TRABAJADORES</h3>
+        <i class="fa-solid fa-users mb-3 icont"></i>
+        <div class="value" id="total-trabajadores-card"></div>
+    </div>
+
+    <div class="card-number" id="card_autobus" onclick="window.location='parque_vehicular/index.html'">
+        <h3 class="text-white mb-3">PARQUE VEHICULAR</h3>
+        <i class="fa-solid fa-bus mb-3 icont"></i>
+        <div class="value" id="total_parque_card"></div>
+    </div>
+        
+    <div class="card-number" id="card_ruta" onclick="window.location='Rutas/rutas.html'">
+        <h3 class="text-white mb-3">RUTAS</h3>
+        <i class="fa-solid fa-route mb-3 icont"></i>
+        <div class="value" id="total_rutas_card"></div>
+    </div>
+        
+    <div class="card-number" id="card_sefi" onclick="window.location='sefis.php'">
+        <h3 class="text-white mb-3">SEFIS</h3>
+        <i class="fa-solid fa-user-check mb-3 icont"></i>
+        <i class="fa-solid fa-bus mb-3 icont"></i>
+        <div class="value">4</div>
+    </div>
+        
+    <div class="card-number" id="card_accidente" onclick="window.location='accidentes/index.html'">
+        <h3 class="text-black mb-3">ACCIDENTES</h3>
+        <i class="fa-solid fa-car-burst mb-3 icont"></i>
+        <div class="value" id="total_accidentes">--</div>
+    </div>
+
+    <div class="card-number" id="card_mantenimiento" onclick="window.location='mantenimiento.php'">
+        <h3 class="text-white mb-3">MANTENIMIENTO</h3>
+        <i class="fa-solid fa-screwdriver-wrench mb-3 icont"></i>
+        <div class="value">80</div>
+    </div>
+        <div class="card-number" id="card_recaudacion" onclick="window.location='recaudacion.php'">
+        <h3 class="text-white mb-3">RECAUDACION</h3>
+        <i class="fa-regular fa-money-bill-1 mb-3 icont"></i>
+        <div class="value">560000</div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    fetch("http://accidentes-pv.rtp.gob.mx/accidentes/query_sql/accidentes_tablero.php")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("total_accidentes").innerText =
+                data.total_accidentes ?? 0;
+        })
+        .catch(error => {
+            console.error("Error al cargar accidentes:", error);
+            document.getElementById("total_accidentes").innerText = "N/A";
+        });
+
+});
+</script>

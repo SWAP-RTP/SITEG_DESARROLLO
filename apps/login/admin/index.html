@@ -18,6 +18,10 @@ $user = validarAcceso();
     <link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css" />
     <!-- DataTable CSS -->
     <link rel="stylesheet" href="/lib/datatables.net-1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- ESTILOS PERSONALIZADOS CSS-->
+    <link class="theme-link theme-dark" rel="stylesheet" href="/includes/css/style_dark.css">
+    <link class="theme-link theme-light" rel="stylesheet" href="/includes/css/style_light.css" disabled>
+    <link rel="stylesheet" href="/includes/css/style.css">
 </head>
 
 <body class="body_index">
@@ -87,8 +91,11 @@ $user = validarAcceso();
     <script src="/lib/datatables.net-1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Bootstrap JavaScript -->
     <script src="/lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts de menu----------------->
+    <script src="/includes/js/menu.js"></script>
+    <!-- CARGAR TEMAS LIGHT Y DARCK CON JS -->
+    <script src="/includes/js/cargar_temas.js"></script>
     <!--  -->
     <script type="module" src="../admin/scripts/index.js"></script>
-    <script type="module" src="/app-swap/includes/helpers/js.js"></script>
 </body>
 </html>

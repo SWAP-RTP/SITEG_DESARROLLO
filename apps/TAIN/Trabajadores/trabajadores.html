@@ -7,39 +7,36 @@ $usuario = validarAcceso();
 
 <head>
     <meta charset="UTF-8">
-    <title>Trabajadores</title>
-    <link rel="shortcut icon" href="../img/Logo_RTP.png" type="image/x-icon">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="../lib/Bootstrap-5-5.3.0/css/bootstrap.min.css">
-    <!-- fontawesome -->
-    <link rel="stylesheet" type="text/css" href="../lib/fontawesome/css/all.min.css" />
-    <!-- style general -->
-    <link rel="stylesheet" href="../css/style.css">
-    <!-- ESTILO PERSONALIZADO -->
-    <link rel="stylesheet" href="../css/style_trabajadores.css">
-    <!-- Chart.js -->
-    <script src="../lib/chartjs/chart.umd.min.js"></script>
+    <title>TAIN</title>
+    <link rel="shortcut icon" href="../includes/img/Logo_RTP.png" type="image/x-icon">
+    <!-- Bootstrap ------------------------->
+    <link rel="stylesheet" href="../includes/lib/Bootstrap-5-5.3.0/css/bootstrap.min.css">
+    <!-- fontawesome ----------------------->
+    <link rel="stylesheet" type="text/css" href="../includes/lib/fontawesome/css/all.min.css" />
+    <!-- ESTILOS PERSONALIZADOS CSS -------->
+    <link class="theme-link theme-dark" rel="stylesheet" href="../includes/css/style_dark.css">
+    <link class="theme-link theme-light" rel="stylesheet" href="../includes/css/style_light.css" disabled>
+    <link rel="stylesheet" type="text/css" href="../includes/css/style.css" />
 </head>
 
-<body>
-
-    <?php include '../header.html'; ?>
-
+<body class="body_index">
+    <?php include '../includes/components/header.html';?>
+    <?php include '../includes/components/menu.html'; ?>
     <main>
-        <div class="container-main">
+        <div class="contenedor">
+            <div class="mb-4 d-flex justify-content-end">
+                <span class="badge text-bg-primary">Nota: Solo las tarjetas de colores son interactivas.</span>
+            </div>
+            
             <div class="d-flex align-items-center position-relative">
-                <button id="btnregresar" class="btn btn-warning btn-lg position-absolute start-0 ms-3"
-                    onclick="location.href='../index.html'">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
                 <h3 class="flex-fill text-center mb-4">TRABAJADORES</h3>
             </div>
 
             <form id="formFiltro" class="needs-validation" novalidate>
-                <div class="filtros-trabajadores mb-4 mt-2">
-                    <div class="row g-3 align-items-end">
+                <div class="card mb-4 mt-2">
+                    <div class="row g-3 align-items-end mt-1 mb-2 ms-2 me-2">
                         <div class="col-md-3">
-                            <label for="año_trabajadores" class="form-label">Año *</label>
+                            <label for="año_trabajadores" class="form-label">Año:</label>
                             <select id="año_trabajadores" class="form-select" required>
                                 <option value="" selected disabled>Seleccione un año</option>
                                 <option value="1"> 2025</option>
@@ -52,7 +49,7 @@ $usuario = validarAcceso();
                         </div>
 
                         <div class="col-md-3">
-                            <label for="mes_trabajadores" class="form-label">Mes *</label>
+                            <label for="mes_trabajadores" class="form-label">Mes:</label>
                             <select id="mes_trabajadores" class="form-select" required>
                                 <option value="" disabled selected>Seleccione un Mes</option>
                                 <option value="1">Enero</option>
@@ -71,7 +68,7 @@ $usuario = validarAcceso();
                         </div>
 
                         <div class="col-md-3">
-                            <label for="modulo_trabajadores" class="form-label">Módulo *</label>
+                            <label for="modulo_trabajadores" class="form-label">Módulo:</label>
                             <select id="modulo_trabajadores" class="form-select" required>
                                 <option value="" disabled selected>Seleccione un Modulo</option>
                                 <option value="1">Oficinas Centrales</option>
@@ -93,32 +90,36 @@ $usuario = validarAcceso();
                 </div>
             </form>
 
-            <div class="grid text-center">
-                <div class="card-number card_activos" id="card_trabajadores_activos">
+            <div class="d-flex flex-wrap gap-4 text-center w-100 contenedor-cards">
+                <div class="card-number card_activos w-100" id="card_trabajadores_activos">
                     <h4 class="text-white">TRABAJADORES ACTIVOS</h4>
                     <i class="fa-solid fa-user-plus icont"></i>
                     <div class="value" id="total-activos"></div>
                 </div>
-                <div class="card-number card_inactivos" id="card_trabajadores_inactivos">
+
+                <div class="card-number card_inactivos w-100" id="card_trabajadores_inactivos">
                     <h4 class="text-white">TRABAJADORES INACTIVOS</h4>
                     <i class="fa-solid fa-user-minus icont"></i>
                     <div class="value" id="total-inactivos"></div>
                 </div>
             </div>
-            <div class="grid mt-3 mb-3 desplegable" id="trabajadores-activos" hidden>
+            <div class="grid d-flex gap-3 justify-content-center mt-3 mb-3 desplegable" id="trabajadores-activos" hidden>
                 <?php include 'cards_act.html'; ?>
             </div>
 
-            <div class="grid mt-3 mb-3 desplegable" id="trabajadores-inactivos" hidden>
+            <div class="grid d-flex gap-3 justify-content-center mt-3 mb-3 desplegable" id="trabajadores-inactivos" hidden>
                 <?php include 'cards_inact.html'; ?>
             </div>
-            <div class="col-md-6 contenedor-modulos">
+            
+            <div class="contenedor-modulos">
                 <?php include 'cards_modulos.html'; ?>
             </div>
 
-            <div class="card-graph">
-                <h4>GRAFICO POR MODULOS</h4>
-                <canvas id="grafModulos" width="900" height="400"></canvas>
+            <div class="card w-100">
+                <h4 class="text-center mt-3 mb-3">GRAFICO POR MODULOS</h4>
+                <div class="mt-2 mb-2 ms-2 me-2">
+                    <canvas id="grafModulos" width="900" height="400"></canvas>
+                </div>
             </div>
 
 
@@ -130,36 +131,24 @@ $usuario = validarAcceso();
             </div>
         </div>
     </main>
-    <?php include '../footer.html'; ?>
+    <?php include '../includes/components/pie.html';?>
+    
+    <!-- MANDAMOS A LLAMAR EL MODAL CORRESPONDIENTE -->
+    <?php include '../includes/components/modales.html';?>
 
-    <div class="modal fade" id="modalxModulos" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background:#0e1a2b; color:white;">
-
-                <div class="modal-header border-0">
-                    <h2 class="modal-title" id="tituloModalModulo"></h2>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <!-- Aquí se inyectan los bloques de segmentos (cada uno con porcentaje + desglose) -->
-                        <div id="contenedorDetallesModulo" class="row g-4"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- JS de Bootstrap -->
-    <script src="../lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- JS fontawesome -->
-    <script src="../lib/fontawesome/js/all.min.js"></script>
-    <!-- Script -->
+    <!-- JS de Bootstrap --------------->
+    <script src="../includes/lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- JS de fontawesome ------------->
+    <script type="text/javascript" src="../includes/lib/fontawesome/js/all.min.js"></script>
+    <!-- JS JQuery --------------------->
+    <script src="../includes/lib/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <!-- Chart.js ---------------------->
+    <script src="../includes/lib/chartjs/chart.js"></script>
+    <!-- Script de menu ---------------->
+    <script src="../includes/js/menu.js"></script>
+    <!-- Script cargar temas ----------->
+    <script src="../includes/js/cargar_temas.js"></script>
+    <!-- Script ------------------------>
     <script type="module" src="script/trabajadores.js"></script>
 </body>
-
 </html>

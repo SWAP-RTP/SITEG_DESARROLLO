@@ -1,0 +1,82 @@
+/*
+importamos componentes que es la configuración de la plantilla principal,
+que se encuentran en login/includes/css/core y son (componenetes.css, dark.css y light.css)
+esos son archivos generales y no se modifican 
+ */
+@import url("core/componentes.css");
+
+/* ---------------ESTILO DE LOS CARD DE LOS SISTEMAS----------------- */
+.card{
+  max-width:450px;
+  margin-left:10px;
+  margin-right:10px;
+
+  opacity:0;
+  transform:translateX(-50px);
+
+  animation: slideRight 1s ease forwards;
+}
+
+@keyframes slideRight{
+  from{
+    opacity:0;
+    transform:translateX(-50px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+.card img {
+  width: 100%;
+  max-height: 250px; /* Limita la altura de la imagen, pero permite que se reduzca */
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/*CONTENIDO INTERNO*/
+.card .mt-3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%; /* Asegura que el contenido interno ocupe todo el ancho del card */
+}
+
+/* ---------ESTILO DEL FOLDER -----------*/
+.nav-tabs .nav-link {
+  white-space: nowrap; /* evita salto de línea */
+  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem;
+}
+@media (max-width: 400px) {
+  .nav-tabs .nav-link {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+.card-folder {
+  width: 93%; /* Ocupa todo el ancho de la ventana */
+  max-width: 100vw; /* No se limita */
+  background: transparent;
+
+  /* centramos el folder */
+  margin-left: 6rem;
+  margin-right: auto;
+  display: block;
+}
+@media (max-width: 990px) {
+  .card-folder {
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-left: 0;
+  }
+  .contenedor-tabla {
+    overflow-x: auto;
+  }
+}
+.card-folder .card-body {
+  border-radius: 3px;
+}

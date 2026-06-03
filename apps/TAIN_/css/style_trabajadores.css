@@ -1,0 +1,468 @@
+:root {
+    /* Colores principales */
+    --primary-bg: #132C46;
+    --card-bg: #0e1a2b;
+    --shadow: 0 0 15px #0006;
+    --shadow-hover: 0 15px 25px #0008;
+
+    /* Colores de tarjetas */
+    --activos: #77b824;
+    --inactivos: #800020;
+    --modulo1: #439DF7;
+    --modulo2: #F75243;
+    --modulo3: #F79143;
+    --modulo4: #F7CF43;
+    --modulo5: #43F7D4;
+    --modulo6: #914DFA;
+    --modulo7: #A1A1A1;
+    --oficinas: #3232EA;
+
+    /* Textos */
+    --text-light: #90c8ff;
+
+    /* Animaciones */
+    --transition-fast: 0.3s ease;
+    --transition-medium: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Tamaños base */
+    --padding-sm: 10px;
+    --padding-md: 15px;
+    --padding-lg: 20px;
+    --radius: 10px;
+    --gap: 15px;
+}
+
+.container-main {
+    padding: var(--padding-lg);
+}
+
+.grid,
+.filtros-trabajadores,
+.contenedor-modulos,
+.card-graph {
+    background: var(--primary-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.grid {
+    padding: var(--padding-md);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--gap);
+}
+
+.grid2 {
+    padding: var(--padding-md);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--gap);
+}
+
+.filtros-trabajadores {
+    padding: var(--padding-md);
+    margin-bottom: var(--padding-lg);
+}
+
+.filtros-trabajadores label {
+    font-size: 13px;
+}
+
+.form-select {
+    background: var(--card-bg);
+    color: white;
+    border: 1px solid #3a4f65;
+}
+
+/* Estilos base para tarjetas */
+.card-number {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: var(--padding-sm);
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.25s ease-in-out !important;
+}
+
+.card-number2 {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: var(--padding-sm);
+    text-align: center;
+}
+
+/* Iconos */
+.card-number .icont,
+.card-number2 .icont {
+    font-size: 50px !important;
+}
+
+/* Textos dentro de tarjetas */
+.card-number h4 {
+    color: var(--text-light);
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.card-number .value,
+.card-number2 .value {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* Estados hover */
+.card-number:hover {
+    transform: translateY(-5px) scale(1.03) !important;
+    cursor: pointer;
+}
+
+/* Colores específicos de tarjetas */
+.card-number.card_activos,
+.grid .card_activos {
+    background-color: var(--activos) !important;
+}
+
+.card-number.card_inactivos,
+.grid .card_inactivos {
+    background-color: var(--inactivos) !important;
+}
+
+#modulo1 {
+    background-color: var(--modulo1);
+}
+
+#modulo2 {
+    background-color: var(--modulo2);
+}
+
+#modulo3 {
+    background-color: var(--modulo3);
+}
+
+#modulo4 {
+    background-color: var(--modulo4);
+}
+
+#modulo5 {
+    background-color: var(--modulo5);
+}
+
+#modulo6 {
+    background-color: var(--modulo6);
+}
+
+#modulo7 {
+    background-color: var(--modulo7);
+}
+
+#oficinasc {
+    background-color: var(--oficinas);
+}
+
+/* Desplegables */
+.desplegable {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-20px);
+    transition: all var(--transition-medium);
+}
+
+.desplegable.mostrar {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Gráficas */
+.card-graph {
+    padding: var(--padding-md);
+    margin-bottom: var(--padding-lg);
+}
+
+.card-graph canvas.wide-chart {
+    width: 100% !important;
+    height: 350px !important;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    padding: var(--padding-md);
+}
+
+.card-graph h4 {
+    display: block !important;
+    text-align: center !important;
+}
+
+/* Botones */
+.contenedor-botones {
+    min-width: 120px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    margin-bottom: var(--padding-lg);
+}
+
+/* Módulos */
+.contenedor-modulos {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: stretch;
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    padding: 32px 24px;
+    background: var(--primary-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    min-height: 180px;
+}
+
+.contenedor-modulos .card-number {
+    min-width: 0;
+    flex: 1 1 0;
+    min-height: 120px;
+    padding: 24px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Animación */
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Desktop grande */
+@media (min-width: 1200px) {
+    .container-main {
+        padding: 40px;
+    }
+
+    .contenedor-botones {
+        padding: 0.5rem 20rem;
+    }
+}
+
+/* Tablet landscape y desktop pequeño */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .container-main {
+        padding: 30px;
+    }
+
+    .contenedor-botones {
+        padding: 0.5rem 10rem;
+    }
+
+    .contenedor-modulos {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .card-graph canvas.wide-chart {
+        height: 300px !important;
+        padding: 12px;
+    }
+}
+
+/* Tablet portrait */
+@media (max-width: 991px) and (min-width: 768px) {
+    .container-main {
+        padding: 20px 15px;
+    }
+
+    .contenedor-botones {
+        padding: 0.5rem 5rem;
+    }
+
+    .contenedor-modulos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .card-graph canvas.wide-chart {
+        height: 280px !important;
+        padding: 10px;
+    }
+
+    .card-number h4 {
+        font-size: 22px;
+    }
+
+    .card-number .value {
+        font-size: 28px;
+    }
+}
+
+/* Móviles grandes */
+@media (max-width: 767px) and (min-width: 576px) {
+    .container-main {
+        padding: 15px 10px;
+    }
+
+    .contenedor-botones {
+        padding: 0.5rem 2rem;
+    }
+
+    .contenedor-modulos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .card-graph {
+        padding: 12px;
+    }
+
+    .card-graph canvas.wide-chart {
+        height: 250px !important;
+        padding: 8px;
+    }
+
+    .card-number {
+        padding: 12px;
+    }
+
+    .card-number h4 {
+        font-size: 20px;
+    }
+
+    .card-number .value {
+        font-size: 26px;
+    }
+
+    .card-number .icont {
+        font-size: 40px !important;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 575px) {
+    .container-main {
+        padding: 10px 5px;
+    }
+
+    .contenedor-botones {
+        padding: 0.5rem 1rem;
+        width: 100%;
+    }
+
+    .contenedor-modulos,
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .filtros-trabajadores {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+
+    .card-graph {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .card-graph canvas.wide-chart {
+        height: 220px !important;
+        padding: 5px;
+    }
+
+    .card-number {
+        padding: 10px;
+        min-height: 100px;
+    }
+
+    .card-number h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .card-number .value {
+        font-size: 24px;
+    }
+
+    .card-number .icont {
+        font-size: 35px !important;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 359px) {
+    .container-main {
+        padding: 5px;
+    }
+
+    .contenedor-modulos,
+    .grid,
+    .filtros-trabajadores,
+    .card-graph {
+        padding: 8px;
+    }
+
+    .card-graph canvas.wide-chart {
+        height: 200px !important;
+    }
+
+    .card-number h4 {
+        font-size: 16px;
+    }
+
+    .card-number .value {
+        font-size: 22px;
+    }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    .card-number {
+        transition: none;
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .card-number:hover {
+        transform: none !important;
+    }
+}
+
+/* Landscape móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .card-graph canvas.wide-chart {
+        height: 200px !important;
+    }
+
+    .contenedor-modulos {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+#grafModulos {
+    width: 100% !important;
+    height: 600px !important;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}

@@ -1,0 +1,126 @@
+.container-main {
+    padding: 40px;
+}
+/* estilo card carpeta */
+.card-header {
+    background: #0e1a2b !important;
+}  
+
+/* Sobrescribe los estilos oscuros para la pestaña activa */
+.nav-tabs .nav-link.active {
+    background-color: #132c46 !important; 
+    color: white!important; 
+    border-color: #132c46;
+}
+
+/* Estilo para las pestañas inactivas si las quieres más claras */
+.nav-tabs .nav-link {
+    color: #ffffff;
+    border-color: #132c46;
+}
+
+.card-body {
+    background-color: #132c46 !important;
+}
+/* estilo card carpeta */
+.grid {
+    color: white;
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); */
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas fijas */
+    gap: 25px;
+}
+/* Pantallas medianas (tablets, laptops pequeños) */
+@media (max-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 por fila */
+    }
+}
+/* Tablets verticales o pantallas pequeñas */
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 por fila */
+    }
+}
+/* Celulares */
+@media (max-width: 576px) {
+    .grid {
+        grid-template-columns: 1fr; /* 1 por fila */
+    }
+}
+
+#card_trabajador{
+    background-color: #1E88E5;
+}
+#card_autobus{
+    background-color: #77b824;
+}
+#card_sefi{
+    background-color: #800020;
+}
+#card_recaudacion{
+    background: rgb(34, 197, 94);
+}
+#card_accidente{
+    background-color: #fffb00;
+    color: black;
+}
+#card_mantenimiento{
+    background-color: #0026ffff;
+}
+#card_ruta{
+    background-color: #6b6b6b;
+}
+
+.card-number .icont {
+    font-size: 60px !important;
+}
+
+.card-number {
+    background: #132c46;
+    border-radius: 10px;
+    padding: 28px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0006;
+    
+    /* Estado inicial de la animación (antes de correr) */
+    opacity: 0; 
+    transform: translateY(20px); 
+    
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards; 
+    /* El delay ayuda a que el elemento no intente el hover mientras anima */
+    animation-delay: 0.1s; 
+}
+
+.card-number:hover {
+    transform: translateY(-9px) !important;
+    /* sombra para dar más profundidad al pasar el cursor sobre la card*/
+    box-shadow: 0 15px 25px #0008; 
+}
+
+/* 5. Definición del keyframe */
+@keyframes fadeUp {
+    from {
+        opacity: 1;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-number h4 {
+    color: #90c8ff;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card-number .value {
+    font-size: 32px;
+    font-weight: bold;
+}

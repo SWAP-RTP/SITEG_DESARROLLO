@@ -1,8 +1,8 @@
 <?php
-require(__DIR__ . '/../../public/conexion2.php');
+require(__DIR__ . '/../../conf/conexion.php');
 header('Content-Type: application/json');
 
-$pdo_accidentes = conexionAccidentes();
+$conexion = Database_accidentes::conectar();
 
 try {
 
@@ -15,15 +15,13 @@ try {
             FROM accidentes
             GROUP BY economico, operador_credencial, modulo
             ORDER BY modulo, economico;";
-
-    $stmt = $pdo_accidentes->prepare($sql);
-    $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = @pg_query($conexion, $sql);
+    $row = @pg_fetch_assoc($result);
 
     //JSON
     echo json_encode([
         'ok'   => true,
-        'data' => $rows
+        'data' => $row
     ]);
 
 } catch (PDOException $e) {

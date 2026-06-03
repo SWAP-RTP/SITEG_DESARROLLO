@@ -1,0 +1,96 @@
+<?php
+require_once '/var/www/login_shared/middleware.php';
+$usuario = validarAcceso(); 
+?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TAIN</title>
+    <link rel="shortcut icon" href="../includes/img/Logo_RTP.png" type="image/x-icon">
+    <!-- Bootstrap ------------------------->
+    <link rel="stylesheet" href="../includes/lib/Bootstrap-5-5.3.0/css/bootstrap.min.css">
+    <!-- fontawesome ----------------------->
+    <link rel="stylesheet" type="text/css" href="../includes/lib/fontawesome/css/all.min.css" />
+    <!-- ESTILOS PERSONALIZADOS CSS -------->
+    <link class="theme-link theme-dark" rel="stylesheet" href="../includes/css/style_dark.css">
+    <link class="theme-link theme-light" rel="stylesheet" href="../includes/css/style_light.css" disabled>
+    <link rel="stylesheet" type="text/css" href="../includes/css/style.css" />
+</head>
+
+<body class="body_index">
+    <?php include '../includes/components/header.html';?>
+    <?php include '../includes/components/menu.html'; ?>
+    <main>
+        <div class="contenedor">
+            <div class="mb-4 d-flex justify-content-end">
+                <span class="badge text-bg-primary">Nota: Solo las tarjetas de colores son interactivas.</span>
+            </div>
+            
+            <div class="d-flex align-items-center position-relative mb-4">
+                <h3 class="flex-fill text-center">DISTRIBUCIÓN DE PARQUE VEHICULAR</h3>
+            </div>
+
+            <div class="card filtro-box p-3 mb-4">
+                <form id="filtro_pv">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="año" class="form-label">Fecha inicio:</label>
+                            <input type="date" class="form-control" id="fech_inicio" name="fech_inicio">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="año" class="form-label">Fecha fin:</label>
+                            <input type="date" class="form-control" id="fech_final" name="fech_final">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="filtro_por" class="form-label">Filtrar por</label>
+                            <select id="filtro_por" class="form-select">
+                                <option value="1">Todos</option>
+                                <option value="2">Por modulo</option>
+                            </select>
+                        </div>
+
+                        <div class="col gap-2 d-flex align-items-end justify-content-end">
+                            <button type="button" id="btn_limpiar" class="btn btn-warning">
+                                <i class="fa-solid fa-broom me-1"></i> Limpiar filtros
+                            </button>
+                            <button type="button" id="btn_filtrar" class="btn btn-success">
+                                <i class="fa-solid fa-filter me-1"></i> Aplicar filtros
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="indicadores_generales">
+                <?php include 'indicadores_generales.html'; ?>
+            </div>
+            <div id="indicadores_por_modulo" hidden>
+                <?php include 'indicadores_por_modulo.html'; ?>
+            </div>
+        </div>
+    </main>
+    <?php include '../includes/components/pie.html';?>
+    
+    <!-- MANDAMOS A LLAMAR EL MODAL CORRESPONDIENTE -->
+    <?php include '../includes/components/modales.html';?>
+
+    <!-- JS de Bootstrap --------------->
+    <script src="../includes/lib/Bootstrap-5-5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- JS de fontawesome ------------->
+    <script type="text/javascript" src="../includes/lib/fontawesome/js/all.min.js"></script>
+    <!-- JS JQuery --------------------->
+    <script src="../includes/lib/jQuery-3.7.0/jquery-3.7.0.min.js"></script>
+    <!-- Chart.js ---------------------->
+    <script src="../includes/lib/chartjs/chart.js"></script>
+    <!-- Script de menu ---------------->
+    <script src="../includes/js/menu.js"></script>
+    <!-- Script cargar temas ----------->
+    <script src="../includes/js/cargar_temas.js"></script>
+    <!-- Script ------------------------>
+    <script type="module" src="script/parque.js"></script>
+</body>
+</html>

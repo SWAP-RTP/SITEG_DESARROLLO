@@ -1,0 +1,62 @@
+.grid2 {
+    color: white;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 40px;
+}
+/* Pantallas medianas (tablets, laptops pequeños) */
+@media (max-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 por fila */
+    }
+}
+
+/* Tablets verticales o pantallas pequeñas */
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 por fila */
+    }
+}
+
+/* Celulares */
+@media (max-width: 576px) {
+    .grid {
+        grid-template-columns: 1fr; /* 1 por fila */
+    }
+}
+
+.filtros{
+    background: #0e1a2b;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #0006;
+    margin-bottom: 25px;
+}
+.filtros label {
+    font-size: 13px;
+}
+
+.card-number2 {
+    background: #0e1a2b;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0006;
+    
+    /* 2. Estado inicial de la animación (antes de correr) */
+    opacity: 0; 
+    transform: translateY(20px); 
+    
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards; 
+    /* El delay ayuda a que el elemento no intente el hover mientras anima */
+    animation-delay: 0.1s; 
+}
+
+.card-number2 .value {
+    font-size: 32px;
+    font-weight: bold;
+}

@@ -1,0 +1,59 @@
+
+<div class="filtros mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label for="tipoServicioMant" class="form-label text-white">Periodo</label>
+            <select id="tipoServicioMant" class="form-select">
+                <option value="">Todos</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="moduloMant" class="form-label text-white">Módulo</label>
+            <select id="moduloMant" class="form-select">
+                <option value="">Todos</option>
+                <option>Módulo 1</option>
+                <option>Módulo 2</option>
+                <option>Módulo 3</option>
+                <option>Módulo 4</option>
+                <option>Módulo 5</option>
+                <option>Módulo 6</option>
+                <option>Módulo 7</option>
+            </select>
+        </div>
+        <div class="col-md-1 text-md-end">
+            <button id="btnCargarMant" class="btn btn-success mt-3 mt-md-0">
+                Filtrar Datos
+            </button>
+        </div>
+        
+    </div>
+</div>
+
+<div class="grid2 mt-3 mb-3">
+    <div class="card-number2">
+        <h4 class="text-white mb-3">TOTAL DE QUEJAS</h4>
+        <div class="value">1,720</div>
+    </div>
+    <div class="card-number2">
+        <h4 class="text-white mb-3">VARIACIÓN CON EL PERIODO ANTERIOR</h4>
+        <div class="value">44</div>
+    </div>
+    <div class="card-number2">
+        <h4 class="text-white mb-3">TOTAL DE SUGERENCIAS</h4>
+        <div class="value">572</div>
+    </div>
+</div>
+
+<div class="grid2 mt-4">
+    <div class="card-graph">
+        <h4 class="mt-4">Linea de quejas por medio</h4>
+        <canvas id="graficaQuejasMedio"></canvas>
+    </div>
+    <div class="card-graph">
+        <h4 class="mt-4">Linea de quejas por medio</h4>
+        <canvas id="graficaQuejasRuta"></canvas>
+    </div>
+</div>
