@@ -66,7 +66,7 @@ class AuthController
                 $jwt = $authService->generarToken($user_info, $session_id);
 
                 setcookie("access_token", $jwt, [
-                    'expires' => time() + 3600,
+                    'expires' => time() + 28800,
                     'path' => '/',
                     'samesite' => 'Lax'
                 ]);
