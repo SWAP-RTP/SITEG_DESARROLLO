@@ -33,11 +33,7 @@ services:
     container_name: app_tain
     volumes:
       - ./apps/TAIN:/var/www/html
-<<<<<<< HEAD
       #MAPEAMOS LA CONEXION Y LIBRERIAS DE LOGIN - lógica de backend
-=======
-      #MAPEAMOS LA CONEXION Y LIBRERIAS DE LOGIN
->>>>>>> cc83f5f8e84bd0a1d2548638e1ec58f89200fb51
       - ./apps/login/conf:/var/www/login_shared/conf:ro
       - ./apps/login/vendor:/var/www/login_shared/vendor:ro
       - ./apps/login/middleware.php:/var/www/login_shared/middleware.php:ro
